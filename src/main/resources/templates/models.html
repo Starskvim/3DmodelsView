@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MODELS</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+
+    <!--  Оформление  -->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">-->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>
+                <form th:action="@{/models}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/models/zipPage}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Zip Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/models/good}"
+                      method="get" target=»_blank» class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 14%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Good
+                        </button>
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/models/admin}"
+                      method="get" target=»_blank» class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Admin Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th>
+                <form th:action="@{/models/modelPage}"
+                      method="post" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>
+                        <button type="submit" class="btn btn-primary">Page</button>
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/models/search_name}"
+                      method="post" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" th:name="word" placeholder="by name (*)" class="form-control"/>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </th>
+
+
+        </tr>
+
+
+    </table>
+</div>
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <span th:text="${'Всего моделей на странице ' + models.size()}"/>
+        <br>
+
+        <tr>
+            <th>Preview</th>
+            <th>ID</th>
+            <th>Category</th>
+            <th>modelName</th>
+            <th>Действия</th>
+        </tr>
+
+        </thead>
+        <tbody>
+        <tr th:each="model : ${models}">
+            <th>
+                <img th:src="'data:image/png;base64,' + ${model.getPreviewBaseSFimg}" alt="None" height="200"
+                     class="rounded"/>
+            </th>
+            <td th:text="${model.id}"/>
+            <td th:text="${model.modelCategory}"/>
+            <td th:text="${model.modelName}"/>
+            <td class="Link">
+                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотреть"/>
+            </td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+
+</div>
+
+
+<canvas id="canvas" width="1400" height="600"></canvas>
+<script th:src="@{/js/scriptWARP.js}"></script>
+
+
+</body>
+</html>

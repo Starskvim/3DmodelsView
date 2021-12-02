@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ZIP page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>
+                <form th:action="@{/models}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/models/good}"
+                      method="get" target=»_blank» class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 14%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Good
+                        </button>
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/models/admin}"
+                      method="get" target=»_blank» class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Admin Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+
+
+        <tr>
+            <th>
+                <form th:action="@{/models/modelPage}"
+                      method="post" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>
+                        <button type="submit" class="btn btn-primary">Page</button>
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <form th:action="@{/models/search_name}"
+                      method="post" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <input type="text" th:name="word" placeholder="by name (*)" class="form-control"/>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </th>
+
+
+        </tr>
+
+
+    </table>
+</div>
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <span th:text="${'Всего архивов на странице ' + zips.size()}"/>
+        <br>
+
+        <tr>
+
+            <th>ID</th>
+            <th>Name</th>
+            <th>Format</th>
+            <th>Size</th>
+            <th>Ratio</th>
+            <th>Action</th>
+
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <tr th:each="zip : ${zips}">
+
+
+            <td th:text="${zip.id}"/>
+            <td th:text="${zip.nameModelZIP}"/>
+            <td th:text="${zip.modelZIPFormat}"/>
+            <td th:text="${zip.sizeZIP}"/>
+            <td th:text="${zip.archiveRatio}"/>
+
+
+            <td>
+                <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+                <form th:action="@{/models/open}" target="dummyframe">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:name="path" th:value="${zip.modelZIPAdress}" class="btn btn-primary">
+                            Open
+                        </button>
+                    </div>
+                </form>
+            </td>
+
+
+            <!--            <td class="Link">-->
+            <!--                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотреть"/>-->
+            <!--            </td>-->
+
+        </tr>
+        </tbody>
+
+    </table>
+
+
+</div>
+
+
+<canvas id="canvas" width="1400" height="600"></canvas>
+<script th:src="@{/js/scriptWARP.js}"></script>
+
+</body>
+</html>

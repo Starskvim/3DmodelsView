@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>
+                <form th:action="@{/products/simpleFilterMin}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:href="@{'/products/simpleFilterMin'}" class="btn btn-primary">Price Min
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/products/simpleFilterMax}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:href="@{'/products/simpleFilterMax'}" class="btn btn-primary">Price Max
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/products/adminproducts}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:href="@{'/products/adminproducts'}" class="btn btn-primary">Admin Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/products/mostview}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 25px" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Most View
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+
+        <tr>
+            <th>
+            <td>
+                <a th:href="@{'/products/page/' + ${1}}" th:text="1"/>
+            </td>
+            </th>
+            <th>
+            <td>
+                <a th:href="@{'/products/page/' + ${2}}" th:text="2"/>
+            </td>
+            </th>
+            <th>
+            <td>
+                <a th:href="@{'/products/page/' + ${3}}" th:text="3"/>
+            </td>
+            </th>
+        </tr>
+
+        <tr>
+            <th>ID</th>
+            <th>Название товара</th>
+            <th>Цена</th>
+            <th>Просмотров</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.id}"/>
+            <td th:text="${product.title}"/>
+            <td th:text="${product.price}"/>
+            <td th:text="${product.views}"/>
+            <td>
+                <a th:href="@{'/products/show/' + ${product.id}}" th:text="Просмотреть"/>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <span th:text="${'Всего товаров ' + products.size()}"/>
+    <br>
+
+
+
+    <form th:action="@{/products/filterContain}"
+          method="post" class="form-horizontal">
+
+        <div style="margin-bottom: 25px" class="input-group">
+            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+            <input type="text" th:name="words" placeholder="Filter (*)" class="form-control"/>
+            <button type="submit" class="btn btn-primary">Filter word</button>
+        </div>
+
+    </form>
+
+
+</div>
+
+</body>
+</html>

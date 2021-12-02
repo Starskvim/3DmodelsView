@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Model page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+<!--  Оформление  -->
+<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">-->
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+
+</head>
+<body>
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                <form th:action="@{/models}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+    </table>
+</div>
+
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+
+        <tr>
+            <th>ID</th>
+            <th>Category</th>
+            <th>modelName</th>
+            <th>modelDerictory</th>
+            <th>Open</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${printModel.id}"/>
+            <td th:text="${printModel.modelCategory}"/>
+            <td th:text="${printModel.modelName}"/>
+            <td th:text="${printModel.modelDerictory}"/>
+
+            <td>
+                <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+                <form th:action="@{/models/open}" target="dummyframe" >
+                <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <button type="submit" th:name="path" th:value="${printModel.modelDerictory}" class="btn btn-primary">
+                        Open
+                    </button>
+                </div>
+                </form>
+            </td>
+
+        </tr>
+        </tbody>
+
+        <span th:text="${'Всего файлов - ' + printModelOTHList.size() + ' + ' + printModelZIPList.size()}"/>
+        <br>
+
+    </table>
+
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Format</th>
+            <th>Size</th>
+            <th>Compress</th>
+            <th>adress</th>
+            <th>Open</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fileZIP : ${printModelZIPList}">
+            <td th:text="${fileZIP.id}"/>
+            <td th:text="${fileZIP.nameModelZIP}"/>
+            <td th:text="${fileZIP.modelZIPFormat}"/>
+            <td th:text="${fileZIP.sizeZIP + ' mb.'}"/>
+            <td th:text="${fileZIP.archiveRatio + ' %.'}"/>
+            <td th:text="${fileZIP.modelZIPAdress}"/>
+
+
+
+            <td>
+                <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+                <form th:action="@{/models/open}" target="dummyframe" >
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:name="path" th:value="${fileZIP.modelZIPAdress}" class="btn btn-primary">
+                            Open
+                        </button>
+                    </div>
+                </form>
+            </td>
+
+
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Format</th>
+            <th>Size</th>
+            <th>Open</th>
+
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fileOTH : ${printModelOTHList}">
+            <td th:text="${fileOTH.id}"/>
+            <td th:text="${fileOTH.nameModelOTH}"/>
+            <td th:text="${fileOTH.modelOTHFormat}"/>
+            <td th:text="${fileOTH.sizeOTH + ' mb.'}"/>
+
+
+
+            <td>
+                <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
+                <form th:action="@{/models/open}" target="dummyframe" >
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:name="path" th:value="${fileOTH.modelOTHAdress}" class="btn btn-primary">
+                            Open
+                        </button>
+                    </div>
+                </form>
+            </td>
+
+
+
+
+        </tr>
+        </tbody>
+    </table>
+
+    <tr th:each="fileOTH : ${printModelOTHList}">
+
+        <th>
+            <img th:src="'data:image/png;base64,' + ${fileOTH.getBaseSFimg}" alt="Red dot" width="1100" class="rounded"/>
+        </th>
+
+    </tr>
+
+    <iframe width="110" height="200" src="https://www.myinstants.com/instant/ukh-ty-blia-99517/embed/" frameborder="0" scrolling="no"></iframe>
+
+</div>
+
+
+
+<canvas id="canvas" width="1400" height="600"></canvas>
+<script th:src="@{/js/scriptWARP.js}"></script>
+
+</body>
+</html>

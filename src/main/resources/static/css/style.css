@@ -1,0 +1,108 @@
+body {
+  /*height: 100vh;*/
+  /*display: flex;*/
+  /*justify-content: center;*/
+  /*align-items: center;*/
+  background: rgba(0, 0, 0, 0.88);
+  color: #fff;
+
+  z-index: 0;
+  /*background-image: url(../img/123.jpg);*/
+  /*background-size: 3% 5%;*/
+}
+
+
+
+div {
+  z-index: 10;
+  background: rgba(126, 100, 100, 0.7);
+}
+
+
+.table td {
+  vertical-align: middle;
+}
+
+
+/* -------------------------------------------------- */
+canvas {
+  z-index: -10;
+  position: fixed;
+  top: 0;
+}
+/* --------------------кнопки------------------------------ */
+.input-group {
+
+}
+/* -------------------------------------------------- */
+
+.Link {
+  color: #fff;
+  text-shadow: 1px 1px 2px black, 0 0 1em #a63ff3;
+  link: white;
+
+}
+
+a {
+  color: #fff;
+  text-shadow: 1px 1px 2px #be23f1, 0 0 1em #a63ff3;
+}
+
+td {
+  color: #fff;
+  text-shadow: 1px 1px 2px black, 0 0 1em #f11f1f;
+
+  /*position: static;*/
+  top: 50%;
+  bottom: 50%;
+  /*left: 50%;*/
+  /*right: 50%;*/
+
+  text-align: center;
+  position: relative;
+
+  /*margin: 0;*/
+  /*position: absolute;*/
+  /*top: 50%;*/
+  /*transform: translate(0, -50%);*/
+
+  /*margin-left: auto;*/
+  /*margin-right: auto;*/
+  /*width: 6em;*/
+
+}
+
+
+
+
+/* -------------------------------------------------- */
+svg {
+  cursor: pointer;
+  position: fixed; z-index: 0;
+  left: 35%;
+  right: 50%;
+}
+svg path {
+  fill: none;
+  stroke-linecap: round;
+  -webkit-animation: go 1s linear infinite;
+          animation: go 1s linear infinite;
+}
+
+@-webkit-keyframes go {
+  0% {
+    stroke-dashoffset: var(--offset);
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes go {
+  0% {
+    stroke-dashoffset: var(--offset);
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
