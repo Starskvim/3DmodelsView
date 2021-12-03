@@ -22,6 +22,7 @@ import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,8 @@ public class FolderScanRepository {
     Collection<ModelZIP> modelZIPList = new ArrayList<>();
     ArrayList<String> zipFormatList = new ArrayList<>(6);
 //////////////////////////////////////// hashset?
+    HashSet<String> printModelsNameStringSet = new HashSet<>(1);
+
 
     public Collection<File> startScanRepository() throws IOException {
         long start = System.currentTimeMillis();
@@ -71,9 +74,13 @@ public class FolderScanRepository {
         zipFormatList.add("7z");
         zipFormatList.add("rar");
 
+        HashSet<String> printModelsNameStringSetPREPARE = new HashSet<>(10000);
+        printModelsNameStringSet = printModelsNameStringSetPREPARE;
+
+
 
         for (File file : filesList) {
-            if (checkPrintModelsList(file)) {
+            if (checkPrintModelsNameStringSet(file.getParentFile().getName())) {
                 checkAndCreateOBJ(file);
                 System.out.println(file.getName() + "- OK");
             } else {
@@ -127,12 +134,13 @@ public class FolderScanRepository {
         return false;
     }
 
-    public void createPrintModelOBJ(File file) {
-        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), detectPrintModelCategory(file));
-        printModelsList.add(printModel);
-
-        // rep
-        //modelRepositoryJPA.save(printModel);
+    public boolean checkPrintModelsNameStringSet (String name){
+        if (printModelsNameStringSet.isEmpty()) {
+            return false;
+        } else if (printModelsNameStringSet.contains(name)){
+            return true;
+        }
+        return false;
     }
 
     public String detectPrintModelCategory (File file) {
@@ -155,15 +163,20 @@ public class FolderScanRepository {
         }
     }
 
+    public void createPrintModelOBJ(File file) {
+        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), detectPrintModelCategory(file));
+
+        printModelsNameStringSet.add(file.getParentFile().getName());
+
+        printModelsList.add(printModel);
+    }
+
     public void createModelOTH(File file) {
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
         String format = FilenameUtils.getExtension(file.getName());
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
-
-        // rep
-        //modelRepositoryOTHJPA.save(modelOTH);
 
 
         getModelListOTHRepositoryRepository(file, modelOTH);
@@ -275,3 +288,13 @@ public class FolderScanRepository {
 //   ALL SAVE saveAllListToJpaRepository time - 5111
 //   Входные файлы filesList size - 24982
 //   Итоговые модели printModelsList size - 4044
+
+// VER 2.1
+//all folder
+//1 ScanRepository SIZE 24844 ScanRepository TIME 37691 - startCreateController time create - 1036331 - 17.2 min
+//  modelRepositoryJPA.saveAll time - 4914
+//  modelRepositoryZIPJPA.saveAll time - 167
+//  modelRepositoryOTHJPA.saveAll time - 212
+//  ALL SAVE saveAllListToJpaRepository time - 5294
+//  Входные файлы filesList size - 24844
+//  Итоговые модели printModelsList size - 4041

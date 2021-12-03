@@ -33,7 +33,6 @@ public class PrintModelService {
     }
 
     public List<ModelZIP> getAllZIPListByPageService(int page){
-        //return modelRepositoryJPA.findAll(PageRequest.of(page, 50)).toList();
 
         return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 250)).toList();
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>MODELS</title>
@@ -114,8 +115,8 @@
         <tbody>
         <tr th:each="model : ${models}">
             <th>
-                <img th:src="'data:image/png;base64,' + ${model.getPreviewBaseSFimg}" alt="None" height="200"
-                     class="rounded"/>
+                <img th:src="'data:image/png;base64,' + ${model.getPreviewBaseSFimg}" alt="None"
+                     class="imagePreveiw"/>
             </th>
             <td th:text="${model.id}"/>
             <td th:text="${model.modelCategory}"/>
