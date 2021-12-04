@@ -3,7 +3,6 @@ package com.example.ModelView.repositories;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
@@ -14,7 +13,6 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,19 +21,18 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Repository
 @RequiredArgsConstructor
-public class FolderScanRepository {
-
+public class FolderSyncRepository {
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    Collection<PrintModel> printModelsList = new ArrayList<>();
+    Collection<PrintModel> printModelsList = new HashSet<>();
+
+
 
     Collection<ModelOTH> modelOTHList = new ArrayList<>();
     Collection<ModelZIP> modelZIPList = new ArrayList<>();
@@ -44,8 +41,7 @@ public class FolderScanRepository {
     HashSet<String> printModelsNameStringSet = new HashSet<>(10000);
     HashSet<String> printModelsFilesNameSaveStringSet = new HashSet<>(30000);
 
-
-    public Collection<File> startScanRepository() throws IOException {
+    public Collection<File> startScanSyncRepository() throws IOException {
         long start = System.currentTimeMillis();
         File adres = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]");
         File adres2 = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Pack]");
@@ -61,9 +57,9 @@ public class FolderScanRepository {
         return files;
     }
 
-    public void startCreateOBJRepository() throws IOException {
+    public void startSyncOBJRepository() throws IOException {
 
-        Collection<File> filesList = startScanRepository();
+        Collection<File> filesList = startScanSyncRepository();
         zipFormatList.add("zip");
         zipFormatList.add("7z");
         zipFormatList.add("rar");
@@ -77,24 +73,26 @@ public class FolderScanRepository {
         int countDone = 0;
 
         for (File file : filesList) {
-            if (checkPrintModelsNameStringSet(file.getParentFile().getName())) {
-                checkAndCreateOBJ(file);
-            } else {
-                createPrintModelOBJ(file);
-                checkAndCreateOBJ(file);
+            if (checkPrintModelsSaveNameStringSet(file.getName())) {
+                if (checkSyncPrintModelsNameStringSet(file.getParentFile().getName())) {
+                    checkAndCreateOBJ(file);
+                } else {
+                    createPrintModelOBJ(file);
+                    checkAndCreateOBJ(file);
+                }
+                countDone += 1;
+                System.out.println(countDone + "/" + filesListSize + " - sync - " + file.getName());
             }
-            countDone += 1;
-            System.out.println(countDone + "/" + filesListSize + " - " + file.getName());
         }
 
         saveAllListToJpaRepository();
 
-        System.out.println("Входные файлы filesList size - " + filesList.size());
-        System.out.println("Итоговые модели printModelsList size - " + printModelsList.size());
+        System.out.println( "Входные файлы filesList size - " + filesList.size());
+        System.out.println( "Итоговые модели printModelsList size - " + printModelsList.size());
 
     }
 
-    public void saveAllListToJpaRepository() {
+    public void saveAllListToJpaRepository () {
 
         long start = System.currentTimeMillis();
 
@@ -118,29 +116,16 @@ public class FolderScanRepository {
 
     }
 
-    public boolean checkPrintModelsList(File file) {
-        if (CollectionUtils.isEmpty(printModelsList)) {
-            return false;
-        } else {
-            for (PrintModel printModel : printModelsList) {
-                if (printModel.getModelName().equals(file.getParentFile().getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean checkPrintModelsNameStringSet(String name) {
+    public boolean checkSyncPrintModelsNameStringSet(String name){
         if (printModelsNameStringSet.isEmpty()) {
             return false;
-        } else if (printModelsNameStringSet.contains(name)) {
+        } else if (printModelsNameStringSet.contains(name)){
             return true;
         }
         return false;
     }
 
-    public String detectPrintModelCategory(File file) {
+    public String detectPrintModelCategory (File file) {
         if (file.getPath().contains("[Figure]")) {
             return "[Figure]";
         } else if (file.getPath().contains("[Pack]")) {
@@ -174,6 +159,8 @@ public class FolderScanRepository {
         String format = FilenameUtils.getExtension(file.getName());
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
+
+
         getModelListOTHRepositoryRepository(file, modelOTH);
     }
 
@@ -187,7 +174,7 @@ public class FolderScanRepository {
         getModelListZIPRepository(file, modelZIP);
     }
 
-    public double getArchiveCompressionRatio(String sourceZipFile) {
+    public double getArchiveCompressionRatio (String sourceZipFile) {
         RandomAccessFile randomAccessFile = null;
         IInArchive inArchive = null;
         try {
@@ -248,62 +235,15 @@ public class FolderScanRepository {
         }
     }
 
-    public boolean checkPrintModelsSaveNameStringSet(String name) {
-        if (printModelsFilesNameSaveStringSet == null) {
+    public boolean checkPrintModelsSaveNameStringSet (String name){
+        if (printModelsFilesNameSaveStringSet == null){
             return true;
-        } else if (printModelsFilesNameSaveStringSet.isEmpty()) {
+        }
+        else if (printModelsFilesNameSaveStringSet.isEmpty()) {
 
-        } else if (printModelsFilesNameSaveStringSet.contains(name)) {
+        }else if (printModelsFilesNameSaveStringSet.contains(name)) {
             return false;
         }
         return true;
     }
-
 }
-
-// VER 1 TEST
-// 1 ScanRepository SIZE 5354 ScanRepository TIME 7262 - 2 ScanRepository SIZE 5354 ScanRepository TIME 188
-//                                                       3                          ScanRepository TIME 210
-// 4 filesList size - 5354 printModelsList size - 1172  startCreateController time create - 199932
-// 5                                                    startCreateController time create - 82257
-// 6                                                    startCreateController time create - 86004
-// 7                                                    startCreateController time create - 84278
-
-// VER 2 TEST
-// 1                                                    startCreateController time create - 4387
-//   modelRepositoryJPA.saveAll time - 1175
-//   modelRepositoryZIPJPA.saveAll time - 44
-//   modelRepositoryOTHJPA.saveAll time - 49
-//   ALL SAVE saveAllListToJpaRepository time - 1268
-// 2                                                    startCreateController time create - 4334
-
-
-//all folder
-// 3 ScanRepository SIZE 24982 ScanRepository TIME 29750 - startCreateController time create - 381979
-//   modelRepositoryJPA.saveAll time - 4721
-//   modelRepositoryZIPJPA.saveAll time - 186
-//   modelRepositoryOTHJPA.saveAll time - 204
-//   ALL SAVE saveAllListToJpaRepository time - 5111
-//   Входные файлы filesList size - 24982
-//   Итоговые модели printModelsList size - 4044
-
-// VER 2.1
-//all folder (Win Defender on)
-//1 ScanRepository SIZE 24844 ScanRepository TIME 37691 - startCreateController time create - 1036331 - 17.2 min
-//  modelRepositoryJPA.saveAll time - 4914
-//  modelRepositoryZIPJPA.saveAll time - 167
-//  modelRepositoryOTHJPA.saveAll time - 212
-//  ALL SAVE saveAllListToJpaRepository time - 5294
-//  Входные файлы filesList size - 24844
-//  Итоговые модели printModelsList size - 4041
-//
-// (Win Defender off second start)
-//2 ScanRepository SIZE 24844 ScanRepository TIME 1308  - startCreateController time create - 38617
-//  modelRepositoryJPA.saveAll time - 4251
-//  modelRepositoryZIPJPA.saveAll time - 171
-//  modelRepositoryOTHJPA.saveAll time - 182
-//  ALL SAVE saveAllListToJpaRepository time - 4605
-//3                                                     - startCreateController time create - 23949
-//4 ScanRepository SIZE 24844 ScanRepository TIME 27700 - startCreateController time create - 458782
-//5                           ScanRepository TIME 1071  - startCreateController time create - 20572
-//6 ScanRepository SIZE 24844 ScanRepository TIME 44235 - startCreateController time create - 486660
