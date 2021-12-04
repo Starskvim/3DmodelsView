@@ -39,8 +39,8 @@ public class FolderScanRepository {
     Collection<ModelOTH> modelOTHList = new ArrayList<>();
     Collection<ModelZIP> modelZIPList = new ArrayList<>();
     ArrayList<String> zipFormatList = new ArrayList<>(6);
-//////////////////////////////////////// hashset?
-    HashSet<String> printModelsNameStringSet = new HashSet<>(1);
+    HashSet<String> printModelsNameStringSet = null;
+    HashSet<String> printModelsNameSaveStringSet = null;
 
 
     public Collection<File> startScanRepository() throws IOException {
@@ -75,18 +75,30 @@ public class FolderScanRepository {
         zipFormatList.add("rar");
 
         HashSet<String> printModelsNameStringSetPREPARE = new HashSet<>(10000);
+
+        HashSet<String> printModelsNameSaveStringSet = new HashSet<>(30000);;
+
         printModelsNameStringSet = printModelsNameStringSetPREPARE;
 
+        printModelsNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
+        printModelsNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
 
+
+        int filesListSize = filesList.size();
+        int countDone = 0;
 
         for (File file : filesList) {
-            if (checkPrintModelsNameStringSet(file.getParentFile().getName())) {
-                checkAndCreateOBJ(file);
-                System.out.println(file.getName() + "- OK");
-            } else {
-                createPrintModelOBJ(file);
-                checkAndCreateOBJ(file);
-                System.out.println(file.getName() + "- OK");
+            if (checkPrintModelsSaveNameStringSet(file.getName())) {
+                if (checkPrintModelsNameStringSet(file.getParentFile().getName())) {
+                    checkAndCreateOBJ(file);
+                    countDone += 1;
+                    System.out.println(countDone + "/" + filesListSize + " - " + file.getName());
+                } else {
+                    createPrintModelOBJ(file);
+                    checkAndCreateOBJ(file);
+                    countDone += 1;
+                    System.out.println(countDone + "/" + filesListSize + " - " + file.getName());
+                }
             }
         }
 
@@ -260,6 +272,17 @@ public class FolderScanRepository {
         }
     }
 
+    public boolean checkPrintModelsSaveNameStringSet (String name){
+        if (printModelsNameSaveStringSet == null){
+            return true;
+        }
+        else if (printModelsNameSaveStringSet.isEmpty()) {
+
+        }else if (printModelsNameSaveStringSet.contains(name)) {
+            return false;
+        }
+        return true;
+    }
 
 }
 
@@ -290,7 +313,7 @@ public class FolderScanRepository {
 //   Итоговые модели printModelsList size - 4044
 
 // VER 2.1
-//all folder
+//all folder (Win Defender on)
 //1 ScanRepository SIZE 24844 ScanRepository TIME 37691 - startCreateController time create - 1036331 - 17.2 min
 //  modelRepositoryJPA.saveAll time - 4914
 //  modelRepositoryZIPJPA.saveAll time - 167
@@ -298,3 +321,13 @@ public class FolderScanRepository {
 //  ALL SAVE saveAllListToJpaRepository time - 5294
 //  Входные файлы filesList size - 24844
 //  Итоговые модели printModelsList size - 4041
+//
+// (Win Defender off second start)
+//2 ScanRepository SIZE 24844 ScanRepository TIME 1308  - startCreateController time create - 38617
+//  modelRepositoryJPA.saveAll time - 4251
+//  modelRepositoryZIPJPA.saveAll time - 171
+//  modelRepositoryOTHJPA.saveAll time - 182
+//  ALL SAVE saveAllListToJpaRepository time - 4605
+//3                                                     - startCreateController time create - 23949
+//4 ScanRepository SIZE 24844 ScanRepository TIME 27700 - startCreateController time create - 458782
+//5                           ScanRepository TIME 1071  - startCreateController time create - 20572
