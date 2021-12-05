@@ -73,5 +73,19 @@ public class PrintModel {
     }
 
 
+    public String getPreviewBaseSFimg () {
+
+        try {
+            String adress = getOnePicturePreview();
+            File file =  new File(adress);
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            return new String(Base64.encodeBase64(bytes), "UTF-8");
+        } catch (Exception a) {
+            return "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
+        }
+
+    }
 
 }
