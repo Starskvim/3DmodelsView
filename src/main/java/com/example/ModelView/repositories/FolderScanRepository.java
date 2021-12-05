@@ -42,7 +42,8 @@ public class FolderScanRepository {
     ArrayList<String> zipFormatList = new ArrayList<>(6);
 
     HashSet<String> printModelsNameStringSet = new HashSet<>(10000);
-    HashSet<String> printModelsFilesNameSaveStringSet = new HashSet<>(30000);
+
+    //HashSet<String> printModelsFilesNameSaveStringSet = new HashSet<>(30000);
 
 
     public Collection<File> startScanRepository() throws IOException {
@@ -69,8 +70,9 @@ public class FolderScanRepository {
         zipFormatList.add("rar");
 
         printModelsNameStringSet.addAll(modelRepositoryJPA.getAllnameModel());
-        printModelsFilesNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
-        printModelsFilesNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
+
+        //printModelsFilesNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
+        //printModelsFilesNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
 
 
         int filesListSize = filesList.size();
@@ -116,19 +118,6 @@ public class FolderScanRepository {
         long fin = System.currentTimeMillis();
         System.out.println("ALL SAVE saveAllListToJpaRepository time - " + (fin - start));
 
-    }
-
-    public boolean checkPrintModelsList(File file) {
-        if (CollectionUtils.isEmpty(printModelsList)) {
-            return false;
-        } else {
-            for (PrintModel printModel : printModelsList) {
-                if (printModel.getModelName().equals(file.getParentFile().getName())) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public boolean checkPrintModelsNameStringSet(String name) {
@@ -248,16 +237,16 @@ public class FolderScanRepository {
         }
     }
 
-    public boolean checkPrintModelsSaveNameStringSet(String name) {
-        if (printModelsFilesNameSaveStringSet == null) {
-            return true;
-        } else if (printModelsFilesNameSaveStringSet.isEmpty()) {
-
-        } else if (printModelsFilesNameSaveStringSet.contains(name)) {
-            return false;
-        }
-        return true;
-    }
+    //public boolean checkPrintModelsSaveNameStringSet(String name) {
+    //    if (printModelsFilesNameSaveStringSet == null) {
+    //        return true;
+    //    } else if (printModelsFilesNameSaveStringSet.isEmpty()) {
+//
+    //    } else if (printModelsFilesNameSaveStringSet.contains(name)) {
+    //        return false;
+    //    }
+    //    return true;
+    //}
 
 }
 

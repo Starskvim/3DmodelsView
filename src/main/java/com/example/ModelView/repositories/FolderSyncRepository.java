@@ -30,16 +30,18 @@ public class FolderSyncRepository {
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    Collection<PrintModel> printModelsList = new HashSet<>();
+    Collection<PrintModel> printModelsToSaveList = new ArrayList<>();
 
+    //Collection<PrintModel> printModelsSavedList = new ArrayList<>();
 
 
     Collection<ModelOTH> modelOTHList = new ArrayList<>();
     Collection<ModelZIP> modelZIPList = new ArrayList<>();
     ArrayList<String> zipFormatList = new ArrayList<>(6);
 
-    HashSet<String> printModelsNameStringSet = new HashSet<>(10000);
-    HashSet<String> printModelsFilesNameSaveStringSet = new HashSet<>(30000);
+    HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
+    HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
+    HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
 
     public Collection<File> startScanSyncRepository() throws IOException {
         long start = System.currentTimeMillis();
@@ -64,16 +66,18 @@ public class FolderSyncRepository {
         zipFormatList.add("7z");
         zipFormatList.add("rar");
 
-        printModelsNameStringSet.addAll(modelRepositoryJPA.getAllnameModel());
-        printModelsFilesNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
-        printModelsFilesNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
+        printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllnameModel());
 
+        printModelsSavedFilesNameStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
+        printModelsSavedFilesNameStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
+
+        printModelsSavedNameStringSet.addAll(modelRepositoryJPA.getAllnameModel());
 
         int filesListSize = filesList.size();
         int countDone = 0;
 
         for (File file : filesList) {
-            if (checkPrintModelsSaveNameStringSet(file.getName())) {
+            if (checkPrintModelsFilesSavedNameStringSet(file.getName())) {
                 if (checkSyncPrintModelsNameStringSet(file.getParentFile().getName())) {
                     checkAndCreateOBJ(file);
                 } else {
@@ -87,8 +91,10 @@ public class FolderSyncRepository {
 
         saveAllListToJpaRepository();
 
+
+
         System.out.println( "Входные файлы filesList size - " + filesList.size());
-        System.out.println( "Итоговые модели printModelsList size - " + printModelsList.size());
+        System.out.println( "Итоговые модели printModelsList size - " + printModelsToSaveList.size());
 
     }
 
@@ -97,7 +103,7 @@ public class FolderSyncRepository {
         long start = System.currentTimeMillis();
 
         long start1 = System.currentTimeMillis();
-        modelRepositoryJPA.saveAll(printModelsList);
+        modelRepositoryJPA.saveAll(printModelsToSaveList);
         long fin1 = System.currentTimeMillis();
         System.out.println("modelRepositoryJPA.saveAll time - " + (fin1 - start1));
 
@@ -117,9 +123,9 @@ public class FolderSyncRepository {
     }
 
     public boolean checkSyncPrintModelsNameStringSet(String name){
-        if (printModelsNameStringSet.isEmpty()) {
+        if (printModelsToSaveNameStringSet.isEmpty()) {
             return false;
-        } else if (printModelsNameStringSet.contains(name)){
+        } else if (printModelsToSaveNameStringSet.contains(name)){
             return true;
         }
         return false;
@@ -148,9 +154,9 @@ public class FolderSyncRepository {
     public void createPrintModelOBJ(File file) {
         PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), detectPrintModelCategory(file));
 
-        printModelsNameStringSet.add(file.getParentFile().getName());
+        printModelsToSaveNameStringSet.add(file.getParentFile().getName());
 
-        printModelsList.add(printModel);
+        printModelsToSaveList.add(printModel);
     }
 
     public void createModelOTH(File file) {
@@ -160,8 +166,15 @@ public class FolderSyncRepository {
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
 
+        String nameModel = file.getParentFile().getName();
 
-        getModelListOTHRepositoryRepository(file, modelOTH);
+
+        if (printModelsSavedFilesNameStringSet.contains(nameModel)){
+            addInSavedModelOTHList(modelOTH, nameModel);
+        }else {
+            addToSaveModelListOTH(file, modelOTH);
+        }
+
     }
 
     public void createModelZIP(File file) {
@@ -171,7 +184,36 @@ public class FolderSyncRepository {
         double ratioZIP = getArchiveCompressionRatio(file.getAbsolutePath());
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
-        getModelListZIPRepository(file, modelZIP);
+
+        String nameModel = file.getParentFile().getName();
+
+        if (printModelsSavedFilesNameStringSet.contains(nameModel)){
+            addInSavedModelZIPList(modelZIP, nameModel);
+        }else {
+            addToSaveModelListZIP(file, modelZIP);
+        }
+
+
+    }
+
+    public void addInSavedModelZIPList (ModelZIP modelZIP, String nameModel){
+
+            PrintModel printModel = modelRepositoryJPA.getBynameModel(nameModel);
+
+            printModel.addModelZIP(modelZIP);
+
+            modelRepositoryJPA.save(printModel);
+
+    }
+
+    public void addInSavedModelOTHList (ModelOTH modelOTH, String nameModel) {
+
+            PrintModel printModel = modelRepositoryJPA.getBynameModel(nameModel);
+
+            printModel.addModelOTH(modelOTH);
+
+            modelRepositoryJPA.save(printModel);
+
     }
 
     public double getArchiveCompressionRatio (String sourceZipFile) {
@@ -217,8 +259,8 @@ public class FolderSyncRepository {
         return 0.0;
     }
 
-    public void getModelListZIPRepository(File file, ModelZIP modelZip) {
-        for (PrintModel printModel : printModelsList) {
+    public void addToSaveModelListZIP(File file, ModelZIP modelZip) {
+        for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
                 printModel.addModelZIP(modelZip);
                 break;
@@ -226,8 +268,8 @@ public class FolderSyncRepository {
         }
     }
 
-    public void getModelListOTHRepositoryRepository(File file, ModelOTH modelOTH) {
-        for (PrintModel printModel : printModelsList) {
+    public void addToSaveModelListOTH(File file, ModelOTH modelOTH) {
+        for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
                 printModel.addModelOTH(modelOTH);
                 break;
@@ -235,13 +277,26 @@ public class FolderSyncRepository {
         }
     }
 
-    public boolean checkPrintModelsSaveNameStringSet (String name){
-        if (printModelsFilesNameSaveStringSet == null){
+    public void deleteModelsWhereDeletedFiles (Collection<File> files){
+
+        HashSet<String> deletModelSet = printModelsSavedNameStringSet;
+
+        for (File file : files){
+            deletModelSet.remove(file.getParentFile().getName());
+            System.out.println(file.getParentFile().getName() + "- модель удалена");
+        }
+
+        modelRepositoryJPA.deleteAllBynameModel(deletModelSet);
+
+    }
+
+    public boolean checkPrintModelsFilesSavedNameStringSet(String name){
+        if (printModelsSavedFilesNameStringSet == null){
             return true;
         }
-        else if (printModelsFilesNameSaveStringSet.isEmpty()) {
-
-        }else if (printModelsFilesNameSaveStringSet.contains(name)) {
+        else if (printModelsSavedFilesNameStringSet.isEmpty()) {
+            return true;
+        }else if (printModelsSavedFilesNameStringSet.contains(name)) {
             return false;
         }
         return true;

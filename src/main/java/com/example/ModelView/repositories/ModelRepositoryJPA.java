@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Repository
@@ -20,5 +21,11 @@ public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long> {
 
     @Query("Select modelName from PrintModel")
     List<String> getAllnameModel();
+
+    PrintModel getBynameModel(String nameModel);
+
+    void deleteAllBynameModel();
+
+    void deleteAllBynameModel(HashSet<String> deletModelSet);
 
 }
