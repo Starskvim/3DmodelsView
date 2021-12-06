@@ -57,7 +57,6 @@ public class PrintModel {
         modelOTHList.add(modelOTH);
     }
 
-
     ///// !!!!!
     public String getOnePicturePreview() {
         String adress = null;
@@ -72,7 +71,6 @@ public class PrintModel {
         }
         return adress;
     }
-
 
     public String getPreviewBaseSFimg () {
         try {

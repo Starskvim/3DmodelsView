@@ -29,9 +29,6 @@ public class ModelZIP {
 
     private double archiveRatio;
 
-    //@ManyToOne
-    //@JoinColumn
-    //private PrintModel printModell;
 
 
     public ModelZIP (String nameModelZIP, String modelZIPAdress, String modelZIPFormat, String sizeZIP, double archiveRatio){

@@ -4,6 +4,7 @@ import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
@@ -26,21 +27,21 @@ import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
+@Log4j2
 public class FolderScanRepository {
 
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    Collection<PrintModel> printModelsList = new ArrayList<>();
+    Collection<PrintModel> printModelsToSaveList = new ArrayList<>();
 
     Collection<ModelOTH> modelOTHList = new ArrayList<>();
     Collection<ModelZIP> modelZIPList = new ArrayList<>();
     ArrayList<String> zipFormatList = new ArrayList<>(6);
 
-    HashSet<String> printModelsNameStringSet = new HashSet<>(10000);
+    HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
 
-    //HashSet<String> printModelsFilesNameSaveStringSet = new HashSet<>(30000);
 
 
     public Collection<File> startScanRepository() throws IOException {
@@ -66,10 +67,7 @@ public class FolderScanRepository {
         zipFormatList.add("7z");
         zipFormatList.add("rar");
 
-        printModelsNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
-
-        //printModelsFilesNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
-        //printModelsFilesNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
+        printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
 
         int filesListSize = filesList.size();
@@ -88,8 +86,9 @@ public class FolderScanRepository {
 
         saveAllListToJpaRepository();
 
-        System.out.println("Входные файлы filesList size - " + filesList.size());
-        System.out.println("Итоговые модели printModelsList size - " + printModelsList.size());
+        log.info("Входные файлы filesList size - {}", filesList.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveList.size());
+
 
     }
 
@@ -98,7 +97,7 @@ public class FolderScanRepository {
         long start = System.currentTimeMillis();
 
         long start1 = System.currentTimeMillis();
-        modelRepositoryJPA.saveAll(printModelsList);
+        modelRepositoryJPA.saveAll(printModelsToSaveList);
         long fin1 = System.currentTimeMillis();
         System.out.println("modelRepositoryJPA.saveAll time - " + (fin1 - start1));
 
@@ -118,9 +117,9 @@ public class FolderScanRepository {
     }
 
     public boolean checkPrintModelsNameStringSet(String name) {
-        if (printModelsNameStringSet.isEmpty()) {
+        if (printModelsToSaveNameStringSet.isEmpty()) {
             return false;
-        } else if (printModelsNameStringSet.contains(name)) {
+        } else if (printModelsToSaveNameStringSet.contains(name)) {
             return true;
         }
         return false;
@@ -149,9 +148,9 @@ public class FolderScanRepository {
     public void createPrintModelOBJ(File file) {
         PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), detectPrintModelCategory(file));
 
-        printModelsNameStringSet.add(file.getParentFile().getName());
+        printModelsToSaveNameStringSet.add(file.getParentFile().getName());
 
-        printModelsList.add(printModel);
+        printModelsToSaveList.add(printModel);
     }
 
     public void createModelOTH(File file) {
@@ -167,13 +166,21 @@ public class FolderScanRepository {
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
         String format = FilenameUtils.getExtension(file.getName());
+
         double ratioZIP = getArchiveCompressionRatio(file.getAbsolutePath());
+
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getAbsolutePath(), format, size, ratioZIP);
+
         modelZIPList.add(modelZIP);
+
         getModelListZIPRepository(file, modelZIP);
     }
 
     public double getArchiveCompressionRatio(String sourceZipFile) {
+        return getCreateArchiveCompressionRatio(sourceZipFile);
+    }
+
+    public static double getCreateArchiveCompressionRatio(String sourceZipFile) {
         RandomAccessFile randomAccessFile = null;
         IInArchive inArchive = null;
         try {
@@ -217,7 +224,7 @@ public class FolderScanRepository {
     }
 
     public void getModelListZIPRepository(File file, ModelZIP modelZip) {
-        for (PrintModel printModel : printModelsList) {
+        for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
                 printModel.addModelZIP(modelZip);
                 break;
@@ -226,7 +233,7 @@ public class FolderScanRepository {
     }
 
     public void getModelListOTHRepositoryRepository(File file, ModelOTH modelOTH) {
-        for (PrintModel printModel : printModelsList) {
+        for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
                 printModel.addModelOTH(modelOTH);
                 break;
