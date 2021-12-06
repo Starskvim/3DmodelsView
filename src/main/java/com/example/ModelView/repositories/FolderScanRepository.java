@@ -3,7 +3,6 @@ package com.example.ModelView.repositories;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
@@ -14,7 +13,6 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +21,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -69,7 +66,7 @@ public class FolderScanRepository {
         zipFormatList.add("7z");
         zipFormatList.add("rar");
 
-        printModelsNameStringSet.addAll(modelRepositoryJPA.getAllnameModel());
+        printModelsNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
         //printModelsFilesNameSaveStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
         //printModelsFilesNameSaveStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());

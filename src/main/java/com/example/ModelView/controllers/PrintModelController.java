@@ -70,6 +70,21 @@ public class PrintModelController {
         return "redirect:/models";
     }
 
+    @GetMapping("/sync")
+    public String startSyncController(){
+        long start = System.currentTimeMillis();
+        try {
+            printModelService.startSyncService();
+        } catch (IOException a) {
+            System.out.println("IOException");
+        }
+        long fin = System.currentTimeMillis();
+        System.out.println("startSyncController time create - " + (fin - start));
+        return "redirect:/models/admin";
+    }
+
+
+
     @GetMapping("/good")
     public String startGood(){
         return "good";
@@ -80,15 +95,6 @@ public class PrintModelController {
         return "admin";
     }
 
-
-////////////////////////////////////////////
-   //@PostMapping("/modelPage")
-   //public String showModelListControllerPage(@RequestParam(value = "id")Long id){
-
-
-   //    //productsService.delete(id);
-   //    return "redirect:/modelPage";
-   //}
 
 
     @GetMapping("/modelOBJ/{id}")
@@ -122,18 +128,15 @@ public class PrintModelController {
     @RequestMapping(value = "/open", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    //@GetMapping ("/open")
     public void openController(@RequestParam (value = "path") String path){
         try {
             printModelService.openFolderOrFile(path);
         } catch (IOException a) {
-            System.out.println(a);
+            System.out.println(a + "  -  " + path);
         }
-
-        //return "redirect:/models/modelOBJ/" + id.toString();
     }
 
-// @RequestParam (value = "id") Long id
+
 
 
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -74,7 +75,6 @@ public class PrintModel {
 
 
     public String getPreviewBaseSFimg () {
-
         try {
             String adress = getOnePicturePreview();
             File file =  new File(adress);
@@ -85,7 +85,18 @@ public class PrintModel {
         } catch (Exception a) {
             return "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
         }
-
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PrintModel that = (PrintModel) o;
+        return id.equals(that.id) && modelName.equals(that.modelName) && modelDerictory.equals(that.modelDerictory) && modelCategory.equals(that.modelCategory);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, modelName, modelDerictory, modelCategory);
+    }
 }

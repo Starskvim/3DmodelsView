@@ -2,10 +2,7 @@ package com.example.ModelView.services;
 
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.repositories.ModelRepositoryJPA;
-import com.example.ModelView.repositories.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.ModelRepositoryZIPJPA;
+import com.example.ModelView.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,6 +19,7 @@ public class PrintModelService {
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
+    private final FolderSyncRepository folderSyncRepository;
 
 
     public List<PrintModel> getAllModelListService(){
@@ -45,6 +43,10 @@ public class PrintModelService {
 
     public void startFolderCreateService () throws IOException {
         folderScanRepository.startCreateOBJRepository();
+    }
+
+    public void startSyncService() throws IOException {
+        folderSyncRepository.startSyncOBJRepository();
     }
 
     public PrintModel getById (Long id) {
