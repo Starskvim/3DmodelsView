@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.io.*;
 
 @Entity
-@Table (name = "MODEL_OTHER_FILES")
+@Table(name = "MODEL_OTHER_FILES")
 @NoArgsConstructor
 @Setter
 @Getter
@@ -23,19 +23,16 @@ public class ModelOTH {
 
     private String nameModelOTH;
 
+    //private String modelName;
+
     private String modelOTHAdress;
 
     private String modelOTHFormat;
 
     private String sizeOTH;
 
-    //@ManyToOne
-    //@JoinColumn
-    //private PrintModel printModell;
 
-
-
-    public ModelOTH (String nameModelOTH, String modelOTHAdress, String modelOTHFormat, String sizeOTH){
+    public ModelOTH(String nameModelOTH, String modelOTHAdress, String modelOTHFormat, String sizeOTH) {
         this.nameModelOTH = nameModelOTH;
         this.modelOTHAdress = modelOTHAdress;
         this.modelOTHFormat = modelOTHFormat;
@@ -43,16 +40,24 @@ public class ModelOTH {
     }
 
 
-    public String getBaseSFimg () throws IOException {
+    public String getPicture() {
+        String adress;
+        if (this.modelOTHFormat.contains("jpg") || this.modelOTHFormat.contains("png") || this.modelOTHFormat.contains("jpeg")) {
+            adress = this.modelOTHFormat;
+        } else {
+            adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
+        }
+        return adress;
+    }
 
-        String adress = this.modelOTHAdress;
+    public String getBaseSFimg() throws IOException {
 
-        File file =  new File(adress);
+        String adress = getPicture();
+
+        File file = new File(adress);
         FileInputStream fileInputStreamReader = new FileInputStream(file);
-        byte[] bytes = new byte[(int)file.length()];
+        byte[] bytes = new byte[(int) file.length()];
         fileInputStreamReader.read(bytes);
-
-
 
         return new String(Base64.encodeBase64(bytes), "UTF-8");
 

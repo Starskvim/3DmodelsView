@@ -36,11 +36,11 @@ public class PrintModel {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn
-    private Collection<ModelZIP> modelZIPList = new ArrayList<ModelZIP>();
+    private Collection<ModelZIP> modelZIPList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn
-    private Collection<ModelOTH> modelOTHList = new ArrayList<ModelOTH>();
+    private Collection<ModelOTH> modelOTHList = new ArrayList<>();
 
 
     public PrintModel(String modelName, String modelDerictory, String modelCategory) {
@@ -61,9 +61,7 @@ public class PrintModel {
     public String getOnePicturePreview() {
         String adress = null;
         for (ModelOTH modelOTH : modelOTHList) {
-            if (modelOTH.getModelOTHFormat().contains("jpg")) {
-                adress = modelOTH.getModelOTHAdress();
-            } else if (modelOTH.getModelOTHFormat().contains("png")) {
+            if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
                 adress = modelOTH.getModelOTHAdress();
             } else {
                 adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
