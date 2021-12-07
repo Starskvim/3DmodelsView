@@ -6,31 +6,42 @@ import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.ModelRepositoryJPA;
 import com.example.ModelView.repositories.ModelRepositoryOTHJPA;
 import com.example.ModelView.repositories.ModelRepositoryZIPJPA;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
+@Setter
+@Getter
 public class CollectionsService {
 
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    Collection<PrintModel> printModelsToSaveList = new ArrayList<>();
+    private Collection<PrintModel> printModelsToSaveList = new ArrayList<>();
 
-    Collection<ModelOTH> modelOTHList = new ArrayList<>();
-    Collection<ModelZIP> modelZIPList = new ArrayList<>();
-    ArrayList<String> zipFormatList = new ArrayList<>(6);
+    private Collection<ModelOTH> modelOTHList = new ArrayList<>();
+    private Collection<ModelZIP> modelZIPList = new ArrayList<>();
+    private ArrayList<String> zipFormatList = new ArrayList<>(6);
 
-    HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
-    HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
-    HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
+    private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
+    private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
+    private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
 
+
+    public boolean checkPrintModelsNameStringSet(String name) {
+        if (printModelsToSaveNameStringSet.isEmpty()) {
+            return false;
+        } else return printModelsToSaveNameStringSet.contains(name);
+    }
 
     public void saveAllListToJpaRepository () {
 
@@ -56,4 +67,12 @@ public class CollectionsService {
 
     }
 
+    public boolean checkPrintModelsFilesSavedNameStringSet(String name){
+        if (printModelsSavedFilesNameStringSet == null){
+            return true;
+        }
+        else if (printModelsSavedFilesNameStringSet.isEmpty()) {
+            return true;
+        }else return !printModelsSavedFilesNameStringSet.contains(name);
+    }
 }

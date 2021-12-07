@@ -3,8 +3,11 @@ package com.example.ModelView.controllers;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.services.CreateObjService;
+import com.example.ModelView.services.CreateSyncObjService;
 import com.example.ModelView.services.PrintModelService;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,20 +25,15 @@ import org.apache.catalina.util.URLEncoder;
 
 @Controller
 @RequestMapping("/models")
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class PrintModelController {
-    private PrintModelService printModelService;
-
-    @Autowired
-    public void setProductsService(PrintModelService printModelService){
-        this.printModelService = printModelService;
-    }
+    private final PrintModelService printModelService;
+    private final CreateObjService createObjService;
+    private final CreateSyncObjService createSyncObjService;
 
     @GetMapping
     public String showModelListController(Model model){
-
         model.addAttribute("models", printModelService.getAllModelListByPageService(0));
-
         return "models";
     }
 
@@ -61,7 +59,10 @@ public class PrintModelController {
     public String startCreateController(){
         long start = System.currentTimeMillis();
         try {
-            printModelService.startFolderCreateService();
+            createObjService.startCreateOBJService();
+
+            //printModelService.startFolderCreateService();
+
         } catch (IOException a) {
             System.out.println("IOException");
         }
@@ -74,7 +75,10 @@ public class PrintModelController {
     public String startSyncController(){
         long start = System.currentTimeMillis();
         try {
-            printModelService.startSyncService();
+            createSyncObjService.startSyncOBJRepository();
+
+            //printModelService.startSyncService();
+
         } catch (IOException a) {
             System.out.println("IOException");
         }
