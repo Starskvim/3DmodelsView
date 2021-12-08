@@ -44,6 +44,8 @@ public class CreateSyncObjService {
     HashSet<String> printModelsSavedNameStringSet;
     HashSet<String> printModelsSavedFilesNameStringSet;
 
+    //DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
     @PostConstruct
     private void postConstruct() {
         printModelsToSaveList = collectionsService.getPrintModelsToSaveList();
@@ -118,7 +120,7 @@ public class CreateSyncObjService {
         DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
         String format = FilenameUtils.getExtension(file.getName());
-        ModelOTH modelOTH = new ModelOTH(file.getName(), file.getAbsolutePath(), format, size);
+        ModelOTH modelOTH = new ModelOTH(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
@@ -135,7 +137,7 @@ public class CreateSyncObjService {
 
         double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
 
-        ModelZIP modelZIP = new ModelZIP(file.getName(), file.getAbsolutePath(), format, size, ratioZIP);
+        ModelZIP modelZIP = new ModelZIP(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
@@ -180,6 +182,8 @@ public class CreateSyncObjService {
 
     public void deleteModelsWhereDeletedFiles(Collection<File> files) {
         HashSet<String> deleteModelSet = printModelsSavedNameStringSet;
+
+        // mb stream
         for (File file : files) {
             deleteModelSet.remove(file.getParentFile().getName());
         }
@@ -187,23 +191,30 @@ public class CreateSyncObjService {
         modelRepositoryJPA.deleteAllByModelNameIn(deleteModelSet);
     }
 
-    public void checkAndDeleteOBJinListOTHandZIP(File file) {
-        if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
+    //public void checkAndDeleteOBJinListOTHandZIP(Collection<File> files) {
 
-            PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
-            String deleteNameFile = file.getName();
-            Collection<ModelZIP> printModelZIPlist = printModel.getModelZIPList();
-            printModelZIPlist.removeIf(b -> b.getNameModelZIP().equals(deleteNameFile));
 
-        } else {
+//        for (File file: files) {
+//            printModelsSavedFilesNameStringSet.remove(file.getName());
+//        }
+//
+//        for (String fileName: printModelsSavedFilesNameStringSet){
+//
+//        }
 
-            PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
-            String deleteNameFile = file.getName();
-            Collection<ModelOTH> printModelOTHlist = printModel.getModelOTHList();
-            printModelOTHlist.removeIf(b -> b.getNameModelOTH().equals(deleteNameFile));
 
-        }
-    }
+        //if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
+        //    PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
+        //    String deleteNameFile = file.getName();
+        //    Collection<ModelZIP> printModelZIPlist = printModel.getModelZIPList();
+        //    printModelZIPlist.removeIf(b -> b.getNameModelZIP().equals(deleteNameFile));
+        //} else {
+        //    PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
+        //    String deleteNameFile = file.getName();
+        //    Collection<ModelOTH> printModelOTHlist = printModel.getModelOTHList();
+        //    printModelOTHlist.removeIf(b -> b.getNameModelOTH().equals(deleteNameFile));
+        //}
+    //}
 
 
 }

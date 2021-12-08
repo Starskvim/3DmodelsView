@@ -24,8 +24,6 @@ import java.util.HashSet;
 public class CreateObjService {
 
     private final ModelRepositoryJPA modelRepositoryJPA;
-    //private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-    //private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
     private final FolderScanRepository folderScanRepository;
     private final EntitiesAttributeService entitiesAttributeService;
     private final CollectionsService collectionsService;
@@ -38,6 +36,7 @@ public class CreateObjService {
     ArrayList<String> zipFormatList;
     HashSet<String> printModelsToSaveNameStringSet;
 
+    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     @PostConstruct
     private void postConstruct(){
@@ -101,20 +100,18 @@ public class CreateObjService {
     }
 
     public void createModelOTH(File file) {
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
         String format = FilenameUtils.getExtension(file.getName());
-        ModelOTH modelOTH = new ModelOTH(file.getName(), file.getAbsolutePath(), format, size);
+        ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
         getModelListOTHRepositoryService(file, modelOTH);
     }
 
     public void createModelZIP(File file) {
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
         String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
         String format = FilenameUtils.getExtension(file.getName());
         double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
-        ModelZIP modelZIP = new ModelZIP(file.getName(), file.getAbsolutePath(), format, size, ratioZIP);
+        ModelZIP modelZIP = new ModelZIP(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
         getModelListZIPService(file, modelZIP);
     }

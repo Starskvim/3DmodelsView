@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.io.*;
 
 @Entity
-@Table(name = "MODEL_OTHER_FILES")
+@Table(name = "model_other_files")
 @NoArgsConstructor
 @Setter
 @Getter
@@ -23,7 +23,9 @@ public class ModelOTH {
 
     private String nameModelOTH;
 
-    //private String modelName;
+    private String modelName;
+
+    private String fileClass;
 
     private String modelOTHAdress;
 
@@ -32,8 +34,10 @@ public class ModelOTH {
     private String sizeOTH;
 
 
-    public ModelOTH(String nameModelOTH, String modelOTHAdress, String modelOTHFormat, String sizeOTH) {
+    public ModelOTH(String nameModelOTH, String modelName, String modelOTHAdress, String modelOTHFormat, String sizeOTH) {
         this.nameModelOTH = nameModelOTH;
+        this.modelName = modelName;
+        this.fileClass = "OTH";
         this.modelOTHAdress = modelOTHAdress;
         this.modelOTHFormat = modelOTHFormat;
         this.sizeOTH = sizeOTH;

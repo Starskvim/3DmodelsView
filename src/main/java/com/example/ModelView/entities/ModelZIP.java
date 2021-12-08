@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "MODEL_ZIP_FILES")
+@Table(name = "model_zip_files")
 @NoArgsConstructor
 @Setter
 @Getter
@@ -21,6 +21,10 @@ public class ModelZIP {
 
     private String nameModelZIP;
 
+    private String modelName;
+
+    private String fileClass;
+
     private String modelZIPAdress;
 
     private String modelZIPFormat;
@@ -31,8 +35,10 @@ public class ModelZIP {
 
 
 
-    public ModelZIP (String nameModelZIP, String modelZIPAdress, String modelZIPFormat, String sizeZIP, double archiveRatio){
+    public ModelZIP (String nameModelZIP,String modelName, String modelZIPAdress, String modelZIPFormat, String sizeZIP, double archiveRatio){
         this.nameModelZIP = nameModelZIP;
+        this.modelName = modelName;
+        this.fileClass = "ZIP";
         this.modelZIPAdress = modelZIPAdress;
         this.modelZIPFormat = modelZIPFormat;
         this.sizeZIP = sizeZIP;

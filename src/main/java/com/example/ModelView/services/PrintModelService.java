@@ -19,7 +19,7 @@ public class PrintModelService {
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-    private final FolderSyncRepository folderSyncRepository;
+
 
 
     public List<PrintModel> getAllModelListService(){
@@ -41,13 +41,13 @@ public class PrintModelService {
         folderScanRepository.startScanRepository();
     }
 
-    public void startFolderCreateService () throws IOException {
-        folderScanRepository.startCreateOBJRepository();
-    }
-
-    public void startSyncService() throws IOException {
-        folderSyncRepository.startSyncOBJRepository();
-    }
+//    public void startFolderCreateService () throws IOException {
+//        folderScanRepository.startCreateOBJRepository();
+//    }
+//
+//    public void startSyncService() throws IOException {
+//        folderSyncRepository.startSyncOBJRepository();
+//    }
 
     public PrintModel getById (Long id) {
         return modelRepositoryJPA.findById(id).orElse(null);
