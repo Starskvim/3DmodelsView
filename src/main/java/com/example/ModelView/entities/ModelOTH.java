@@ -47,7 +47,7 @@ public class ModelOTH {
     public String getPicture() {
         String adress;
         if (this.modelOTHFormat.contains("jpg") || this.modelOTHFormat.contains("png") || this.modelOTHFormat.contains("jpeg")) {
-            adress = this.modelOTHFormat;
+            adress = this.modelOTHAdress;
         } else {
             adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
         }

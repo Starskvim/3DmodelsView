@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.DecimalFormat;
 
 @Service
 public class EntitiesAttributeService {
@@ -71,5 +72,9 @@ public class EntitiesAttributeService {
         return 0.0;
     }
 
+    public String getSizeFileToString (File file) {
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        return decimalFormat.format(file.length() / 1024.0 / 1024.0);
+    }
 
 }

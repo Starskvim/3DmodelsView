@@ -17,10 +17,7 @@ import java.util.List;
 public class PrintModelService {
     private final FolderScanRepository folderScanRepository;
     private final ModelRepositoryJPA modelRepositoryJPA;
-    private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-
-
 
     public List<PrintModel> getAllModelListService(){
         return modelRepositoryJPA.findAll();
@@ -31,23 +28,12 @@ public class PrintModelService {
     }
 
     public List<ModelZIP> getAllZIPListByPageService(int page){
-
         return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 250)).toList();
-
     }
-
 
     public void startFolderScanService () throws IOException {
         folderScanRepository.startScanRepository();
     }
-
-//    public void startFolderCreateService () throws IOException {
-//        folderScanRepository.startCreateOBJRepository();
-//    }
-//
-//    public void startSyncService() throws IOException {
-//        folderSyncRepository.startSyncOBJRepository();
-//    }
 
     public PrintModel getById (Long id) {
         return modelRepositoryJPA.findById(id).orElse(null);

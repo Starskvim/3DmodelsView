@@ -36,7 +36,6 @@ public class CreateObjService {
     ArrayList<String> zipFormatList;
     HashSet<String> printModelsToSaveNameStringSet;
 
-    DecimalFormat decimalFormat = new DecimalFormat("#0.00");
 
     @PostConstruct
     private void postConstruct(){
@@ -100,7 +99,7 @@ public class CreateObjService {
     }
 
     public void createModelOTH(File file) {
-        String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
+        String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
@@ -108,7 +107,7 @@ public class CreateObjService {
     }
 
     public void createModelZIP(File file) {
-        String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
+        String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
         double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
         ModelZIP modelZIP = new ModelZIP(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);

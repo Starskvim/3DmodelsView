@@ -44,7 +44,8 @@ public class CreateSyncObjService {
     HashSet<String> printModelsSavedNameStringSet;
     HashSet<String> printModelsSavedFilesNameStringSet;
 
-    //DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+    HashSet<String> printModelsSavedFilesAdressStringSet;
+
 
     @PostConstruct
     private void postConstruct() {
@@ -54,7 +55,10 @@ public class CreateSyncObjService {
         zipFormatList = collectionsService.getZipFormatList();
         printModelsToSaveNameStringSet = collectionsService.getPrintModelsToSaveNameStringSet();
         printModelsSavedNameStringSet = collectionsService.getPrintModelsSavedNameStringSet();
+
         printModelsSavedFilesNameStringSet = collectionsService.getPrintModelsSavedFilesNameStringSet();
+
+        printModelsSavedFilesAdressStringSet = collectionsService.getPrintModelsSavedFilesAdressStringSet();
     }
 
 
@@ -68,8 +72,13 @@ public class CreateSyncObjService {
 
         printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
+        //?
         printModelsSavedFilesNameStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
         printModelsSavedFilesNameStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
+
+        printModelsSavedFilesAdressStringSet.addAll(modelRepositoryOTHJPA.getAllmodelOTHAdress());
+        printModelsSavedFilesAdressStringSet.addAll(modelRepositoryZIPJPA.getAllmodelZIPAdress());
+
 
         printModelsSavedNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
@@ -91,6 +100,7 @@ public class CreateSyncObjService {
         }
 
         collectionsService.saveAllListToJpaRepository();
+        checkAndDeleteOBJinListOTHandZIP(filesList);
         deleteModelsWhereDeletedFiles(filesList);
         collectionsService.saveAllListToJpaRepository();
 
@@ -117,10 +127,9 @@ public class CreateSyncObjService {
     }
 
     public void createModelOTH(File file) {
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
+        String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
-        ModelOTH modelOTH = new ModelOTH(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size);
+        ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
@@ -131,13 +140,12 @@ public class CreateSyncObjService {
     }
 
     public void createModelZIP(File file) {
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        String size = decimalFormat.format(file.length() / 1024.0 / 1024.0);
+        String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
 
         double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
 
-        ModelZIP modelZIP = new ModelZIP(file.getName(),file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
+        ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
@@ -191,30 +199,35 @@ public class CreateSyncObjService {
         modelRepositoryJPA.deleteAllByModelNameIn(deleteModelSet);
     }
 
-    //public void checkAndDeleteOBJinListOTHandZIP(Collection<File> files) {
+    public void checkAndDeleteOBJinListOTHandZIP(Collection<File> files) {
 
+        Collection<ModelOTH> toDeleteOTHList = new ArrayList<>();
+        Collection<ModelZIP> toDeleteZIPList = new ArrayList<>();
 
-//        for (File file: files) {
-//            printModelsSavedFilesNameStringSet.remove(file.getName());
-//        }
-//
-//        for (String fileName: printModelsSavedFilesNameStringSet){
-//
-//        }
+        for (File file : files) {
+            printModelsSavedFilesAdressStringSet.remove(file.getAbsolutePath());
+        }
 
-
-        //if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
-        //    PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
-        //    String deleteNameFile = file.getName();
-        //    Collection<ModelZIP> printModelZIPlist = printModel.getModelZIPList();
-        //    printModelZIPlist.removeIf(b -> b.getNameModelZIP().equals(deleteNameFile));
-        //} else {
-        //    PrintModel printModel = modelRepositoryJPA.getByModelName(file.getParentFile().getName());
-        //    String deleteNameFile = file.getName();
-        //    Collection<ModelOTH> printModelOTHlist = printModel.getModelOTHList();
-        //    printModelOTHlist.removeIf(b -> b.getNameModelOTH().equals(deleteNameFile));
-        //}
-    //}
+        if (!printModelsSavedFilesAdressStringSet.isEmpty()) {
+            for (String fileAbsPath : printModelsSavedFilesAdressStringSet) {
+                if (zipFormatList.contains(FilenameUtils.getExtension(fileAbsPath))) {
+                    ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
+                    PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());
+                    Collection<ModelZIP> modelZIPList = printModel.getModelZIPList();
+                    modelZIPList.remove(modelZIP);
+                    toDeleteZIPList.add(modelZIP);
+                } else {
+                    ModelOTH modelOTH = modelRepositoryOTHJPA.getModelOTHByModelOTHAdress(fileAbsPath);
+                    PrintModel printModel = modelRepositoryJPA.getByModelName(modelOTH.getModelName());
+                    Collection<ModelOTH> modelOTHList = printModel.getModelOTHList();
+                    modelOTHList.remove(modelOTH);
+                    toDeleteOTHList.add(modelOTH);
+                }
+            }
+            modelRepositoryOTHJPA.deleteAll(toDeleteOTHList);
+            modelRepositoryZIPJPA.deleteAll(toDeleteZIPList);
+        }
+    }
 
 
 }

@@ -15,4 +15,11 @@ public interface ModelRepositoryOTHJPA extends JpaRepository <ModelOTH, Long>  {
     @Query("Select nameModelOTH from ModelOTH ")
     List<String> getAllnameModelOTH();
 
+    @Query("Select modelOTHAdress from ModelOTH ")
+    List<String> getAllmodelOTHAdress();
+
+    //ModelOTH getBymodelOTHAdress();
+
+    ModelOTH getModelOTHByModelOTHAdress(String adress);
+
 }

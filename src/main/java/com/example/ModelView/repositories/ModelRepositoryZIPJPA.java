@@ -15,4 +15,13 @@ public interface ModelRepositoryZIPJPA extends JpaRepository<ModelZIP, Long> {
 
     @Query("Select nameModelZIP from ModelZIP ")
     List<String> getAllnameModelZIP();
+
+    @Query("Select modelZIPAdress from ModelZIP ")
+    List<String> getAllmodelZIPAdress();
+
+    //ModelZIP getBymodelZIPAdress();
+
+    ModelZIP getModelZIPByModelZIPAdress(String adress);
+
+
 }

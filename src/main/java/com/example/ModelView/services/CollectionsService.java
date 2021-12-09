@@ -34,7 +34,11 @@ public class CollectionsService {
 
     private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
     private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
+
+    //?
     private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
+
+    private HashSet<String> printModelsSavedFilesAdressStringSet = new HashSet<>(30000);
 
 
     public boolean checkPrintModelsNameStringSet(String name) {
