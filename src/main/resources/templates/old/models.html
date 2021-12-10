@@ -99,22 +99,25 @@
                 </form>
             </th>
         </tr>
-    </table>
-</div>
 
-<div class="container">
-    <table class="table table-hover">
-        <tr>
-            <th th:each="pageNumber : ${pageNumbers}">
-                <nav aria-label="...">
-                    <ul class="pagination">
 
-                        <li class="page-item"><a class="page-link" th:href="@{'/models/' + ${pageNumber.toString}}" th:text = ${pageNumber} > th:text = ${pageNumber} </a></li>
+        <!--        <tr>-->
+        <!--            <th>-->
+        <!--                <div class="be-wrapper">-->
+        <!--                    <div class="container">-->
+        <!--                        <h1>Pagination Plugin</h1>-->
+        <!--                        <p>Anything you need. It's here!</p>-->
+        <!--                        <div class="demo">-->
+        <!--                            <div id="page">-->
+        <!--                                <ul class="pagination"></ul>-->
+        <!--                            </div>-->
+        <!--                            <label id="info">Page information will be displayed here.</label>-->
+        <!--                        </div>-->
+        <!--                    </div>-->
+        <!--                </div>-->
+        <!--            </th>-->
+        <!--        </tr>-->
 
-                    </ul>
-                </nav>
-            </th>
-        </tr>
     </table>
 </div>
 
@@ -154,23 +157,6 @@
     </table>
 
 
-</div>
-
-
-<div class="container">
-    <table class="table table-hover">
-        <tr>
-            <th th:each="pageNumber : ${pageNumbers}">
-                <nav aria-label="...">
-                    <ul class="pagination">
-
-                        <li class="page-item"><a class="page-link" th:href="@{'/models/modelsTest/' + ${pageNumber.toString}}" th:text = ${pageNumber} > th:text = ${pageNumber} </a></li>
-
-                    </ul>
-                </nav>
-            </th>
-        </tr>
-    </table>
 </div>
 
 

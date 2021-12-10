@@ -24,7 +24,7 @@ public class PrintModelService {
     }
 
     public List<PrintModel> getAllModelListByPageService(int page){
-        return modelRepositoryJPA.findAll(PageRequest.of(page, 60)).toList();
+        return modelRepositoryJPA.findAll(PageRequest.of(page, 40)).toList();
     }
 
     public List<ModelZIP> getAllZIPListByPageService(int page){

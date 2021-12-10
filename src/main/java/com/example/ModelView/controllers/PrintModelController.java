@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 import org.apache.catalina.util.URLEncoder;
 
@@ -32,13 +34,16 @@ public class PrintModelController {
     private final CreateSyncObjService createSyncObjService;
 
     @GetMapping
-    public String showModelListController(Model model){
+    public String showModelListController(Model model) {
+
+        model.addAttribute("pageNumbers", preparePageInt(0));
         model.addAttribute("models", printModelService.getAllModelListByPageService(0));
         return "models";
     }
 
     @GetMapping("/zipPage")
-    public String showZIPListController(Model model){
+    public String showZIPListController(Model model) {
+
 
         model.addAttribute("zips", printModelService.getAllZIPListByPageService(0));
 
@@ -46,7 +51,7 @@ public class PrintModelController {
     }
 
     @GetMapping("/start")
-    public String startSkanController(){
+    public String startSkanController() {
         try {
             printModelService.startFolderScanService();
         } catch (IOException a) {
@@ -56,7 +61,7 @@ public class PrintModelController {
     }
 
     @GetMapping("/startCreate")
-    public String startCreateController(){
+    public String startCreateController() {
         long start = System.currentTimeMillis();
         try {
             createObjService.startCreateOBJService();
@@ -72,7 +77,7 @@ public class PrintModelController {
     }
 
     @GetMapping("/sync")
-    public String startSyncController(){
+    public String startSyncController() {
         long start = System.currentTimeMillis();
         try {
             createSyncObjService.startSyncOBJRepository();
@@ -88,21 +93,19 @@ public class PrintModelController {
     }
 
 
-
     @GetMapping("/good")
-    public String startGood(){
+    public String startGood() {
         return "good";
     }
 
     @GetMapping("/admin")
-    public String startAdmin(){
+    public String startAdmin() {
         return "admin";
     }
 
 
-
     @GetMapping("/modelOBJ/{id}")
-    public String showOneModelPage(Model model, @PathVariable(value = "id") Long id){
+    public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
 
         PrintModel printModel = printModelService.getById(id);
         Collection<ModelOTH> printModelOTHList = printModel.getModelOTHList();
@@ -116,23 +119,34 @@ public class PrintModelController {
     }
 
     @PostMapping("/modelPage")
-    public String showModelListByPageController(Model model, @ModelAttribute(value = "page") int page){
+    public String showModelListByPageController(Model model, @ModelAttribute(value = "page") int page) {
 
         model.addAttribute("models", printModelService.getAllModelListByPageService(page));
 
         return "models";
     }
 
-    @PostMapping("/{page}")
-    public String showModelListByPageControllerNEW(Model model, @PathVariable(value = "page") int page){
+//    @GetMapping("/{page}")
+//    public String showModelListByPageControllerNEW(Model model, @PathVariable(value = "page") int page) {
+//
+//        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
+//        return "models";
+//    }
+
+
+    @GetMapping("/{page}")
+    public String showModelListControllerNew(Model model, @PathVariable(value = "page") int page) {
+
+        model.addAttribute("pageNumbers", preparePageInt(page));
 
         model.addAttribute("models", printModelService.getAllModelListByPageService(page));
 
         return "models";
     }
+
 
     @PostMapping("/search_name")
-    public String searchByNameController(Model model, @ModelAttribute(value = "word") String word){
+    public String searchByNameController(Model model, @ModelAttribute(value = "word") String word) {
 
         model.addAttribute("models", printModelService.searchByModelNameService(word, 0));
         return "models";
@@ -142,7 +156,7 @@ public class PrintModelController {
     @RequestMapping(value = "/open", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody
-    public void openController(@RequestParam (value = "path") String path){
+    public void openController(@RequestParam(value = "path") String path) {
         try {
             printModelService.openFolderOrFile(path);
         } catch (IOException a) {
@@ -151,6 +165,28 @@ public class PrintModelController {
     }
 
 
+    public LinkedList<Integer> preparePageInt(int current) {
+
+        LinkedList<Integer> pageNumbers = new LinkedList<>();
+
+        if (current <= 0) {
+            pageNumbers.add(0);
+        } else if (current == 1) {
+            pageNumbers.add(0);
+            pageNumbers.add(current);
+        } else {
+            pageNumbers.add(0);
+            pageNumbers.add(current - 1);
+            pageNumbers.add(current);
+        }
+
+        for (int i = 0; i < 11; i++) {
+            current += 1;
+            pageNumbers.add(current);
+        }
+
+        return pageNumbers;
+    }
 
 
 }
