@@ -117,7 +117,17 @@ public class PrintModelController {
 
     @PostMapping("/modelPage")
     public String showModelListByPageController(Model model, @ModelAttribute(value = "page") int page){
+
         model.addAttribute("models", printModelService.getAllModelListByPageService(page));
+
+        return "models";
+    }
+
+    @PostMapping("/{page}")
+    public String showModelListByPageControllerNEW(Model model, @PathVariable(value = "page") int page){
+
+        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
+
         return "models";
     }
 
