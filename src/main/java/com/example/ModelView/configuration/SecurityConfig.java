@@ -40,7 +40,8 @@ import javax.sql.DataSource;
         http.csrf().disable().authorizeRequests()
 
                 //.anyRequest().permitAll();
-                .antMatchers("/products/adminproducts").hasAnyRole("ADMIN")
+                .antMatchers("/models/admin").hasAnyRole("ADMIN")
+                .antMatchers("/models/open").hasAnyRole("ADMIN")
                 .and()
                 .formLogin()
                 //.loginPage("/login")

@@ -148,6 +148,7 @@ public class PrintModelController {
     @PostMapping("/search_name")
     public String searchByNameController(Model model, @ModelAttribute(value = "word") String word) {
 
+        model.addAttribute("word", word);
         model.addAttribute("models", printModelService.searchByModelNameService(word, 0));
         return "models";
     }
