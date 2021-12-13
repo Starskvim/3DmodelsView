@@ -170,20 +170,18 @@ public class PrintModelController {
 
         LinkedList<Integer> pageNumbers = new LinkedList<>();
 
-        if (current <= 0) {
-            pageNumbers.add(0);
-        } else if (current == 1) {
-            pageNumbers.add(0);
+
+        if (current == 2) {
             pageNumbers.add(current);
-        } else {
-            pageNumbers.add(0);
+        }else if (current > 2) {
             pageNumbers.add(current - 1);
             pageNumbers.add(current);
         }
 
         for (int i = 0; i < 11; i++) {
             current += 1;
-            pageNumbers.add(current);
+            if (!(current == 1)){
+            pageNumbers.add(current);}
         }
 
         return pageNumbers;

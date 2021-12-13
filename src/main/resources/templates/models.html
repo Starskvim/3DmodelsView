@@ -104,13 +104,20 @@
 
 <div class="container">
     <table class="table table-hover">
+
         <tr>
+            <th>
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="page-link" th:href="@{'/models/0'}">1</a></li>
+                    </ul>
+                </nav>
+            </th>
             <th th:each="pageNumber : ${pageNumbers}">
                 <nav aria-label="...">
                     <ul class="pagination">
-
-                        <li class="page-item"><a class="page-link" th:href="@{'/models/' + ${pageNumber.toString}}" th:text = ${pageNumber} > th:text = ${pageNumber} </a></li>
-
+                        <li class="page-item"><a class="page-link" th:href="@{'/models/' + ${pageNumber.toString}}"
+                                                 th:text=${pageNumber}></a></li>
                     </ul>
                 </nav>
             </th>
@@ -164,7 +171,9 @@
                 <nav aria-label="...">
                     <ul class="pagination">
 
-                        <li class="page-item"><a class="page-link" th:href="@{'/models/modelsTest/' + ${pageNumber.toString}}" th:text = ${pageNumber} > th:text = ${pageNumber} </a></li>
+                        <li class="page-item"><a class="page-link"
+                                                 th:href="@{'/models/modelsTest/' + ${pageNumber.toString}}"
+                                                 th:text=${pageNumber}> th:text = ${pageNumber} </a></li>
 
                     </ul>
                 </nav>

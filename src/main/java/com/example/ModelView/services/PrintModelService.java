@@ -5,6 +5,7 @@ import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -27,6 +28,13 @@ public class PrintModelService {
         return modelRepositoryJPA.findAll(PageRequest.of(page, 40)).toList();
     }
 
+    public List<PrintModel> findAllModelByPageAndSpecsService(int page, Specification<PrintModel> modelSpecification){
+
+        return modelRepositoryJPA.findAll(modelSpecification, (PageRequest.of(page, 40))).toList();
+
+
+    }
+
     public List<ModelZIP> getAllZIPListByPageService(int page){
         return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 250)).toList();
     }
@@ -46,5 +54,7 @@ public class PrintModelService {
     public List<PrintModel> searchByModelNameService (String word, int page) {
         return modelRepositoryJPA.findAllBymodelNameContains(word, PageRequest.of(page, 50)).toList();
     }
+
+
 
 }
