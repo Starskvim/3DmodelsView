@@ -77,28 +77,52 @@
 
 
         <tr>
-            <th>
-                <form th:action="@{/models/modelPage}"
-                      method="post" class="form-horizontal">
-                    <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>
-                        <button type="submit" class="btn btn-primary">Page</button>
-                    </div>
-                </form>
-            </th>
+<!--            <th>-->
+<!--                <form th:action="@{/models/modelPage}"-->
+<!--                      method="post" class="form-horizontal">-->
+<!--                    <div style="margin-bottom: 25px" class="input-group">-->
+<!--                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
+<!--                        <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>-->
+<!--                        <button type="submit" class="btn btn-primary">Page</button>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--            </th>-->
 
             <th>
-                <form th:action="@{/models/search_name}"
-                      method="post" class="form-horizontal">
+                <form th:action="@{/models}"
+                      method="get" class="form-horizontal">
+
                     <div style="margin-bottom: 25px" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <input type="text" th:name="word" placeholder="by name (*)" class="form-control"/>
+
+<!--                        <input type="text" th:name="wordCategory" placeholder="by Category (*)" class="form-control"/>-->
+
+
+                        <select class="form-control" th:name="wordCategory" id="FormControlSelect">
+                            <option type="text" value="" >All</option>
+                            <option type="text" th:value="[Figure]" >Figure</option>
+                            <option type="text" th:value="[Pack]" >Pack</option>
+                            <option type="text" th:value="[OtherFDM]"  >OtherFDM</option>
+                        </select>
+
+
+
+                        <input type="text" th:name="wordName" placeholder="by Name (*)" class="form-control"/>
+
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
+
                 </form>
             </th>
         </tr>
+
+
+
+<!--        <div style="margin-top: 25px" class="form-group">-->
+<!--            <div class="col-sm-6 controls">-->
+<!--                <button type="submit" class="btn btn-primary">Add Product</button>-->
+<!--            </div>-->
+<!--        </div>-->
     </table>
 </div>
 
@@ -106,6 +130,7 @@
     <table class="table table-hover">
 
         <tr>
+            <th> <span th:text="${'Всего страниц ' + allPage}" /> </th>
             <th>
                 <nav aria-label="...">
                     <ul class="pagination">

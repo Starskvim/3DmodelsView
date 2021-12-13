@@ -19,7 +19,7 @@ public class ModelSpecs {
         };
     }
 
-    public static Specification<PrintModel> modelCategory (String word){
+    public static Specification<PrintModel> modelCategoryContains (String word){
         return (Specification<PrintModel>) (root, query, criteriaBuilder) -> {return criteriaBuilder.like(root.get("modelCategory"), "%"+word+"%");};
     }
 }

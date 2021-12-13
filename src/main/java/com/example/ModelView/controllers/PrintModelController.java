@@ -3,27 +3,22 @@ package com.example.ModelView.controllers;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.repositories.specifications.ModelSpecs;
 import com.example.ModelView.services.CreateObjService;
 import com.example.ModelView.services.CreateSyncObjService;
 import com.example.ModelView.services.PrintModelService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
-
-import org.apache.catalina.util.URLEncoder;
 
 @Controller
 @RequestMapping("/models")
@@ -33,20 +28,55 @@ public class PrintModelController {
     private final CreateObjService createObjService;
     private final CreateSyncObjService createSyncObjService;
 
-    @GetMapping
-    public String showModelListController(Model model) {
+//    @GetMapping("/test")
+//    public String showModelListController(Model model) {
+//
+//        model.addAttribute("pageNumbers", preparePageInt(0));
+//        model.addAttribute("models", printModelService.getAllModelListByPageService(0));
+//        return "models";
+//    }
 
-        model.addAttribute("pageNumbers", preparePageInt(0));
-        model.addAttribute("models", printModelService.getAllModelListByPageService(0));
+
+    @GetMapping
+    public String testshowModelListController(Model model,
+                                              @RequestParam(value = "wordName", required = false) String wordName,
+                                              @RequestParam(value = "wordCategory", required = false) String wordCategory,
+                                              @RequestParam(value = "currentPage", required = false) Integer currentPage
+    ) {
+        if (currentPage == null){
+            currentPage = 0;
+        }
+
+        Specification<PrintModel> spec = Specification.where(null);
+        StringBuilder filters = new StringBuilder();
+
+        if (wordName != null) {
+            spec = spec.and(ModelSpecs.modelNameContains(wordName));
+            filters.append("@word-" + wordName);
+        }
+        if (wordCategory != null){
+            spec = spec.and(ModelSpecs.modelCategoryContains(wordCategory));
+            filters.append("@word-" +  wordCategory);
+        }
+
+
+        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(currentPage, spec);
+
+
+        model.addAttribute("models", modelsPages.getContent());
+        model.addAttribute("allPage", modelsPages.getTotalPages());
+        model.addAttribute("filters", filters.toString());
+        model.addAttribute("wordName", wordName);
+        model.addAttribute("wordCategory", wordCategory);
+
+        model.addAttribute("pageNumbers", preparePageInt(currentPage));
         return "models";
     }
 
+
     @GetMapping("/zipPage")
     public String showZIPListController(Model model) {
-
-
         model.addAttribute("zips", printModelService.getAllZIPListByPageService(0));
-
         return "zipPage";
     }
 
@@ -173,15 +203,16 @@ public class PrintModelController {
 
         if (current == 2) {
             pageNumbers.add(current);
-        }else if (current > 2) {
+        } else if (current > 2) {
             pageNumbers.add(current - 1);
             pageNumbers.add(current);
         }
 
         for (int i = 0; i < 11; i++) {
             current += 1;
-            if (!(current == 1)){
-            pageNumbers.add(current);}
+            if (!(current == 1)) {
+                pageNumbers.add(current);
+            }
         }
 
         return pageNumbers;
