@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 @Controller
-@RequestMapping("/models")
+@RequestMapping("/models/{currentPage}")
 @RequiredArgsConstructor
 public class PrintModelController {
     private final PrintModelService printModelService;
@@ -36,12 +36,12 @@ public class PrintModelController {
 //        return "models";
 //    }
 
-
     @GetMapping
     public String testshowModelListController(Model model,
                                               @RequestParam(value = "wordName", required = false) String wordName,
                                               @RequestParam(value = "wordCategory", required = false) String wordCategory,
-                                              @RequestParam(value = "currentPage", required = false) Integer currentPage
+                                              @PathVariable(value = "currentPage", required = false) Integer currentPage
+
     ) {
         if (currentPage == null){
             currentPage = 0;
@@ -164,15 +164,15 @@ public class PrintModelController {
 //    }
 
 
-    @GetMapping("/{page}")
-    public String showModelListControllerNew(Model model, @PathVariable(value = "page") int page) {
-
-        model.addAttribute("pageNumbers", preparePageInt(page));
-
-        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
-
-        return "models";
-    }
+//    @GetMapping("/{page}")
+//    public String showModelListControllerNew(Model model, @PathVariable(value = "page") int page) {
+//
+//        model.addAttribute("pageNumbers", preparePageInt(page));
+//
+//        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
+//
+//        return "models";
+//    }
 
 
     @PostMapping("/search_name")
