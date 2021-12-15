@@ -33,7 +33,7 @@
 
         <tr>
             <th>
-                <form th:action="@{/models/0}"
+                <form th:action="@{/models}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -75,30 +75,26 @@
             </th>
         </tr>
 
+    </table>
 
-        <tr>
-            <!--            <th>-->
-            <!--                <form th:action="@{/models/modelPage}"-->
-            <!--                      method="post" class="form-horizontal">-->
-            <!--                    <div style="margin-bottom: 25px" class="input-group">-->
-            <!--                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>-->
-            <!--                        <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>-->
-            <!--                        <button type="submit" class="btn btn-primary">Page</button>-->
-            <!--                    </div>-->
-            <!--                </form>-->
-            <!--            </th>-->
+</div>
 
-            <th>
-                <form th:action="@{'/models/'+ ${currentPage.toString}}"
-                      method="get" class="form-horizontal">
+<div class="container">
 
+    <form th:action="@{/models}"
+          method="get" class="form-horizontal">
+        <table class="table table-hover">
+
+            <tr>
+                <th>
                     <div style="margin-bottom: 25px" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 
-                        <!--                        <input type="text" th:name="wordCategory" placeholder="by Category (*)" class="form-control"/>-->
-
 
                         <select class="form-control" th:name="wordCategory" id="FormControlSelect">
+                            <option type="text" th:value="${wordCategory != null} ? ${wordCategory}"
+                                    th:text="${wordCategory != null} ? ${wordCategory}">Category
+                            </option>
                             <option type="text" value="">All</option>
                             <option type="text" th:value="[Figure]">Figure</option>
                             <option type="text" th:value="[Pack]">Pack</option>
@@ -106,81 +102,37 @@
                         </select>
 
 
-                        <input type="text" th:name="wordName" placeholder="by Name (*)" class="form-control"/>
+                        <input type="text" th:value="${wordName != null} ? ${wordName}" th:name="wordName"
+                               placeholder="by Name (*)" class="form-control"/>
 
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
+                </th>
 
-                </form>
-            </th>
-        </tr>
+                <th><span th:text="${'Всего страниц ' + allPage}"/></th>
 
+            </tr>
 
-        <!--        <div style="margin-top: 25px" class="form-group">-->
-        <!--            <div class="col-sm-6 controls">-->
-        <!--                <button type="submit" class="btn btn-primary">Add Product</button>-->
-        <!--            </div>-->
-        <!--        </div>-->
-    </table>
-</div>
+            <tr>
+                <th>
+                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>
+                </th>
 
-<div class="container">
-    <table class="table table-hover">
+                <th th:each="pageNumber : ${pageNumbers}">
+                    <button class="btn btn-info" type="submit"
+                            th:name="page"
+                            th:value=${pageNumber}
+                            th:text=${pageNumber}></a></button>
+                </th>
 
-        <tr>
-            <th><span th:text="${'Всего страниц ' + allPage}"/></th>
+                <th>
+                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}" ><a>1</a></button>
+                </th>
 
-            <!--            <form th:action="@{/models}"-->
-            <!--                  method="get"  class="form-horizontal">-->
+            </tr>
 
-            <!--                <div style="margin-bottom: 25px" class="input-group">-->
-            <!--                    <th>-->
-            <!--&lt;!&ndash;                        <nav aria-label="...">&ndash;&gt;-->
-            <!--&lt;!&ndash;                            <ul class="pagination">&ndash;&gt;-->
-
-            <!--                                <button type="submit" class="page-item"><a class="page-link"  th:name="currentPage"-->
-            <!--                                                         th:value="0">1</a></button>-->
-
-            <!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
-            <!--&lt;!&ndash;                        </nav>&ndash;&gt;-->
-            <!--                    </th>-->
-
-            <!--                    <th th:each="pageNumber : ${pageNumbers}">-->
-            <!--&lt;!&ndash;                        <nav aria-label="...">&ndash;&gt;-->
-            <!--&lt;!&ndash;                            <ul class="pagination">&ndash;&gt;-->
-            <!--                                <button type="submit" class="page-item"><a class="page-link" th:name="currentPage"-->
-            <!--                                                         th:value=${pageNumber}-->
-            <!--                                                         th:text=${pageNumber}></a></button>-->
-            <!--&lt;!&ndash;                            </ul>&ndash;&gt;-->
-            <!--&lt;!&ndash;                        </nav>&ndash;&gt;-->
-            <!--                    </th>-->
-
-            <!--                </div>-->
-            <!--            </form>-->
-
-
-            <th>
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" type="submit" th:name="currentPage" th:value="0"
-                                                 th:href="@{'/models/0'}">1</a></li>
-                    </ul>
-                </nav>
-            </th>
-
-            <th th:each="pageNumber : ${pageNumbers}">
-                <nav aria-label="...">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" type="submit" th:name="currentPage"
-                                                 th:value=${pageNumber} th:href="@{'/models/' + ${pageNumber.toString}}"
-                                                 th:text=${pageNumber}></a></li>
-                    </ul>
-                </nav>
-            </th>
-
-
-        </tr>
-    </table>
+        </table>
+    </form>
 </div>
 
 
@@ -222,41 +174,8 @@
 </div>
 
 
-<div class="container">
-    <table class="table table-hover">
-        <tr>
-            <th th:each="pageNumber : ${pageNumbers}">
-                <nav aria-label="...">
-                    <ul class="pagination">
-
-                        <li class="page-item"><a class="page-link"
-                                                 th:href="@{'/models/' + ${pageNumber.toString}}"
-                                                 th:text=${pageNumber}> th:text = ${pageNumber} </a></li>
-
-                    </ul>
-                </nav>
-            </th>
-        </tr>
-    </table>
-</div>
-
-
 <canvas id="canvas" width="1400" height="600"></canvas>
 <script th:src="@{/js/scriptWARP.js}"></script>
-<script th:src="@{/js/pagination.js}"></script>
-
-<script>
-    $(document).ready(function () {
-        $('#page').Pagination({ // id to initial draw and use pagination
-            size: 87, // size of list input
-            pageShow: 5, // 5 page-item per page
-            page: 0, // current page (default)
-            limit: 10, // current limit show perpage (default)
-        }, function (obj) { // callback function, you can use it to re-draw table or something
-            $('#info').html('Current page: ' + obj.page);
-        });
-    });
-</script>
 
 
 </body>

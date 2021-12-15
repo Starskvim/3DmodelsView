@@ -19,14 +19,20 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.Optional;
+
+
+//"/models/{currentPage}"
 
 @Controller
-@RequestMapping("/models/{currentPage}")
+@RequestMapping("/models")
 @RequiredArgsConstructor
 public class PrintModelController {
     private final PrintModelService printModelService;
     private final CreateObjService createObjService;
     private final CreateSyncObjService createSyncObjService;
+
+    private static final int INITIAL_PAGE = 0;
 
 //    @GetMapping("/test")
 //    public String showModelListController(Model model) {
@@ -38,14 +44,18 @@ public class PrintModelController {
 
     @GetMapping
     public String testshowModelListController(Model model,
+                                              @RequestParam(value = "page", required = false) Optional<Integer> page,
                                               @RequestParam(value = "wordName", required = false) String wordName,
-                                              @RequestParam(value = "wordCategory", required = false) String wordCategory,
-                                              @PathVariable(value = "currentPage", required = false) Integer currentPage
+                                              @RequestParam(value = "wordCategory", required = false) String wordCategory
+//                                              @PathVariable(value = "currentPage", required = false) Integer currentPage
 
     ) {
-        if (currentPage == null){
-            currentPage = 0;
-        }
+
+        final  int newCurrentPage = (page.orElse(0)<1) ? INITIAL_PAGE : page.get() -1;
+
+        //if (currentPage == null){
+        //    currentPage = 0;
+        //}
 
         Specification<PrintModel> spec = Specification.where(null);
         StringBuilder filters = new StringBuilder();
@@ -60,7 +70,7 @@ public class PrintModelController {
         }
 
 
-        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(currentPage, spec);
+        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(newCurrentPage, spec);
 
 
         model.addAttribute("models", modelsPages.getContent());
@@ -69,7 +79,10 @@ public class PrintModelController {
         model.addAttribute("wordName", wordName);
         model.addAttribute("wordCategory", wordCategory);
 
-        model.addAttribute("pageNumbers", preparePageInt(currentPage));
+
+        model.addAttribute("page", newCurrentPage);
+
+        model.addAttribute("pageNumbers", preparePageInt(newCurrentPage));
         return "models";
     }
 
