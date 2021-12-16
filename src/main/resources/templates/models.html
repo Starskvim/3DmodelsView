@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -35,7 +36,7 @@
             <th>
                 <form th:action="@{/models}"
                       method="get" class="form-horizontal">
-                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Home Page
                         </button>
@@ -45,7 +46,7 @@
             <th>
                 <form th:action="@{/models/zipPage}"
                       method="get" class="form-horizontal">
-                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Zip Page
                         </button>
@@ -54,7 +55,7 @@
             </th>
             <th>
                 <form th:action="@{/models/good}"
-                      method="get" target=»_blank» class="form-horizontal">
+                      method="get" target=»_blank» class="form-horizontal myButtonHead">
                     <div style="margin-bottom: 14px; width: 14%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Good
@@ -65,7 +66,7 @@
 
             <th>
                 <form th:action="@{/models/admin}"
-                      method="get" target=»_blank» class="form-horizontal">
+                      method="get" target=»_blank» class="form-horizontal myButtonHead">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Admin Page
@@ -87,7 +88,7 @@
 
             <tr>
                 <th>
-                    <div style="margin-bottom: 25px" class="input-group">
+                    <div style="margin-bottom: 0px; vertical-align: middle" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
 
 
@@ -113,7 +114,11 @@
 
             </tr>
 
+        </table>
+
+        <table class="table table-hover">
             <tr>
+
                 <th>
                     <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>
                 </th>
@@ -126,7 +131,8 @@
                 </th>
 
                 <th>
-                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}" ><a>1</a></button>
+                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">
+                        <a>1</a></button>
                 </th>
 
             </tr>
@@ -145,7 +151,7 @@
 
         <tr>
             <th>Preview</th>
-            <th>ID</th>
+            <!--            <th>ID</th>-->
             <th>Category</th>
             <th>modelName</th>
             <th>Действия</th>
@@ -158,11 +164,11 @@
                 <img th:src="'data:image/png;base64,' + ${model.getPreviewBaseSFimg}" alt="None"
                      class="imagePreveiw"/>
             </th>
-            <td th:text="${model.id}"/>
+            <!--            <td th:text="${model.id}"/>-->
             <td th:text="${model.modelCategory}"/>
             <td th:text="${model.modelName}"/>
             <td class="Link">
-                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотреть"/>
+                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотр"/>
             </td>
 
         </tr>
@@ -171,6 +177,59 @@
     </table>
 
 
+</div>
+
+
+<div class="container">
+    <form th:action="@{/models}"
+          method="get" class="form-horizontal">
+
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>
+                </th>
+                <th th:each="pageNumber : ${pageNumbers}">
+                    <button class="btn btn-info" type="submit"
+                            th:name="page"
+                            th:value=${pageNumber}
+                            th:text=${pageNumber}></a></button>
+                </th>
+                <th>
+                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">
+                        <a>1</a></button>
+                </th>
+            </tr>
+        </table>
+
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    <div style="margin-bottom: 0px; vertical-align: middle" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+
+
+                        <select class="form-control" th:name="wordCategory" id="FormControlSelect">
+                            <option type="text" th:value="${wordCategory != null} ? ${wordCategory}"
+                                    th:text="${wordCategory != null} ? ${wordCategory}">Category
+                            </option>
+                            <option type="text" value="">All</option>
+                            <option type="text" th:value="[Figure]">Figure</option>
+                            <option type="text" th:value="[Pack]">Pack</option>
+                            <option type="text" th:value="[OtherFDM]">OtherFDM</option>
+                        </select>
+
+                        <input type="text" th:value="${wordName != null} ? ${wordName}" th:name="wordName"
+                               placeholder="by Name (*)" class="form-control"/>
+
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </th>
+                <th><span th:text="${'Всего страниц ' + allPage}"/></th>
+            </tr>
+        </table>
+
+    </form>
 </div>
 
 

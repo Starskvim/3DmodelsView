@@ -100,8 +100,11 @@ public class CreateSyncObjService {
         }
 
         collectionsService.saveAllListToJpaRepository();
+
+        // ? Очередность, вызов не существующих листов ?
         checkAndDeleteOBJinListOTHandZIP(filesList);
         deleteModelsWhereDeletedFiles(filesList);
+
         collectionsService.saveAllListToJpaRepository();
 
 
@@ -211,17 +214,33 @@ public class CreateSyncObjService {
         if (!printModelsSavedFilesAdressStringSet.isEmpty()) {
             for (String fileAbsPath : printModelsSavedFilesAdressStringSet) {
                 if (zipFormatList.contains(FilenameUtils.getExtension(fileAbsPath))) {
-                    ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
-                    PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());
-                    Collection<ModelZIP> modelZIPList = printModel.getModelZIPList();
-                    modelZIPList.remove(modelZIP);
-                    toDeleteZIPList.add(modelZIP);
+
+
+                    try {
+                        ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
+                        PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());
+                        Collection<ModelZIP> modelZIPList = printModel.getModelZIPList();
+                        modelZIPList.remove(modelZIP);
+                        toDeleteZIPList.add(modelZIP);
+                    } catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
+
                 } else {
-                    ModelOTH modelOTH = modelRepositoryOTHJPA.getModelOTHByModelOTHAdress(fileAbsPath);
-                    PrintModel printModel = modelRepositoryJPA.getByModelName(modelOTH.getModelName());
-                    Collection<ModelOTH> modelOTHList = printModel.getModelOTHList();
-                    modelOTHList.remove(modelOTH);
-                    toDeleteOTHList.add(modelOTH);
+
+                    try {
+                        ModelOTH modelOTH = modelRepositoryOTHJPA.getModelOTHByModelOTHAdress(fileAbsPath);
+                        PrintModel printModel = modelRepositoryJPA.getByModelName(modelOTH.getModelName());
+                        Collection<ModelOTH> modelOTHList = printModel.getModelOTHList();
+                        modelOTHList.remove(modelOTH);
+                        toDeleteOTHList.add(modelOTH);
+                    } catch (Exception e){
+                        System.out.println(e);
+                    }
+
+
                 }
             }
             modelRepositoryOTHJPA.deleteAll(toDeleteOTHList);

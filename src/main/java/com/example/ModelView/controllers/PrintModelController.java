@@ -132,7 +132,7 @@ public class PrintModelController {
         }
         long fin = System.currentTimeMillis();
         System.out.println("startSyncController time create - " + (fin - start));
-        return "redirect:/models/admin";
+        return "admin";
     }
 
 
