@@ -53,7 +53,7 @@ public class PrintModelService {
     }
 
     public List<PrintModel> searchByModelNameService (String word, int page) {
-        return modelRepositoryJPA.findAllBymodelNameContains(word, PageRequest.of(page, 50)).toList();
+        return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
     }
 
 
