@@ -9,6 +9,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 @Entity
 @Table(name = "model_other_files")
@@ -54,16 +55,22 @@ public class ModelOTH {
         return adress;
     }
 
-    public String getBaseSFimg() throws IOException {
+    public String getBaseSFimg() {
 
         String adress = getPicture();
 
         File file = new File(adress);
-        FileInputStream fileInputStreamReader = new FileInputStream(file);
-        byte[] bytes = new byte[(int) file.length()];
-        fileInputStreamReader.read(bytes);
 
-        return new String(Base64.encodeBase64(bytes), "UTF-8");
+        try (FileInputStream fileInputStreamReader = new FileInputStream(file)) {
+            byte[] bytes = new byte[(int) file.length()];
+            fileInputStreamReader.read(bytes);
+            fileInputStreamReader.close();
+            return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
+
 
     }
 
