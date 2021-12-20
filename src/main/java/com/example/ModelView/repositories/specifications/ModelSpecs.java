@@ -2,6 +2,7 @@ package com.example.ModelView.repositories.specifications;
 
 
 import com.example.ModelView.entities.PrintModel;
+import org.hibernate.Filter;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,7 +15,12 @@ public class ModelSpecs {
         return new Specification<PrintModel>() {
             @Override
             public Predicate toPredicate(Root<PrintModel> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-                return criteriaBuilder.like(root.get("modelName"), "%"+word+"%");
+
+
+//                return criteriaBuilder.like(root.get("modelName"), "%"+word+"%");
+                return criteriaBuilder.like(criteriaBuilder.upper(root.get("modelName")), "%"+word.toUpperCase()+"%");
+
+
             }
         };
     }

@@ -51,7 +51,7 @@ public class PrintModelController {
 
     ) {
 
-        final  int newCurrentPage = (page.orElse(0)<1) ? INITIAL_PAGE : page.get() -1;
+        final int newCurrentPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
 
         //if (currentPage == null){
         //    currentPage = 0;
@@ -62,11 +62,15 @@ public class PrintModelController {
 
         if (wordName != null) {
             spec = spec.and(ModelSpecs.modelNameContains(wordName));
-            filters.append("@word-" + wordName);
+
+//            filters.append("@word-" + wordName);
+
+
+
         }
-        if (wordCategory != null){
+        if (wordCategory != null) {
             spec = spec.and(ModelSpecs.modelCategoryContains(wordCategory));
-            filters.append("@word-" +  wordCategory);
+            filters.append("@word-" + wordCategory);
         }
 
 
