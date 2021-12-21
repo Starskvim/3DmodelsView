@@ -1,5 +1,7 @@
 package com.example.ModelView.controllers;
 
+import com.example.ModelView.DTO.MapperDTO;
+import com.example.ModelView.DTO.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
@@ -17,12 +19,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 
 
-//"/models/{currentPage}"
+
 
 @Controller
 @RequestMapping("/models")
@@ -31,53 +34,43 @@ public class PrintModelController {
     private final PrintModelService printModelService;
     private final CreateObjService createObjService;
     private final CreateSyncObjService createSyncObjService;
+    private final MapperDTO mapperDTO;
 
     private static final int INITIAL_PAGE = 0;
-
-//    @GetMapping("/test")
-//    public String showModelListController(Model model) {
-//
-//        model.addAttribute("pageNumbers", preparePageInt(0));
-//        model.addAttribute("models", printModelService.getAllModelListByPageService(0));
-//        return "models";
-//    }
 
     @GetMapping
     public String testshowModelListController(Model model,
                                               @RequestParam(value = "page", required = false) Optional<Integer> page,
                                               @RequestParam(value = "wordName", required = false) String wordName,
                                               @RequestParam(value = "wordCategory", required = false) String wordCategory
-//                                              @PathVariable(value = "currentPage", required = false) Integer currentPage
 
     ) {
 
         final int newCurrentPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
-
-        //if (currentPage == null){
-        //    currentPage = 0;
-        //}
 
         Specification<PrintModel> spec = Specification.where(null);
         StringBuilder filters = new StringBuilder();
 
         if (wordName != null) {
             spec = spec.and(ModelSpecs.modelNameContains(wordName));
-
-//            filters.append("@word-" + wordName);
-
-
-
         }
         if (wordCategory != null) {
             spec = spec.and(ModelSpecs.modelCategoryContains(wordCategory));
             filters.append("@word-" + wordCategory);
         }
 
-
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(newCurrentPage, spec);
 
+        ArrayList<PrintModelDTO> resultList = new ArrayList<>(40);
 
-        model.addAttribute("models", modelsPages.getContent());
+        for(PrintModel printModel: modelsPages.getContent()){
+            resultList.add(mapperDTO.toDTO(printModel));
+        }
+
+        model.addAttribute("models", resultList);
+
+
+
         model.addAttribute("allPage", modelsPages.getTotalPages());
         model.addAttribute("filters", filters.toString());
         model.addAttribute("wordName", wordName);

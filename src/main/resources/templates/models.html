@@ -161,7 +161,7 @@
         <tbody>
         <tr th:each="model : ${models}">
             <th>
-                <img th:src="'data:image/png;base64,' + ${model.getPreviewBaseSFimg}" alt="None"
+                <img th:src="'data:image/png;base64,' + ${model.compressPreview}" alt="None"
                      class="imagePreveiw"/>
             </th>
             <!--            <td th:text="${model.id}"/>-->
