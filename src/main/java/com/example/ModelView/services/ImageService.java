@@ -91,7 +91,7 @@ public class ImageService {
 
     private byte[] createResultBytes(BufferedImage losslessimage) {
 
-        float lossyquality = 0.5F;
+        float lossyquality = 0.2F;
 
         Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName("JPG");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

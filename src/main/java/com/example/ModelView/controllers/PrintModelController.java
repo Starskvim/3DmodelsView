@@ -7,9 +7,7 @@ import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
-import com.example.ModelView.services.CreateObjService;
-import com.example.ModelView.services.CreateSyncObjService;
-import com.example.ModelView.services.PrintModelService;
+import com.example.ModelView.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -20,12 +18,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.Optional;
-
-
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 @Controller
@@ -36,6 +33,7 @@ public class PrintModelController {
     private final CreateObjService createObjService;
     private final CreateSyncObjService createSyncObjService;
     private final MapperDTO mapperDTO;
+    private final CreateDTOService createDTOService;
 
     private static final int INITIAL_PAGE = 0;
 
@@ -62,15 +60,13 @@ public class PrintModelController {
 
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(newCurrentPage, spec);
 
-        ArrayList<PrintModelDTO> resultList = new ArrayList<>(40);
-
-        for(PrintModel printModel: modelsPages.getContent()){
-            resultList.add(mapperDTO.toPrintModelDTO(printModel));
-        }
+        long start = System.currentTimeMillis();
+        //List<PrintModelDTO> resultList = createDTOService.createDTOlistThreads(modelsPages);
+        List<PrintModelDTO> resultList = createDTOService.createDTOlistStream(modelsPages);
+        long fin = System.currentTimeMillis();
+        System.out.println("Create page "+ newCurrentPage + " Time " + (fin - start));
 
         model.addAttribute("models", resultList);
-
-
 
         model.addAttribute("allPage", modelsPages.getTotalPages());
         model.addAttribute("filters", filters.toString());
@@ -155,7 +151,7 @@ public class PrintModelController {
 
         Collection<ModelOTHDTO> resultListOTH = new ArrayList<>(10);
 
-        for (ModelOTH modelOTH: printModelOTHList){
+        for (ModelOTH modelOTH : printModelOTHList) {
             resultListOTH.add(mapperDTO.toModelOTHDTO(modelOTH));
         }
 
@@ -163,8 +159,6 @@ public class PrintModelController {
 
         model.addAttribute("printModelZIPList", printModelZIPList);
         model.addAttribute("printModel", printModel);
-
-
 
 
         return "modelPage";
