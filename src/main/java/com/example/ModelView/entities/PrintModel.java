@@ -61,21 +61,6 @@ public class PrintModel {
         modelOTHList.add(modelOTH);
     }
 
-    ///// !!!!!
-//    public String getOnePicturePreview() {
-//        String adress = null;
-//        for (ModelOTH modelOTH : modelOTHList) {
-//            if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
-//                adress = modelOTH.getModelOTHAdress();
-//            } else {
-//                adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
-//            }
-//        }
-//        return adress;
-//    }
-
-
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

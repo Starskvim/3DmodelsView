@@ -45,34 +45,4 @@ public class ModelOTH {
     }
 
 
-    public String getPicture() {
-        String adress;
-        if (this.modelOTHFormat.contains("jpg") || this.modelOTHFormat.contains("png") || this.modelOTHFormat.contains("jpeg")) {
-            adress = this.modelOTHAdress;
-        } else {
-            adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
-        }
-        return adress;
-    }
-
-    public String getBaseSFimg() {
-
-        String adress = getPicture();
-
-        File file = new File(adress);
-
-        try (FileInputStream fileInputStreamReader = new FileInputStream(file)) {
-            byte[] bytes = new byte[(int) file.length()];
-            fileInputStreamReader.read(bytes);
-            fileInputStreamReader.close();
-            return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            System.out.println(e);
-            return null;
-        }
-
-
-    }
-
-
 }

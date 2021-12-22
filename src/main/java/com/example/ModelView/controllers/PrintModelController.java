@@ -1,6 +1,7 @@
 package com.example.ModelView.controllers;
 
 import com.example.ModelView.DTO.MapperDTO;
+import com.example.ModelView.DTO.ModelOTHDTO;
 import com.example.ModelView.DTO.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
@@ -64,7 +65,7 @@ public class PrintModelController {
         ArrayList<PrintModelDTO> resultList = new ArrayList<>(40);
 
         for(PrintModel printModel: modelsPages.getContent()){
-            resultList.add(mapperDTO.toDTO(printModel));
+            resultList.add(mapperDTO.toPrintModelDTO(printModel));
         }
 
         model.addAttribute("models", resultList);
@@ -148,12 +149,23 @@ public class PrintModelController {
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
 
         PrintModel printModel = printModelService.getById(id);
+
         Collection<ModelOTH> printModelOTHList = printModel.getModelOTHList();
         Collection<ModelZIP> printModelZIPList = printModel.getModelZIPList();
 
-        model.addAttribute("printModelOTHList", printModelOTHList);
+        Collection<ModelOTHDTO> resultListOTH = new ArrayList<>(10);
+
+        for (ModelOTH modelOTH: printModelOTHList){
+            resultListOTH.add(mapperDTO.toModelOTHDTO(modelOTH));
+        }
+
+        model.addAttribute("printModelOTHList", resultListOTH);
+
         model.addAttribute("printModelZIPList", printModelZIPList);
         model.addAttribute("printModel", printModel);
+
+
+
 
         return "modelPage";
     }
@@ -165,24 +177,6 @@ public class PrintModelController {
 
         return "models";
     }
-
-//    @GetMapping("/{page}")
-//    public String showModelListByPageControllerNEW(Model model, @PathVariable(value = "page") int page) {
-//
-//        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
-//        return "models";
-//    }
-
-
-//    @GetMapping("/{page}")
-//    public String showModelListControllerNew(Model model, @PathVariable(value = "page") int page) {
-//
-//        model.addAttribute("pageNumbers", preparePageInt(page));
-//
-//        model.addAttribute("models", printModelService.getAllModelListByPageService(page));
-//
-//        return "models";
-//    }
 
 
     @PostMapping("/search_name")
@@ -209,7 +203,6 @@ public class PrintModelController {
     public LinkedList<Integer> preparePageInt(int current) {
 
         LinkedList<Integer> pageNumbers = new LinkedList<>();
-
 
         if (current == 2) {
             pageNumbers.add(current);

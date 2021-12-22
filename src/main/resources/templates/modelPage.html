@@ -160,7 +160,7 @@
     <tr th:each="fileOTH : ${printModelOTHList}">
 
         <th>
-            <img th:src="'data:image/png;base64,' + ${fileOTH.getBaseSFimg}" alt="Red dot" class="imageFull"/>
+            <img th:src="'data:image/png;base64,' + ${fileOTH.fullPreview}" alt="Red dot" class="imageFull"/>
         </th>
 
     </tr>

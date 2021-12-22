@@ -27,20 +27,10 @@ public class ImageService {
     public String getPreviewBaseSFimg (PrintModel printModel, Boolean comression) {
         try {
 
-
             if (comression){
                 byte[] bytes = compression(getOnePicturePreview(printModel));
                 return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
             }
-
-//            else {
-//
-////                String adress = getOnePicturePreview();
-////                File file =  new File(adress);
-////                FileInputStream fileInputStreamReader = new FileInputStream(file);
-////                byte[] bytes = new byte[(int)file.length()];
-////                fileInputStreamReader.read(bytes);
-//            }
 
         } catch (Exception a) {
             return null;
@@ -49,18 +39,34 @@ public class ImageService {
         return null;
     }
 
-//    public String getPicture() {
-//        String adress;
-//        if (this.modelOTHFormat.contains("jpg") || this.modelOTHFormat.contains("png") || this.modelOTHFormat.contains("jpeg")) {
-//            adress = this.modelOTHAdress;
-//        } else {
-//            adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
-//        }
-//        return adress;
-//    }
+    public String getFullBaseSFimg (ModelOTH modelOTH) {
+        try {
+            String adress = getPicture(modelOTH);
+            File file =  new File(adress);
+            FileInputStream fileInputStreamReader = new FileInputStream(file);
+            byte[] bytes = new byte[(int)file.length()];
+            fileInputStreamReader.read(bytes);
+            return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private String getPicture(ModelOTH modelOTH) {
+        String adress;
+        String format = modelOTH.getModelOTHFormat();
+        if (format.contains("jpg") || format.contains("png") || format.contains("jpeg")) {
+            adress = modelOTH.getModelOTHAdress();
+        } else {
+            adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
+        }
+        return adress;
+    }
 
 
-    public String getOnePicturePreview(PrintModel printModel) {
+    private String getOnePicturePreview(PrintModel printModel) {
         String adress = null;
         for (ModelOTH modelOTH : printModel.getModelOTHList()) {
             if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
@@ -109,7 +115,7 @@ public class ImageService {
                 mcios.close();
             }
             catch (IOException ioe) {
-                System.out.println(ioe);
+                System.out.println(ioe.getMessage());
             }
         }
         return baos.toByteArray();
