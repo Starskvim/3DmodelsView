@@ -26,10 +26,10 @@ public class CollectionsService {
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    private Collection<PrintModel> printModelsToSaveList = new ArrayList<>();
+    private HashSet<PrintModel> printModelsToSaveList = new HashSet<>();
 
-    private Collection<ModelOTH> modelOTHList = new ArrayList<>();
-    private Collection<ModelZIP> modelZIPList = new ArrayList<>();
+    private HashSet<ModelOTH> modelOTHList = new HashSet<>();
+    private HashSet<ModelZIP> modelZIPList = new HashSet<>();
     private ArrayList<String> zipFormatList = new ArrayList<>(6);
 
     private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);

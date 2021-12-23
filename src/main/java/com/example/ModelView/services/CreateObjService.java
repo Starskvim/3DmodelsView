@@ -30,9 +30,9 @@ public class CreateObjService {
 
 
 
-    Collection<PrintModel> printModelsToSaveList;
-    Collection<ModelOTH> modelOTHList;
-    Collection<ModelZIP> modelZIPList;
+    HashSet<PrintModel> printModelsToSaveList;
+    HashSet<ModelOTH> modelOTHList;
+    HashSet<ModelZIP> modelZIPList;
     ArrayList<String> zipFormatList;
     HashSet<String> printModelsToSaveNameStringSet;
 

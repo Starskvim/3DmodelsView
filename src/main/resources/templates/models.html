@@ -124,7 +124,7 @@
                 </th>
 
                 <th th:each="pageNumber : ${pageNumbers}">
-                    <button class="btn btn-info" type="submit"
+                    <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
                             th:value=${pageNumber}
                             th:text=${pageNumber}></a></button>

@@ -10,6 +10,7 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import javax.persistence.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Entity
 @Table(name = "model_other_files")
@@ -44,5 +45,22 @@ public class ModelOTH {
         this.sizeOTH = sizeOTH;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModelOTH modelOTH = (ModelOTH) o;
+        return id.equals(modelOTH.id)
+                && nameModelOTH.equals(modelOTH.nameModelOTH)
+                && modelName.equals(modelOTH.modelName)
+                && fileClass.equals(modelOTH.fileClass)
+                && modelOTHAdress.equals(modelOTH.modelOTHAdress)
+                && modelOTHFormat.equals(modelOTH.modelOTHFormat)
+                && sizeOTH.equals(modelOTH.sizeOTH);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, nameModelOTH, modelName, fileClass, modelOTHAdress, modelOTHFormat, sizeOTH);
+    }
 }

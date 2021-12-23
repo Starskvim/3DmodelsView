@@ -61,8 +61,8 @@ public class PrintModelController {
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(newCurrentPage, spec);
 
         long start = System.currentTimeMillis();
-        //List<PrintModelDTO> resultList = createDTOService.createDTOlistThreads(modelsPages);
-        List<PrintModelDTO> resultList = createDTOService.createDTOlistStream(modelsPages);
+        List<PrintModelDTO> resultList = createDTOService.createDTOlistThreads(modelsPages);
+        //List<PrintModelDTO> resultList = createDTOService.createDTOlistStream(modelsPages);
         long fin = System.currentTimeMillis();
         System.out.println("Create page "+ newCurrentPage + " Time " + (fin - start));
 
@@ -74,6 +74,7 @@ public class PrintModelController {
         model.addAttribute("wordCategory", wordCategory);
 
 
+        model.addAttribute("currentPage", page);
         model.addAttribute("page", newCurrentPage);
 
         model.addAttribute("pageNumbers", preparePageInt(newCurrentPage));
