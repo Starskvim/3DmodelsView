@@ -50,8 +50,7 @@ public class ModelOTH {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ModelOTH modelOTH = (ModelOTH) o;
-        return id.equals(modelOTH.id)
-                && nameModelOTH.equals(modelOTH.nameModelOTH)
+        return nameModelOTH.equals(modelOTH.nameModelOTH)
                 && modelName.equals(modelOTH.modelName)
                 && fileClass.equals(modelOTH.fileClass)
                 && modelOTHAdress.equals(modelOTH.modelOTHAdress)
@@ -61,6 +60,6 @@ public class ModelOTH {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameModelOTH, modelName, fileClass, modelOTHAdress, modelOTHFormat, sizeOTH);
+        return Objects.hash(nameModelOTH, modelName, fileClass, modelOTHAdress, modelOTHFormat, sizeOTH);
     }
 }

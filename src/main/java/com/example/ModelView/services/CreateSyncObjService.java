@@ -20,6 +20,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 
 @Service
@@ -36,12 +38,14 @@ public class CreateSyncObjService {
     private final CollectionsService collectionsService;
 
 
-    Collection<PrintModel> printModelsToSaveList;
-    Collection<ModelOTH> modelOTHList;
-    Collection<ModelZIP> modelZIPList;
-    ArrayList<String> zipFormatList;
+    CopyOnWriteArraySet<PrintModel> printModelsToSaveList;
+    CopyOnWriteArraySet<ModelOTH> modelOTHList;
+    CopyOnWriteArraySet<ModelZIP> modelZIPList;
+    CopyOnWriteArrayList<String> zipFormatList;
+    CopyOnWriteArraySet<String> printModelsToSaveNameStringSet;
 
-    HashSet<String> printModelsToSaveNameStringSet;
+
+
     HashSet<String> printModelsSavedNameStringSet;
     HashSet<String> printModelsSavedFilesNameStringSet;
 

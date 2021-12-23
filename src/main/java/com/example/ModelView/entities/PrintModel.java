@@ -66,11 +66,13 @@ public class PrintModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PrintModel that = (PrintModel) o;
-        return id.equals(that.id) && modelName.equals(that.modelName) && modelDerictory.equals(that.modelDerictory) && modelCategory.equals(that.modelCategory);
+        return modelName.equals(that.modelName)
+                && modelDerictory.equals(that.modelDerictory)
+                && modelCategory.equals(that.modelCategory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, modelName, modelDerictory, modelCategory);
+        return Objects.hash(modelName, modelDerictory, modelCategory);
     }
 }

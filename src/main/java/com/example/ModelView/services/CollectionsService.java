@@ -15,6 +15,8 @@ import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +28,21 @@ public class CollectionsService {
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
 
-    private HashSet<PrintModel> printModelsToSaveList = new HashSet<>();
+    private CopyOnWriteArraySet<PrintModel> printModelsToSaveList = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<ModelOTH> modelOTHList = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<ModelZIP> modelZIPList = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArraySet<String> printModelsToSaveNameStringSet = new CopyOnWriteArraySet<>();
 
-    private HashSet<ModelOTH> modelOTHList = new HashSet<>();
-    private HashSet<ModelZIP> modelZIPList = new HashSet<>();
-    private ArrayList<String> zipFormatList = new ArrayList<>(6);
 
-    private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
+//    private HashSet<PrintModel> printModelsToSaveList = new HashSet<>();
+//    private HashSet<ModelOTH> modelOTHList = new HashSet<>();
+//    private HashSet<ModelZIP> modelZIPList = new HashSet<>();
+//    private ArrayList<String> zipFormatList = new ArrayList<>(6);
+//    private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
+
+
+
     private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
 
     //?

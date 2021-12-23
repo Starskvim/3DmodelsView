@@ -52,7 +52,6 @@ public class ModelZIP {
         if (o == null || getClass() != o.getClass()) return false;
         ModelZIP modelZIP = (ModelZIP) o;
         return Double.compare(modelZIP.archiveRatio, archiveRatio) == 0
-                && id.equals(modelZIP.id)
                 && nameModelZIP.equals(modelZIP.nameModelZIP)
                 && modelName.equals(modelZIP.modelName)
                 && fileClass.equals(modelZIP.fileClass)
@@ -63,6 +62,6 @@ public class ModelZIP {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, nameModelZIP, modelName, fileClass, modelZIPAdress, modelZIPFormat, sizeZIP, archiveRatio);
+        return Objects.hash(nameModelZIP, modelName, fileClass, modelZIPAdress, modelZIPFormat, sizeZIP, archiveRatio);
     }
 }
