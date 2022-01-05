@@ -34,6 +34,7 @@ public class PrintModelController {
     private final CreateSyncObjService createSyncObjService;
     private final MapperDTO mapperDTO;
     private final CreateDTOService createDTOService;
+    private final FolderSyncService folderSyncService;
 
     private static final int INITIAL_PAGE = 0;
 
@@ -119,9 +120,6 @@ public class PrintModelController {
         long start = System.currentTimeMillis();
         try {
             createSyncObjService.startSyncOBJRepository();
-
-            //printModelService.startSyncService();
-
         } catch (IOException a) {
             System.out.println("IOException");
         }
@@ -129,6 +127,16 @@ public class PrintModelController {
         System.out.println("startSyncController time create - " + (fin - start));
         return "admin";
     }
+
+    @GetMapping("/syncFolder")
+    public String startSyncFolderController() {
+        long start = System.currentTimeMillis();
+        folderSyncService.startSyncFolderService();
+        long fin = System.currentTimeMillis();
+        System.out.println("startSyncFolderController time sync - " + (fin - start));
+        return "admin";
+    }
+
 
 
     @GetMapping("/good")
