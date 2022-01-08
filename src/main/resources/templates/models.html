@@ -119,21 +119,21 @@
         <table class="table table-hover">
             <tr>
 
-                <th>
-                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>
-                </th>
+<!--                <th>-->
+<!--                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>-->
+<!--                </th>-->
 
-                <th th:each="pageNumber : ${pageNumbers}">
+                <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
                             th:value=${pageNumber}
-                            th:text=${pageNumber}></a></button>
+                            th:text= ${var}></a></button>
                 </th>
 
-                <th>
-                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">
-                        <a>1</a></button>
-                </th>
+<!--                <th>-->
+<!--                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">-->
+<!--                        <a>1</a></button>-->
+<!--                </th>-->
 
             </tr>
 

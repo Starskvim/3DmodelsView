@@ -78,7 +78,7 @@ public class PrintModelController {
         model.addAttribute("currentPage", page);
         model.addAttribute("page", newCurrentPage);
 
-        model.addAttribute("pageNumbers", preparePageInt(newCurrentPage));
+        model.addAttribute("pageNumbers", preparePageInt(newCurrentPage, modelsPages.getTotalPages()));
         return "models";
     }
 
@@ -203,24 +203,31 @@ public class PrintModelController {
     }
 
 
-    public LinkedList<Integer> preparePageInt(int current) {
+    public ArrayList<Integer> preparePageInt(int current, int totalPages) {
 
-        LinkedList<Integer> pageNumbers = new LinkedList<>();
+        ArrayList<Integer> pageNumbers = new ArrayList<>();
 
-        if (current == 2) {
-            pageNumbers.add(current);
-        } else if (current > 2) {
+        pageNumbers.add(0);
+        if (current >= 2) {
             pageNumbers.add(current - 1);
             pageNumbers.add(current);
+        } else if (current == 1 || current == 0){
+            pageNumbers.add(1);
         }
-
         for (int i = 0; i < 11; i++) {
             current += 1;
+            if (current > totalPages - 2){
+                for ( i = current; i < totalPages - current; i++){
+                    current++;
+                    pageNumbers.add(current);
+                }
+                break;
+            }
             if (!(current == 1)) {
                 pageNumbers.add(current);
             }
         }
-
+        pageNumbers.add(totalPages);
         return pageNumbers;
     }
 

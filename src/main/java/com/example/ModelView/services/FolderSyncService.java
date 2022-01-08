@@ -158,10 +158,8 @@ public class FolderSyncService {
         String md5 = "";
         try {
             try (InputStream is = Files.newInputStream(Paths.get(path))) {
-
                 md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
                 System.out.println(md5);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
