@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -36,6 +37,8 @@ public class CreateSyncObjService {
     private final FolderScanRepository folderScanRepository;
     private final EntitiesAttributeService entitiesAttributeService;
     private final CollectionsService collectionsService;
+
+    private final JProgressBarService jProgressBarService;
 
 
     CopyOnWriteArraySet<PrintModel> printModelsToSaveList;
@@ -90,6 +93,9 @@ public class CreateSyncObjService {
         int filesListSize = filesList.size();
         int countDone = 0;
 
+        JProgressBarService newProgressBar = new JProgressBarService("SyncService", Math.abs(filesListSize - printModelsSavedFilesAdressStringSet.size()));
+
+
         for (File file : filesList) {
 
             if (collectionsService.checkPrintModelsFilesSavedNameStringSet(file.getName())) {
@@ -100,6 +106,7 @@ public class CreateSyncObjService {
                     checkAndCreateOBJ(file);
                 }
                 countDone += 1;
+                newProgressBar.updateBar(countDone);
                 System.out.println(countDone + "/" + filesListSize + " - sync - " + file.getName());
             }
         }

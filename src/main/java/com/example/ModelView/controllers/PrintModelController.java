@@ -17,12 +17,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.Timer;
+import java.util.concurrent.*;
 
 
 @Controller
@@ -35,6 +34,8 @@ public class PrintModelController {
     private final MapperDTO mapperDTO;
     private final CreateDTOService createDTOService;
     private final FolderSyncService folderSyncService;
+
+    private final JProgressBarService jProgressBarService;
 
     private static final int INITIAL_PAGE = 0;
 
@@ -141,6 +142,26 @@ public class PrintModelController {
 
     @GetMapping("/good")
     public String startGood() {
+        return "good";
+    }
+
+    @GetMapping("/testProgressBar")
+    public String startTestBar() {
+
+        JProgressBarService newProgressBar = new JProgressBarService("testBar", 100);
+
+        int current = 0;
+
+        for (int i = 0; i < 10; i++) {
+            current += 10;
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            newProgressBar.updateBar(current);
+        }
+
         return "good";
     }
 
