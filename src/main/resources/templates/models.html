@@ -58,7 +58,7 @@
                       method="get" target=»_blank» class="form-horizontal myButtonHead">
                     <div style="margin-bottom: 14px; width: 14%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" class="btn btn-primary">Good
+                        <button type="submit" class="btn btn-primary">Test
                         </button>
                     </div>
                 </form>
@@ -109,19 +109,13 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-
-                <th><span th:text="${'Всего страниц ' + allPage}"/></th>
-
+                <th th:with="var2 = ${allPage + 1}"><span th:text="${'Всего страниц ' + var2}"/></th>
             </tr>
 
         </table>
 
         <table class="table table-hover">
             <tr>
-
-<!--                <th>-->
-<!--                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>-->
-<!--                </th>-->
 
                 <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
@@ -130,10 +124,6 @@
                             th:text= ${var}></a></button>
                 </th>
 
-<!--                <th>-->
-<!--                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">-->
-<!--                        <a>1</a></button>-->
-<!--                </th>-->
 
             </tr>
 
@@ -186,18 +176,11 @@
 
         <table class="table table-hover">
             <tr>
-                <th>
-                    <button class="btn btn-info" type="submit" th:name="page" th:value="0"><a>1</a></button>
-                </th>
-                <th th:each="pageNumber : ${pageNumbers}">
-                    <button class="btn btn-info" type="submit"
+                <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
+                    <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
                             th:value=${pageNumber}
-                            th:text=${pageNumber}></a></button>
-                </th>
-                <th>
-                    <button class="btn btn-info" type="submit" th:name="page" th:value=${allPage} th:text="${allPage}">
-                        <a>1</a></button>
+                            th:text= ${var}></a></button>
                 </th>
             </tr>
         </table>
@@ -207,7 +190,6 @@
                 <th>
                     <div style="margin-bottom: 0px; vertical-align: middle" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-
 
                         <select class="form-control" th:name="wordCategory" id="FormControlSelect">
                             <option type="text" th:value="${wordCategory != null} ? ${wordCategory}"
@@ -225,7 +207,7 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-                <th><span th:text="${'Всего страниц ' + allPage}"/></th>
+                <th th:with="var2 = ${allPage + 1}"><span th:text="${'Всего страниц ' + var2}"/></th>
             </tr>
         </table>
 
