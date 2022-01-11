@@ -37,7 +37,7 @@ public class PrintModelService {
     }
 
     public List<ModelZIP> getAllZIPListByPageService(int page){
-        return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 250)).toList();
+        return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 150)).toList();
     }
 
     public void startFolderScanService () throws IOException {

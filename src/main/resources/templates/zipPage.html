@@ -115,9 +115,9 @@
             <td>
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
                 <form th:action="@{/models/open}" target="dummyframe">
-                    <div style="margin-bottom: 25px" class="input-group">
+                    <div style="margin-bottom: 14px; width: 10%"  class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" th:name="path" th:value="${zip.modelZIPAdress}" class="btn btn-primary">
+                        <button   type="submit" th:name="path" th:value="${zip.modelZIPAdress}" class="btn btn-primary">
                             Open
                         </button>
                     </div>
@@ -135,8 +135,11 @@
 </div>
 
 
-<canvas id="canvas" width="1400" height="600"></canvas>
-<script th:src="@{/js/scriptWARP.js}"></script>
+<!--<canvas id="canvas" width="1400" height="600"></canvas>-->
+<!--<script th:src="@{/js/scriptWARP.js}"></script>-->
+<svg id="stage"></svg>
+<script src='https://unpkg.co/gsap@3/dist/gsap.min.js'></script>
+<script th:src="@{/js/scriptRandom.js}"></script>
 
 </body>
 </html>

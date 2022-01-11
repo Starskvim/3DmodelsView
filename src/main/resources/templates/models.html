@@ -45,7 +45,7 @@
             </th>
             <th>
                 <form th:action="@{/models/zipPage}"
-                      method="get" class="form-horizontal">
+                      method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Zip Page
@@ -86,7 +86,7 @@
           method="get" class="form-horizontal">
         <table class="table table-hover">
 
-            <tr>
+            <tr >
                 <th>
                     <div style="margin-bottom: 0px; vertical-align: middle" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -109,7 +109,9 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-                <th th:with="var2 = ${allPage + 1}"><span th:text="${'Всего страниц ' + var2}"/></th>
+                <th  th:with="var2 = ${allPage + 1}">
+                    <span style="vertical-align: middle"  th:text="${'Всего страниц ' + var2}"/>
+                </th>
             </tr>
 
         </table>
@@ -207,7 +209,9 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-                <th th:with="var2 = ${allPage + 1}"><span th:text="${'Всего страниц ' + var2}"/></th>
+                <th th:with="var2 = ${allPage + 1}">
+                    <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"/>
+                </th>
             </tr>
         </table>
 
