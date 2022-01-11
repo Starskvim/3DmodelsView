@@ -40,14 +40,6 @@ public class CreateObjService {
     CopyOnWriteArrayList<String> zipFormatList;
     CopyOnWriteArraySet<String> printModelsToSaveNameStringSet;
 
-    //CopyOnWriteArraySet
-
-//    HashSet<PrintModel> printModelsToSaveList;
-//    HashSet<ModelOTH> modelOTHList;
-//    HashSet<ModelZIP> modelZIPList;
-//    ArrayList<String> zipFormatList;
-//    HashSet<String> printModelsToSaveNameStringSet;
-
 
     @PostConstruct
     private void postConstruct() {
@@ -134,7 +126,7 @@ public class CreateObjService {
     private void createModelZIP(File file) {
         String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
-        double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
+        int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
         getModelListZIPService(file, modelZIP);

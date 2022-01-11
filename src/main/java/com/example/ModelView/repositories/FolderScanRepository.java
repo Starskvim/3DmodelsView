@@ -82,10 +82,13 @@ public class FolderScanRepository {
 //6 ScanRepository SIZE 24844 ScanRepository TIME 44235 - startCreateController time create - 486660
 //7                                                     - startCreateController time create - 445717
 
-// VER 3 MultiThread Stream (X36)
+// VER 3 MultiThread Stream (X36)(bug)
 //1 second start 1.5 TB                                 - startCreateController time create - 12245
 // modelRepositoryJPA.saveAll time - 4595
 // modelRepositoryZIPJPA.saveAll time - 204
 // modelRepositoryOTHJPA.saveAll time - 217
 // ALL SAVE saveAllListToJpaRepository time - 5016
 //2                                                     - startCreateController time create - 12308
+//3 ScanRepository SIZE 25080 ScanRepository TIME 51818 - startCreateController time create - 520911 (7,8 min alg)
+
+// VER 3 True MultiThread Stream

@@ -158,7 +158,7 @@ public class CreateSyncObjService {
         String size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
 
-        double ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
+        int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
 
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
@@ -235,7 +235,7 @@ public class CreateSyncObjService {
                         modelZIPList.remove(modelZIP);
                         toDeleteZIPList.add(modelZIP);
                     } catch (Exception e){
-                        System.out.println(e);
+                        System.out.println(e.getMessage());
                     }
 
 
@@ -249,7 +249,7 @@ public class CreateSyncObjService {
                         modelOTHList.remove(modelOTH);
                         toDeleteOTHList.add(modelOTH);
                     } catch (Exception e){
-                        System.out.println(e);
+                        System.out.println(e.getMessage());
                     }
 
 

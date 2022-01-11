@@ -32,11 +32,11 @@ public class ModelZIP {
 
     private String sizeZIP;
 
-    private double archiveRatio;
+    private Integer archiveRatio;
 
 
 
-    public ModelZIP (String nameModelZIP,String modelName, String modelZIPAdress, String modelZIPFormat, String sizeZIP, double archiveRatio){
+    public ModelZIP (String nameModelZIP,String modelName, String modelZIPAdress, String modelZIPFormat, String sizeZIP, int archiveRatio){
         this.nameModelZIP = nameModelZIP;
         this.modelName = modelName;
         this.fileClass = "ZIP";
