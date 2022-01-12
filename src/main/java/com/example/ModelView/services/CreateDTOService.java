@@ -39,10 +39,6 @@ public class CreateDTOService {
             Future<PrintModelDTO> future = executorService.submit(new ImageWorkerThreadService(printModel, mapperDTO));
             futureList.add(future);
         }
-        //executorService.shutdown();
-        //executorService.shutdownNow();
-//        while (!executorService.isTerminated()) {
-//        }
 
         for (Future<PrintModelDTO> future : futureList) {
             try {

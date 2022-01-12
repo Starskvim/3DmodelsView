@@ -15,12 +15,7 @@ public class ModelSpecs {
         return new Specification<PrintModel>() {
             @Override
             public Predicate toPredicate(Root<PrintModel> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-
-
-//                return criteriaBuilder.like(root.get("modelName"), "%"+word+"%");
                 return criteriaBuilder.like(criteriaBuilder.upper(root.get("modelName")), "%"+word.toUpperCase()+"%");
-
-
             }
         };
     }
@@ -28,4 +23,8 @@ public class ModelSpecs {
     public static Specification<PrintModel> modelCategoryContains (String word){
         return (Specification<PrintModel>) (root, query, criteriaBuilder) -> {return criteriaBuilder.like(root.get("modelCategory"), "%"+word+"%");};
     }
+
+//    public static Specification<PrintModel> modelNewSort (){
+//        return (Specification<PrintModel>) (root, query, criteriaBuilder) -> {return criteriaBuilder.desc(root.get("id"));};
+//    }
 }

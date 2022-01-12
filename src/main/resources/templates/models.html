@@ -34,14 +34,14 @@
 
         <tr>
             <th>
-                <form th:action="@{/models}"
-                      method="get" class="form-horizontal">
+                <a th:href="@{/models?size=40&page=0}"
+                       class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Home Page
                         </button>
                     </div>
-                </form>
+                </a>
             </th>
             <th>
                 <form th:action="@{/models/zipPage}"
@@ -50,6 +50,8 @@
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary">Zip Page
                         </button>
+                        <input type="hidden" name="size"  th:value="200">
+                        <input type="hidden" name="sort"  value="archiveRatio,desc">
                     </div>
                 </form>
             </th>
@@ -105,6 +107,10 @@
 
                         <input type="text" th:value="${wordName != null} ? ${wordName}" th:name="wordName"
                                placeholder="by Name (*)" class="form-control"/>
+
+                        <input type="hidden" name="size"  th:value="40">
+                        <input type="hidden" name="sort"  value="id,desc">
+
 
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>

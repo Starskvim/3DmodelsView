@@ -10,6 +10,7 @@ import com.example.ModelView.repositories.specifications.ModelSpecs;
 import com.example.ModelView.services.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -35,19 +36,17 @@ public class PrintModelController {
     private final CreateDTOService createDTOService;
     private final FolderSyncService folderSyncService;
 
-    private final JProgressBarService jProgressBarService;
+    private final TestComponent testComponent;
 
     private static final int INITIAL_PAGE = 0;
 
     @GetMapping
     public String testshowModelListController(Model model,
-                                              @RequestParam(value = "page", required = false) Optional<Integer> page,
+                                              Pageable pageable,
                                               @RequestParam(value = "wordName", required = false) String wordName,
                                               @RequestParam(value = "wordCategory", required = false) String wordCategory
 
     ) {
-
-        final int newCurrentPage = (page.orElse(0) < 1) ? INITIAL_PAGE : page.get() - 1;
 
         Specification<PrintModel> spec = Specification.where(null);
         StringBuilder filters = new StringBuilder();
@@ -60,13 +59,14 @@ public class PrintModelController {
             filters.append("@word-" + wordCategory);
         }
 
-        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(newCurrentPage, spec);
+
+        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(spec, pageable);
 
         long start = System.currentTimeMillis();
         List<PrintModelDTO> resultList = createDTOService.createDTOlistThreads(modelsPages);
-        //List<PrintModelDTO> resultList = createDTOService.createDTOlistStream(modelsPages);
+
         long fin = System.currentTimeMillis();
-        System.out.println("Create page "+ newCurrentPage + " Time " + (fin - start));
+        System.out.println("Create page "+ pageable.getPageNumber() + " Time " + (fin - start));
 
         model.addAttribute("models", resultList);
 
@@ -75,18 +75,19 @@ public class PrintModelController {
         model.addAttribute("wordName", wordName);
         model.addAttribute("wordCategory", wordCategory);
 
+        model.addAttribute("currentPage", pageable.getPageNumber());
 
-        model.addAttribute("currentPage", page);
-        model.addAttribute("page", newCurrentPage);
-
-        model.addAttribute("pageNumbers", preparePageInt(newCurrentPage, modelsPages.getTotalPages()));
+        model.addAttribute("pageNumbers", preparePageInt(pageable.getPageNumber(), modelsPages.getTotalPages()));
         return "models";
     }
 
 
     @GetMapping("/zipPage")
-    public String showZIPListController(Model model) {
-        model.addAttribute("zips", printModelService.getAllZIPListByPageService(0));
+    public String showZIPListController(Model model, Pageable pageable) {
+
+        List<ModelZIP> zipsPages = printModelService.getAllZIPListByPageService(pageable).getContent();
+
+        model.addAttribute("zips", zipsPages);
         return "zipPage";
     }
 
@@ -164,6 +165,12 @@ public class PrintModelController {
 
         return "good";
     }
+
+//    @GetMapping(value = "/updateProgressBar", produces = MediaType.TEXT_PLAIN_VALUE)
+//    public String updateTestBar(){
+//
+//        return String.valueOf(testComponent.getProgress());
+//    }
 
     @GetMapping("/admin")
     public String startAdmin() {
