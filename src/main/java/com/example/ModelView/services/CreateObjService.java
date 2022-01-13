@@ -30,6 +30,8 @@ public class CreateObjService {
     private final EntitiesAttributeService entitiesAttributeService;
     private final CollectionsService collectionsService;
 
+    private final JsProgressBarService jsProgressBarService;
+
     private int filesListSize = 0;
     private volatile int countDone = 0;
 
@@ -60,23 +62,12 @@ public class CreateObjService {
 
         printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
-
         filesListSize = filesList.size();
 
+        JsProgressBarService.setTotalCount(filesListSize);
 
         filesList.parallelStream().forEach(file -> detectTypeCreate(file));
 
-
-//        for (File file : filesList) {
-//            if (collectionsService.checkPrintModelsNameStringSet(file.getParentFile().getName())) {
-//                checkAndCreateOBJ(file);
-//            } else {
-//                createPrintModelOBJ(file);
-//                checkAndCreateOBJ(file);
-//            }
-//            countDone += 1;
-//            System.out.println(countDone + "/" + filesListSize + " - " + file.getName());
-//        }
 
 
         collectionsService.saveAllListToJpaRepository();
@@ -95,7 +86,9 @@ public class CreateObjService {
             checkAndCreateOBJ(file);
         }
         countDone += 1;
-        System.out.println(countDone + "/" + filesListSize + " - " + file.getName());
+        JsProgressBarService.setCurrentCount(countDone);
+        JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - create - " + file.getName());
+        System.out.println(countDone + "/" + filesListSize + " - create - " + file.getName());
 
     }
 

@@ -36,12 +36,8 @@ public class PrintModelController {
     private final CreateDTOService createDTOService;
     private final FolderSyncService folderSyncService;
 
-    private final TestComponent testComponent;
-
-    private static final int INITIAL_PAGE = 0;
-
     @GetMapping
-    public String testshowModelListController(Model model,
+    public String modelsController(Model model,
                                               Pageable pageable,
                                               @RequestParam(value = "wordName", required = false) String wordName,
                                               @RequestParam(value = "wordCategory", required = false) String wordCategory

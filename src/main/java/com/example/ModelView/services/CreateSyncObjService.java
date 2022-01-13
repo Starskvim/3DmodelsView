@@ -39,7 +39,7 @@ public class CreateSyncObjService {
     private final CollectionsService collectionsService;
 
     private final JProgressBarService jProgressBarService;
-
+    private final JsProgressBarService jsProgressBarService;
 
     CopyOnWriteArraySet<PrintModel> printModelsToSaveList;
     CopyOnWriteArraySet<ModelOTH> modelOTHList;
@@ -91,13 +91,13 @@ public class CreateSyncObjService {
         printModelsSavedNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
         int filesListSize = filesList.size();
+        int taskSize = Math.abs(filesListSize - printModelsSavedFilesAdressStringSet.size());
         int countDone = 0;
 
-        JProgressBarService newProgressBar = new JProgressBarService("SyncService", Math.abs(filesListSize - printModelsSavedFilesAdressStringSet.size()));
-
+        //JProgressBarService newProgressBar = new JProgressBarService("SyncService", taskSize); windows bar
+        JsProgressBarService.setTotalCount(taskSize);
 
         for (File file : filesList) {
-
             if (collectionsService.checkPrintModelsFilesSavedNameStringSet(file.getName())) {
                 if (collectionsService.checkPrintModelsNameStringSet(file.getParentFile().getName())) {
                     checkAndCreateOBJ(file);
@@ -106,7 +106,10 @@ public class CreateSyncObjService {
                     checkAndCreateOBJ(file);
                 }
                 countDone += 1;
-                newProgressBar.updateBar(countDone);
+                //newProgressBar.updateBar(countDone); windows bar
+                JsProgressBarService.setCurrentCount(countDone);
+                JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - sync - " + file.getName());
+
                 System.out.println(countDone + "/" + filesListSize + " - sync - " + file.getName());
             }
         }
@@ -124,7 +127,6 @@ public class CreateSyncObjService {
         log.info("Итоговые модели printModelsList size - {}", printModelsToSaveList.size());
 
     }
-
 
     public void checkAndCreateOBJ(File file) {
         if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
@@ -183,7 +185,6 @@ public class CreateSyncObjService {
         printModel.addModelOTH(modelOTH);
         printModelsToSaveList.add(printModel);
     }
-
 
     public void addToSaveModelListZIP(File file, ModelZIP modelZip) {
         for (PrintModel printModel : printModelsToSaveList) {
