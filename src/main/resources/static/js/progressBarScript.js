@@ -1,6 +1,10 @@
 
     var elem = document.getElementById("myBar");
     var elem2 = document.getElementById("myBarTask");
+    var elem3 = document.getElementById("barsTable")
+
+    var invisibleLoadElem = document.getElementsByClassName("invisibleLoad")
+
     var width = 10;
 
     function sleep(ms) {
@@ -24,6 +28,9 @@
 
         let progress = progressOBJ.currentCount
         let task = progressOBJ.currentTask
+        // elem3.style.display = "contents"
+
+        elem3.classList.remove("invisibleLoad")
 
         // console.log(progressOBJ)
         // console.log(progressOBJ.currentCount)
@@ -40,7 +47,7 @@
             elem.innerHTML = progressOBJ.currentCount + "%";
             elem2.innerHTML = task;
 
-            await sleep(300)
+            await sleep(100)
         }
 
     }

@@ -143,12 +143,10 @@ td {
 /* ----------------------------------------------------------------- */
 
 /* ------------------progress bars-------------------------------- */
-
 #myProgress {
   width: 100%;
   background-color: grey;
 }
-
 #myBar {
   width: 10%;
   height: 30px;
@@ -157,5 +155,20 @@ td {
   line-height: 30px; /* To center it vertically */
   color: white;
 }
-
+#myTask{
+  width: 100%;
+  background-color: grey;
+}
+#myBarTask{
+  font-size: 15pt;
+  color: #09ea09;
+  text-shadow: 1px 1px 2px black, 0 0 1em #a63ff3;
+}
+#loading{
+  /*display: none;*/
+  /*visibility: hidden;*/
+}
+.invisibleLoad {
+  display: none;
+}
 /* --------------------------------------------------------------- */

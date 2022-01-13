@@ -123,6 +123,12 @@ public class PrintModelController {
         }
         long fin = System.currentTimeMillis();
         System.out.println("startSyncController time create - " + (fin - start));
+
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return "admin";
     }
 
