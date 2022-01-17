@@ -164,9 +164,8 @@ td {
   color: #09ea09;
   text-shadow: 1px 1px 2px black, 0 0 1em #a63ff3;
 }
-#loading{
-  /*display: none;*/
-  /*visibility: hidden;*/
+#myBar2{
+  height: 35px;
 }
 .invisibleLoad {
   display: none;

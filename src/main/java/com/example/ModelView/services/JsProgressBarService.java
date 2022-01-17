@@ -17,19 +17,21 @@ public class JsProgressBarService {
 
     private static volatile String currentTask = "Start Progress Bar";
 
-    public static void setCurrentCount(int count){
-        currentCount = (int) ((double)count / (double) totalCount) * 100;
+    public static void setCurrentCount(Integer count){
+        double count2 = (double)count;
+        double totalCount2 = (double) totalCount;
+        currentCount = (int) Math.round(count2 / totalCount2 * 100.0);
     }
 
     public static void setTotalCount(int total){
         totalCount = total;
     }
 
-    public static void setCurrentTask (String task){
+    public static synchronized void setCurrentTask (String task){
         currentTask = task;
     }
 
-    public static int getCurrentCount(){
+    public static Integer getCurrentCount(){
         return currentCount;
     }
 

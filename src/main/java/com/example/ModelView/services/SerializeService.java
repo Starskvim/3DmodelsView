@@ -19,14 +19,18 @@ public class SerializeService {
     private final CollectionsService collectionsService;
     private final JsProgressBarService jsProgressBarService;
 
+    private static Integer total = 0;
+    private static volatile int  count = 0;
+
 
     public void serializeObj(List<PrintModel> outputList) throws IOException {
 
-        int count = 0;
-        int total = outputList.size();
+
+        total = outputList.size();
         JsProgressBarService.setTotalCount(total);
 
         for (PrintModel printModel : outputList) {
+
 
             FileOutputStream outputStream = new FileOutputStream("G:\\testJava\\" + printModel.getModelName() +".ser");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
@@ -34,9 +38,10 @@ public class SerializeService {
             objectOutputStream.close();
 
             count ++;
+
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
-            System.out.println(count + "/" + total + " serializeObj");
+            System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
 
 
         }
@@ -66,11 +71,14 @@ public class SerializeService {
             modelOTHList.addAll(printModel.getModelOTHSet());
             modelZIPList.addAll(printModel.getModelZIPSet());
 
+//            for (ModelZIP modelZIP: printModel.getModelZIPSet()){
+//                System.out.println(modelZIP.getArchiveRatio());
+//            }
+
             count ++;
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModel.getModelName());
-            System.out.println(count + "/" + total + " deserializeObj");
-
+            System.out.println(count + "/" + total + " deserializeObj " + printModel.getModelName());
         }
 
         collectionsService.saveAllListToJpaRepository();

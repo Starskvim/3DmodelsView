@@ -29,12 +29,12 @@ public class PrintModel implements Serializable {
 
     private String modelCategory;
 
-    @LazyCollection(LazyCollectionOption.FALSE)
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn
     private Set<ModelZIP> modelZIPSet = new HashSet<>();
 
-    @LazyCollection(LazyCollectionOption.FALSE)
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn
     private Set<ModelOTH> modelOTHSet = new HashSet<>();

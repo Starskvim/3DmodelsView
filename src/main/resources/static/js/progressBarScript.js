@@ -1,7 +1,8 @@
 
-    var elem = document.getElementById("myBar");
+    // var elem = document.getElementById("myBar");
     var elem2 = document.getElementById("myBarTask");
     var elem3 = document.getElementById("barsTable")
+    var elem4 = document.getElementById("myBar2")
 
     var invisibleLoadElem = document.getElementsByClassName("invisibleLoad")
 
@@ -43,13 +44,18 @@
             progress = progressOBJ.currentCount
             task = progressOBJ.currentTask
 
-            elem.style.width = progressOBJ.currentCount + "%";
-            elem.innerHTML = progressOBJ.currentCount + "%";
+            // elem.style.width = progress + "%";
+            // elem.innerHTML = progress + "%";
+
+            elem4.style.width = progress + "%";
+            elem4.innerHTML = progress + "%";
+
+            console.log(progress)
+            console.log(progress + "%")
+
             elem2.innerHTML = task;
 
-            await sleep(100)
+            await sleep(300)
         }
 
     }
-
-// onload()
