@@ -1,22 +1,13 @@
 package com.example.ModelView.entities;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
-import javax.imageio.stream.MemoryCacheImageOutputStream;
 import javax.persistence.*;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 
@@ -26,7 +17,7 @@ import java.util.*;
 @NoArgsConstructor
 @Setter
 @Getter
-public class PrintModel {
+public class PrintModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,13 +29,15 @@ public class PrintModel {
 
     private String modelCategory;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn
-    private Collection<ModelZIP> modelZIPList = new ArrayList<>();
+    private Set<ModelZIP> modelZIPSet = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn
-    private Collection<ModelOTH> modelOTHList = new ArrayList<>();
+    private Set<ModelOTH> modelOTHSet = new HashSet<>();
 
 
     public PrintModel(String modelName, String modelDerictory, String modelCategory) {
@@ -54,11 +47,11 @@ public class PrintModel {
     }
 
     public void addModelZIP(ModelZIP modelZIP) {
-        modelZIPList.add(modelZIP);
+        modelZIPSet.add(modelZIP);
     }
 
     public void addModelOTH(ModelOTH modelOTH) {
-        modelOTHList.add(modelOTH);
+        modelOTHSet.add(modelOTH);
     }
 
     @Override

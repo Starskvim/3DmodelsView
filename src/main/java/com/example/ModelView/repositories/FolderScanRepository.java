@@ -7,25 +7,34 @@ import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Repository
 @RequiredArgsConstructor
-@Log4j2
 public class FolderScanRepository {
 
-    public Collection<File> startScanRepository() throws IOException {
+    public Collection<File> startScanRepository(Boolean mode) throws IOException {
+
+        Collection<File> files;
         long start = System.currentTimeMillis();
-        File adres = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]");
-        File adres2 = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Pack]");
-        File adres3 = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]");
-        Collection<File> files = FileUtils.streamFiles(adres, true, null).collect(Collectors.toList());
-        Collection<File> files2 = FileUtils.streamFiles(adres2, true, null).collect(Collectors.toList());
-        Collection<File> files3 = FileUtils.streamFiles(adres3, true, null).collect(Collectors.toList());
-        files.addAll(files2);
-        files.addAll(files3);
+        if(mode) {
+            File adres = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Figure]");
+            File adres2 = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Pack]");
+            File adres3 = new File("F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]");
+            files = FileUtils.streamFiles(adres, true, null).collect(Collectors.toList());
+            Collection<File> files2 = FileUtils.streamFiles(adres2, true, null).collect(Collectors.toList());
+            Collection<File> files3 = FileUtils.streamFiles(adres3, true, null).collect(Collectors.toList());
+            files.addAll(files2);
+            files.addAll(files3);
+        } else {
+            File adresSer = new File("G:\\testJava");
+            files = FileUtils.streamFiles(adresSer, true, null).collect(Collectors.toList());
+        }
+
         long fin = System.currentTimeMillis();
         System.out.println("ScanRepository SIZE " + files.size());
         System.out.println("ScanRepository TIME " + (fin - start));

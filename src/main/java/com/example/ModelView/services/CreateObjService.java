@@ -55,7 +55,7 @@ public class CreateObjService {
 
     public void startCreateOBJService() throws IOException {
 
-        Collection<File> filesList = folderScanRepository.startScanRepository();
+        Collection<File> filesList = folderScanRepository.startScanRepository(true);
         zipFormatList.add("zip");
         zipFormatList.add("7z");
         zipFormatList.add("rar");

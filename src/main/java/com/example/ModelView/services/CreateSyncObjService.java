@@ -14,10 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -73,7 +71,7 @@ public class CreateSyncObjService {
     @Transactional
     public void startSyncOBJRepository() throws IOException {
 
-        Collection<File> filesList = folderScanRepository.startScanRepository();
+        Collection<File> filesList = folderScanRepository.startScanRepository(true);
         zipFormatList.add("zip");
         zipFormatList.add("7z");
         zipFormatList.add("rar");
@@ -232,7 +230,7 @@ public class CreateSyncObjService {
                     try {
                         ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
                         PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());
-                        Collection<ModelZIP> modelZIPList = printModel.getModelZIPList();
+                        Collection<ModelZIP> modelZIPList = printModel.getModelZIPSet();
                         modelZIPList.remove(modelZIP);
                         toDeleteZIPList.add(modelZIP);
                     } catch (Exception e){
@@ -246,7 +244,7 @@ public class CreateSyncObjService {
                     try {
                         ModelOTH modelOTH = modelRepositoryOTHJPA.getModelOTHByModelOTHAdress(fileAbsPath);
                         PrintModel printModel = modelRepositoryJPA.getByModelName(modelOTH.getModelName());
-                        Collection<ModelOTH> modelOTHList = printModel.getModelOTHList();
+                        Collection<ModelOTH> modelOTHList = printModel.getModelOTHSet();
                         modelOTHList.remove(modelOTH);
                         toDeleteOTHList.add(modelOTH);
                     } catch (Exception e){

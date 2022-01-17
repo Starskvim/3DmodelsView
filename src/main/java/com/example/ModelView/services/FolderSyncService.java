@@ -24,12 +24,10 @@ public class FolderSyncService {
     private static HashSet<File> folder2list = new HashSet<>();
     private static HashSet<String> currentFileABSpath = new HashSet<>();
 
-
     public void startSyncFolderService() {
 
         String folder1 = "F:\\test\\folder1";
         String folder2 = "F:\\test\\folder2";
-
         syncStartMethodB(folder1, folder2);
 
     }
@@ -44,7 +42,6 @@ public class FolderSyncService {
 
                 String absPathCurrentFile = file.getAbsolutePath();
                 String pathCurrentFile = file.getParent();
-
                 String pathNewFile = pathCurrentFile.replace(folder1, folder2);
                 String absPathNewFile = absPathCurrentFile.replace(folder1, folder2);
 

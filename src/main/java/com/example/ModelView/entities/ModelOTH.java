@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Setter
 @Getter
-public class ModelOTH {
+public class ModelOTH implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

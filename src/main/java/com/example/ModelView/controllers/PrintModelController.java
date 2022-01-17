@@ -18,10 +18,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
-import java.util.Timer;
 import java.util.concurrent.*;
 
 
@@ -35,6 +33,7 @@ public class PrintModelController {
     private final MapperDTO mapperDTO;
     private final CreateDTOService createDTOService;
     private final FolderSyncService folderSyncService;
+    private final SerializeService serializeService;
 
     @GetMapping
     public String modelsController(Model model,
@@ -141,6 +140,33 @@ public class PrintModelController {
         return "admin";
     }
 
+    @GetMapping("/serialization")
+    public String startSerializationController() {
+        long start = System.currentTimeMillis();
+        try {
+            serializeService.serializeObj(printModelService.getAllModelListService());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        long fin = System.currentTimeMillis();
+        System.out.println("startSerializationController time ser - " + (fin - start));
+        return "admin";
+    }
+
+    @GetMapping("/deserialization")
+    public String startDeserializationController() {
+        long start = System.currentTimeMillis();
+        try {
+            serializeService.deserializeObj();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        long fin = System.currentTimeMillis();
+        System.out.println("startSerializationController time ser - " + (fin - start));
+        return "admin";
+    }
+
+
 
 
     @GetMapping("/good")
@@ -168,12 +194,6 @@ public class PrintModelController {
         return "good";
     }
 
-//    @GetMapping(value = "/updateProgressBar", produces = MediaType.TEXT_PLAIN_VALUE)
-//    public String updateTestBar(){
-//
-//        return String.valueOf(testComponent.getProgress());
-//    }
-
     @GetMapping("/admin")
     public String startAdmin() {
         return "admin";
@@ -185,8 +205,8 @@ public class PrintModelController {
 
         PrintModel printModel = printModelService.getById(id);
 
-        Collection<ModelOTH> printModelOTHList = printModel.getModelOTHList();
-        Collection<ModelZIP> printModelZIPList = printModel.getModelZIPList();
+        Collection<ModelOTH> printModelOTHList = printModel.getModelOTHSet();
+        Collection<ModelZIP> printModelZIPList = printModel.getModelZIPSet();
 
         Collection<ModelOTHDTO> resultListOTH = new ArrayList<>(10);
 

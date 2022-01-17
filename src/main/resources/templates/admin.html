@@ -26,7 +26,7 @@
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" class="btn btn-primary myButtonHead">Start Scan
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Start Scan
                         </button>
                     </div>
                 </form>
@@ -36,7 +36,7 @@
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" class="btn btn-primary myButtonHead">Start Create
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Start Create
                         </button>
                     </div>
                 </form>
@@ -56,7 +56,7 @@
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" class="btn btn-primary myButtonHead">Sync Folder
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Sync Folder
                         </button>
                     </div>
                 </form>
@@ -77,6 +77,28 @@
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary myButtonHead">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <form th:action="@{/models/serialization}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Serialization
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/models/deserialization}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Deserialization
                         </button>
                     </div>
                 </form>

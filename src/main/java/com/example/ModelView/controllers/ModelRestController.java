@@ -1,5 +1,6 @@
 package com.example.ModelView.controllers;
 
+import com.example.ModelView.controllers.response.ProgressBarResponse;
 import com.example.ModelView.services.JsProgressBarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +13,7 @@ public class ModelRestController {
     private final JsProgressBarService jsProgressBarService;
 
     @GetMapping(value = "/updateProgressBar")
-
-    public ProgressResponse updateTestBar(){
-        return new ProgressResponse(JsProgressBarService.getCurrentCount(), JsProgressBarService.getCurrentTask());
+    public ProgressBarResponse updateTestBar(){
+        return new ProgressBarResponse(JsProgressBarService.getCurrentCount(), JsProgressBarService.getCurrentTask());
     }
 }

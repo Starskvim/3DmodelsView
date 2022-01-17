@@ -20,8 +20,8 @@ public class MapperDTO {
         String modelName = printModel.getModelName();
         String modelDerictory = printModel.getModelDerictory();
         String modelCategory = printModel.getModelCategory();
-        Collection<ModelZIP> modelZIPList = printModel.getModelZIPList();
-        Collection<ModelOTH> modelOTHList = printModel.getModelOTHList();
+        Collection<ModelZIP> modelZIPList = printModel.getModelZIPSet();
+        Collection<ModelOTH> modelOTHList = printModel.getModelOTHSet();
         String compressPreview = imageService.getPreviewBaseSFimg(printModel, true);
 
         return new PrintModelDTO(id, modelName, modelDerictory, modelCategory, modelZIPList, modelOTHList, compressPreview);

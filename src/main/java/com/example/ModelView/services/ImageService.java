@@ -68,7 +68,7 @@ public class ImageService {
 
     private String getOnePicturePreview(PrintModel printModel) {
         String adress = null;
-        for (ModelOTH modelOTH : printModel.getModelOTHList()) {
+        for (ModelOTH modelOTH : printModel.getModelOTHSet()) {
             if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
                 adress = modelOTH.getModelOTHAdress();
             } else {

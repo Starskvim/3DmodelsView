@@ -32,20 +32,15 @@ public class PrintModelService {
     }
 
     public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable){
-
         return modelRepositoryJPA.findAll(modelSpecification, pageable);
-
     }
 
     public Page<ModelZIP> getAllZIPListByPageService(Pageable pageable){
-
         return modelRepositoryZIPJPA.findAll(pageable);
-
-        //return modelRepositoryZIPJPA.findAll(PageRequest.of(page, 150)).toList();
     }
 
     public void startFolderScanService () throws IOException {
-        folderScanRepository.startScanRepository();
+        folderScanRepository.startScanRepository(true);
     }
 
     public PrintModel getById (Long id) {
@@ -59,7 +54,6 @@ public class PrintModelService {
     public List<PrintModel> searchByModelNameService (String word, int page) {
         return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
     }
-
 
 
 }

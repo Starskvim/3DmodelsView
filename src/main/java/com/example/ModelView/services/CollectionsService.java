@@ -62,17 +62,23 @@ public class CollectionsService {
         long start = System.currentTimeMillis();
 
         long start1 = System.currentTimeMillis();
-        modelRepositoryJPA.saveAll(printModelsToSaveList);
+        if (!printModelsToSaveList.isEmpty()) {
+            modelRepositoryJPA.saveAll(printModelsToSaveList);
+        }
         long fin1 = System.currentTimeMillis();
         System.out.println("modelRepositoryJPA.saveAll time - " + (fin1 - start1));
 
         long start2 = System.currentTimeMillis();
-        modelRepositoryZIPJPA.saveAll(modelZIPList);
+        if (!modelZIPList.isEmpty()) {
+            modelRepositoryZIPJPA.saveAll(modelZIPList);
+        }
         long fin2 = System.currentTimeMillis();
         System.out.println("modelRepositoryZIPJPA.saveAll time - " + (fin2 - start2));
 
         long start3 = System.currentTimeMillis();
-        modelRepositoryOTHJPA.saveAll(modelOTHList);
+        if (!modelOTHList.isEmpty()) {
+            modelRepositoryOTHJPA.saveAll(modelOTHList);
+        }
         long fin3 = System.currentTimeMillis();
         System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
 
