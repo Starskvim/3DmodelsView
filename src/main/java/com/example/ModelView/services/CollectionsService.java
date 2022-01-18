@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ public class CollectionsService {
         } else return printModelsToSaveNameStringSet.contains(name);
     }
 
+    @Transactional
     public void saveAllListToJpaRepository () {
 
         long start = System.currentTimeMillis();

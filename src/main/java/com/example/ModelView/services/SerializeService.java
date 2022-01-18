@@ -5,7 +5,9 @@ import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.*;
 import java.util.Collection;
@@ -47,6 +49,7 @@ public class SerializeService {
         }
     }
 
+    @Transactional
     public void deserializeObj() throws IOException, ClassNotFoundException {
 
         CopyOnWriteArraySet<PrintModel> printModelsToSaveList = collectionsService.getPrintModelsToSaveList();
@@ -55,6 +58,12 @@ public class SerializeService {
 
 
         Collection<File> inputSer = folderScanRepository.startScanRepository(false);
+
+//        Hibernate.initialize(PrintModel.class);
+//        Hibernate.initialize(ModelZIP.class);
+//        Hibernate.initialize(ModelOTH.class);
+
+
 
         int count = 0;
         int total = inputSer.size();
@@ -66,6 +75,8 @@ public class SerializeService {
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             PrintModel printModel = (PrintModel) objectInputStream.readObject();
             objectInputStream.close();
+
+            Hibernate.initialize(printModel);
 
             printModelsToSaveList.add(printModel);
             modelOTHList.addAll(printModel.getModelOTHSet());
