@@ -35,7 +35,7 @@ public class MapperDTO {
         String fileClass = modelOTH.getFileClass();
         String modelOTHAdress = modelOTH.getModelOTHAdress();
         String modelOTHFormat = modelOTH.getModelOTHFormat();
-        String sizeOTH = modelOTH.getSizeOTH();
+        Double sizeOTH = modelOTH.getSizeOTH();
         String fullPreview = imageService.getFullBaseSFimg(modelOTH);
 
         return new ModelOTHDTO(id, nameModelOTH, modelName, fileClass, modelOTHAdress, modelOTHFormat, sizeOTH, fullPreview);

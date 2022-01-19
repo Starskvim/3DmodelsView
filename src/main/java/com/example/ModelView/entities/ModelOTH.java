@@ -33,10 +33,10 @@ public class ModelOTH implements Serializable {
 
     private String modelOTHFormat;
 
-    private String sizeOTH;
+    private Double sizeOTH;
 
 
-    public ModelOTH(String nameModelOTH, String modelName, String modelOTHAdress, String modelOTHFormat, String sizeOTH) {
+    public ModelOTH(String nameModelOTH, String modelName, String modelOTHAdress, String modelOTHFormat, Double sizeOTH) {
         this.nameModelOTH = nameModelOTH;
         this.modelName = modelName;
         this.fileClass = "OTH";

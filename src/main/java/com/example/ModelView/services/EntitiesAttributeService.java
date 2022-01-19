@@ -91,9 +91,12 @@ public class EntitiesAttributeService {
         return 0;
     }
 
-    public String getSizeFileToString (File file) {
-        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-        return decimalFormat.format(file.length() / 1024.0 / 1024.0);
+    public Double getSizeFileToString (File file) {
+//        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+
+        double inputSize = file.length() / 1024.0 / 1024.0;
+        double scale = Math.pow(10, 3);
+        return Math.round(inputSize * scale) / scale;
     }
 
     public String detectPrintModelCategory(File file) {

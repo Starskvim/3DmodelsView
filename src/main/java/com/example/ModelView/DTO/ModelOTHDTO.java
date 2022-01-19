@@ -15,7 +15,7 @@ public class ModelOTHDTO {
     private String fileClass;
     private String modelOTHAdress;
     private String modelOTHFormat;
-    private String sizeOTH;
+    private Double sizeOTH;
 
     private String fullPreview;
 }

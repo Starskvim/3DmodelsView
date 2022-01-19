@@ -32,13 +32,13 @@ public class ModelZIP implements Serializable {
 
     private String modelZIPFormat;
 
-    private String sizeZIP;
+    private Double sizeZIP;
 
     private Integer archiveRatio;
 
 
 
-    public ModelZIP (String nameModelZIP,String modelName, String modelZIPAdress, String modelZIPFormat, String sizeZIP, int archiveRatio){
+    public ModelZIP (String nameModelZIP,String modelName, String modelZIPAdress, String modelZIPFormat, Double sizeZIP, int archiveRatio){
         this.nameModelZIP = nameModelZIP;
         this.modelName = modelName;
         this.fileClass = "ZIP";

@@ -109,7 +109,7 @@ public class CreateObjService {
     }
 
     private void createModelOTH(File file) {
-        String size = entitiesAttributeService.getSizeFileToString(file);
+        Double size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
         modelOTHList.add(modelOTH);
@@ -117,7 +117,7 @@ public class CreateObjService {
     }
 
     private void createModelZIP(File file) {
-        String size = entitiesAttributeService.getSizeFileToString(file);
+        Double size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
