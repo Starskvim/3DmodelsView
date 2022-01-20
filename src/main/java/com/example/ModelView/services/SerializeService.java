@@ -4,8 +4,12 @@ import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
+import com.example.ModelView.repositories.ModelRepositoryJPA;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.hibernate.Hibernate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,6 +20,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @Service
 @RequiredArgsConstructor
+@Setter
+@Getter
 public class SerializeService {
     private final FolderScanRepository folderScanRepository;
     private final CollectionsService collectionsService;
@@ -24,6 +30,8 @@ public class SerializeService {
     private static Integer total = 0;
     private static volatile int  count = 0;
 
+    @Value("${scan.adressSer}")
+    private String adressSer;
 
     public void serializeObj(List<PrintModel> outputList) throws IOException {
 
@@ -34,7 +42,7 @@ public class SerializeService {
         for (PrintModel printModel : outputList) {
 
 
-            FileOutputStream outputStream = new FileOutputStream("G:\\testJava\\" + printModel.getModelName() +".ser");
+            FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + printModel.getModelName() +".ser");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(printModel);
             objectOutputStream.close();
@@ -56,14 +64,7 @@ public class SerializeService {
         CopyOnWriteArraySet<ModelOTH> modelOTHList = collectionsService.getModelOTHList();
         CopyOnWriteArraySet<ModelZIP> modelZIPList = collectionsService.getModelZIPList();
 
-
         Collection<File> inputSer = folderScanRepository.startScanRepository(false);
-
-//        Hibernate.initialize(PrintModel.class);
-//        Hibernate.initialize(ModelZIP.class);
-//        Hibernate.initialize(ModelOTH.class);
-
-
 
         int count = 0;
         int total = inputSer.size();
@@ -76,21 +77,26 @@ public class SerializeService {
             PrintModel printModel = (PrintModel) objectInputStream.readObject();
             objectInputStream.close();
 
-            Hibernate.initialize(printModel);
+            printModel.setId(0L);
+
+            for (ModelZIP modelZIP: printModel.getModelZIPSet()){
+                modelZIP.setId(0L);
+            }
+            for (ModelOTH modelOTH: printModel.getModelOTHSet()){
+                modelOTH.setId(0L);
+            }
 
             printModelsToSaveList.add(printModel);
-            modelOTHList.addAll(printModel.getModelOTHSet());
-            modelZIPList.addAll(printModel.getModelZIPSet());
-
-//            for (ModelZIP modelZIP: printModel.getModelZIPSet()){
-//                System.out.println(modelZIP.getArchiveRatio());
-//            }
 
             count ++;
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModel.getModelName());
             System.out.println(count + "/" + total + " deserializeObj " + printModel.getModelName());
         }
+
+        System.out.println(printModelsToSaveList.size() + " printModelsToSaveList");
+        System.out.println(modelOTHList.size() + " modelOTHList");
+        System.out.println(modelZIPList.size() + " modelZIPList");
 
         collectionsService.saveAllListToJpaRepository();
 

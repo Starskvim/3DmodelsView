@@ -31,12 +31,12 @@ public class PrintModel implements Serializable {
 
 //    cascade = CascadeType.ALL,
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn
     private Set<ModelZIP> modelZIPSet = new HashSet<>();
 
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn
     private Set<ModelOTH> modelOTHSet = new HashSet<>();
 

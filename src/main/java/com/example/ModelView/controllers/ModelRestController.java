@@ -15,7 +15,6 @@ public class ModelRestController {
 
     private final JsProgressBarService jsProgressBarService;
 
-    @Autowired
     private final JdbcTemplateDBStatsDao jdbcTemplateDBStatsDao;
 
     @GetMapping(value = "/updateProgressBar")
@@ -25,7 +24,6 @@ public class ModelRestController {
 
     @GetMapping(value = "/stats")
     public DBStatsResponse getStats(){
-        DBStatsResponse dbStatsResponse = jdbcTemplateDBStatsDao.getStats();
-        return dbStatsResponse;
+        return jdbcTemplateDBStatsDao.getStats();
     }
 }
