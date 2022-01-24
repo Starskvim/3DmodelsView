@@ -26,18 +26,30 @@ public class ImageService {
 
     public String getPreviewBaseSFimg (PrintModel printModel, Boolean comression) {
         try {
-
             if (comression){
-                byte[] bytes = compression(getOnePicturePreview(printModel));
+                byte[] bytes = compression(getOnePicturePreview(printModel), 0.2f);
                 return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
             }
-
         } catch (Exception a) {
             return null;
         }
-
         return null;
     }
+
+    public String getBaseSFimgWeb (ModelOTH modelOTH, Boolean comression, float quality) {
+        try {
+            if (comression){
+                byte[] bytes = compression(getPicture(modelOTH), quality);
+                return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
+            } else {
+                return getFullBaseSFimg(modelOTH);
+            }
+        } catch (Exception a) {
+            return null;
+        }
+    }
+
+
 
     public String getFullBaseSFimg (ModelOTH modelOTH) {
         try {
@@ -79,19 +91,17 @@ public class ImageService {
     }
 
 
-    private byte[] compression (String adress) throws IOException {
+    private byte[] compression (String adress, float quality) throws IOException {
 
         File input = new File(adress);
         BufferedImage image = ImageIO.read(input);
-        return createResultBytes(image);
+        return createResultBytes(image, quality);
 
     }
 
 
 
-    private byte[] createResultBytes(BufferedImage losslessimage) {
-
-        float lossyquality = 0.2F;
+    private byte[] createResultBytes(BufferedImage losslessimage, float quality) {
 
         Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName("JPG");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -99,7 +109,7 @@ public class ImageService {
             ImageWriter writer = iter.next();
             ImageWriteParam iwp = writer.getDefaultWriteParam();
             iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            iwp.setCompressionQuality(lossyquality);
+            iwp.setCompressionQuality(quality);
 
             MemoryCacheImageOutputStream mcios = new MemoryCacheImageOutputStream(baos);
             writer.setOutput(mcios);
