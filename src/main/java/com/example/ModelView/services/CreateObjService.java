@@ -103,7 +103,8 @@ public class CreateObjService {
 
     private void createPrintModelOBJ(File file) {
         String category = entitiesAttributeService.detectPrintModelCategory(file);
-        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
+        ArrayList<String> modelTag = entitiesAttributeService.detectTag(file);
+        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category, modelTag);
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
         printModelsToSaveList.add(printModel);
     }

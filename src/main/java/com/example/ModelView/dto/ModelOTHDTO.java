@@ -1,4 +1,4 @@
-package com.example.ModelView.DTO;
+package com.example.ModelView.dto;
 
 
 import lombok.AllArgsConstructor;

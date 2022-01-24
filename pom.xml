@@ -141,9 +141,9 @@
                 <configuration>
                     <url>jdbc:postgresql://localhost:5432/postgres?currentSchema=boot</url>
                     <user>postgres</user>
-                    <password>admin</password>
+                    <password>1998</password>
                     <schemas>
-                        <schema>boot</schema>
+                        <schema>model_db</schema>
                     </schemas>
                 </configuration>
             </plugin>

@@ -1,4 +1,4 @@
-package com.example.ModelView.DTO;
+package com.example.ModelView.dto;
 
 
 import com.example.ModelView.entities.ModelOTH;
@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter

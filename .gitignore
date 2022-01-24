@@ -33,3 +33,4 @@ build/
 .vscode/
 /src/main/resources/db/migration/V1__init.sql
 /src/main/resources/templates/old/
+/docker-compose.yml

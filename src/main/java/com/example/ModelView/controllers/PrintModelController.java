@@ -1,8 +1,8 @@
 package com.example.ModelView.controllers;
 
-import com.example.ModelView.DTO.MapperDTO;
-import com.example.ModelView.DTO.ModelOTHDTO;
-import com.example.ModelView.DTO.PrintModelDTO;
+import com.example.ModelView.dto.MapperDTO;
+import com.example.ModelView.dto.ModelOTHDTO;
+import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;

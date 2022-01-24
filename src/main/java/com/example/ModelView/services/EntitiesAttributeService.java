@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -109,6 +111,35 @@ public class EntitiesAttributeService {
         } else {
             return "Other";
         }
+    }
+
+    public ArrayList<String> detectTag (File file) {
+        ArrayList<String> tags = new ArrayList<>();
+        String inputString = file.getPath();
+        String reg = "\\\\";
+        String[] splitString = inputString.split(reg);
+        for (String word : splitString) {
+            if (word.contains("[") && !word.equals("[3D PRINT]") && !word.equals("[Patreon]")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                int status = 0;
+                for (char ch : word.toCharArray()) {
+                    if (ch == '[') {
+                        status++;
+                    }
+                    if(status > 0){
+                        stringBuilder.append(ch);
+                    }
+                    if(ch == ']'){
+                        status--;
+                    }
+                }
+                tags.add(stringBuilder.toString());
+            }
+        }
+        if(inputString.contains("NSFW")){
+            tags.add("[NSFW]");
+        }
+        return tags;
     }
 
 }

@@ -1,8 +1,8 @@
 package com.example.ModelView.services;
 
 
-import com.example.ModelView.DTO.MapperDTO;
-import com.example.ModelView.DTO.PrintModelDTO;
+import com.example.ModelView.dto.MapperDTO;
+import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.PrintModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

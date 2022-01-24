@@ -29,22 +29,26 @@ public class PrintModel implements Serializable {
 
     private String modelCategory;
 
-//    cascade = CascadeType.ALL,
+    //    cascade = CascadeType.ALL,
+
+    @ElementCollection
+    @CollectionTable
+    private List<String> modelTags;
 
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn
     private Set<ModelZIP> modelZIPSet = new HashSet<>();
-
 
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn
     private Set<ModelOTH> modelOTHSet = new HashSet<>();
 
 
-    public PrintModel(String modelName, String modelDerictory, String modelCategory) {
+    public PrintModel(String modelName, String modelDerictory, String modelCategory, ArrayList<String> modelTags) {
         this.modelName = modelName;
         this.modelDerictory = modelDerictory;
         this.modelCategory = modelCategory;
+        this.modelTags = modelTags;
     }
 
     public void addModelZIP(ModelZIP modelZIP) {

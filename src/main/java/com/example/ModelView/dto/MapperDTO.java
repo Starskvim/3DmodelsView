@@ -1,4 +1,4 @@
-package com.example.ModelView.DTO;
+package com.example.ModelView.dto;
 
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
