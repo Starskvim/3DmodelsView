@@ -1,5 +1,7 @@
 package com.example.ModelView.services;
 
+import com.example.ModelView.dto.web.ModelOTHWebDTO;
+import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
@@ -28,7 +30,7 @@ public class SerializeService {
     private final JsProgressBarService jsProgressBarService;
 
     private static Integer total = 0;
-    private static volatile int  count = 0;
+    private static volatile int count = 0;
 
     @Value("${scan.adressSer}")
     private String adressSer;
@@ -42,12 +44,12 @@ public class SerializeService {
         for (PrintModel printModel : outputList) {
 
 
-            FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + printModel.getModelName() +".ser");
+            FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + printModel.getModelName() + ".ser");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(printModel);
             objectOutputStream.close();
 
-            count ++;
+            count++;
 
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
@@ -55,6 +57,25 @@ public class SerializeService {
 
 
         }
+    }
+
+    public void serializeDTO(PrintModelWebDTO printModelWebDTO) throws IOException {
+
+//        total = outputList.size();
+//        JsProgressBarService.setTotalCount(total);
+
+        String modelName = printModelWebDTO.getModelName();
+        FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + modelName + "WEB.ser");
+        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+        objectOutputStream.writeObject(printModelWebDTO);
+        objectOutputStream.close();
+
+//        count++;
+//        JsProgressBarService.setCurrentCount(count);
+        JsProgressBarService.setCurrentTask(" - ser - " + modelName);
+        System.out.println(" serializeObj " + modelName);
+
+
     }
 
     @Transactional
@@ -70,7 +91,7 @@ public class SerializeService {
         int total = inputSer.size();
         JsProgressBarService.setTotalCount(total);
 
-        for (File file: inputSer) {
+        for (File file : inputSer) {
 
             FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -79,16 +100,16 @@ public class SerializeService {
 
             printModel.setId(0L);
 
-            for (ModelZIP modelZIP: printModel.getModelZIPSet()){
+            for (ModelZIP modelZIP : printModel.getModelZIPSet()) {
                 modelZIP.setId(0L);
             }
-            for (ModelOTH modelOTH: printModel.getModelOTHSet()){
+            for (ModelOTH modelOTH : printModel.getModelOTHSet()) {
                 modelOTH.setId(0L);
             }
 
             printModelsToSaveList.add(printModel);
 
-            count ++;
+            count++;
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModel.getModelName());
             System.out.println(count + "/" + total + " deserializeObj " + printModel.getModelName());
@@ -99,6 +120,29 @@ public class SerializeService {
         System.out.println(modelZIPList.size() + " modelZIPList");
 
         collectionsService.saveAllListToJpaRepository();
+
+    }
+
+    public void deserializeObjDTO(byte[] bytes) throws IOException, ClassNotFoundException {
+
+
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+        ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
+        PrintModelWebDTO printModelWebDTO = (PrintModelWebDTO) objectInputStream.readObject();
+        objectInputStream.close();
+
+        JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelWebDTO.getModelName());
+        System.out.println(count + "/" + total + " deserializeObj " + printModelWebDTO.getModelName());
+
+        System.out.println(printModelWebDTO.getTotalSize());
+        System.out.println(printModelWebDTO.getModelOTHList().size() + " size list");
+
+
+        List<String> list = printModelWebDTO.getModelTags();
+
+        for(String tag: list){
+            System.out.println(tag);
+        }
 
     }
 }

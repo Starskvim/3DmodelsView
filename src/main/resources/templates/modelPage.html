@@ -13,8 +13,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 
-<!--  Оформление  -->
-<!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">-->
+    <!--  Оформление  -->
+    <!--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">-->
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 
 </head>
@@ -30,6 +30,16 @@
                     <div style="margin-bottom: 14px; width: 10%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                         <button type="submit" class="btn btn-primary myButtonHead">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{'/models/serialization/' + ${printModel.id}}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" class="btn btn-primary myButtonHead">Serialize DTO
                         </button>
                     </div>
                 </form>
@@ -60,13 +70,14 @@
 
             <td>
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-                <form th:action="@{/models/open}" target="dummyframe" >
-                <div style="margin-bottom: 14px; width: 10%" class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <button type="submit" th:name="path" th:value="${printModel.modelDerictory}" class="btn btn-primary">
-                        Open
-                    </button>
-                </div>
+                <form th:action="@{/models/open}" target="dummyframe">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <button type="submit" th:name="path" th:value="${printModel.modelDerictory}"
+                                class="btn btn-primary">
+                            Open
+                        </button>
+                    </div>
                 </form>
             </td>
 
@@ -102,13 +113,13 @@
             <td th:text="${fileZIP.modelZIPAdress}"/>
 
 
-
             <td>
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-                <form th:action="@{/models/open}" target="dummyframe" >
+                <form th:action="@{/models/open}" target="dummyframe">
                     <div style="margin-bottom: 14px; width: 10%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" th:name="path" th:value="${fileZIP.modelZIPAdress}" class="btn btn-primary">
+                        <button type="submit" th:name="path" th:value="${fileZIP.modelZIPAdress}"
+                                class="btn btn-primary">
                             Open
                         </button>
                     </div>
@@ -140,20 +151,18 @@
             <td th:text="${fileOTH.sizeOTH + ' mb.'}"/>
 
 
-
             <td>
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
-                <form th:action="@{/models/open}" target="dummyframe" >
+                <form th:action="@{/models/open}" target="dummyframe">
                     <div style="margin-bottom: 14px; width: 10%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                        <button type="submit" th:name="path" th:value="${fileOTH.modelOTHAdress}" class="btn btn-primary">
+                        <button type="submit" th:name="path" th:value="${fileOTH.modelOTHAdress}"
+                                class="btn btn-primary">
                             Open
                         </button>
                     </div>
                 </form>
             </td>
-
-
 
 
         </tr>
@@ -169,9 +178,7 @@
     </tr>
 
 
-
 </div>
-
 
 
 <!--<canvas id="canvas" width="1400" height="600"></canvas>-->

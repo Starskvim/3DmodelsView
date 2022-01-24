@@ -84,6 +84,15 @@
         </tr>
         <tr>
             <th>
+                <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                    <button onclick="stats()" class="btn btn-primary myButtonHead">Stats DB
+                    </button>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
                 <form th:action="@{/models/serialization}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
@@ -103,19 +112,32 @@
                     </div>
                 </form>
             </th>
-            <th>
-
-                <div style="margin-bottom: 14px; width: 25%" class="input-group">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                    <button onclick="stats()" class="btn btn-primary myButtonHead">Stats DB
-                    </button>
-                </div>
-
-            </th>
         </tr>
     </table>
 </div>
 
+<div class="container">
+
+    <form method="POST" enctype="multipart/form-data" th:action="@{/models/upload}">
+        <table id="serialization" class="table table-hover ">
+            <tr>
+
+                <input class="btn" type="file" name="file">
+
+            </tr>
+<!--            <tr>-->
+
+<!--                <input type="text" name="name">-->
+
+<!--            </tr>-->
+            <tr>
+
+                <input class="btn" type="submit" value="Upload"> Upload
+            </tr>
+        </table>
+    </form>
+
+</div>
 
 <div class="container">
     <table id="statsTable" class="invisibleLoad table table-hover ">

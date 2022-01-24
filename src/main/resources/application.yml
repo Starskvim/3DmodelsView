@@ -4,6 +4,10 @@ spring:
     username: postgres
     url: jdbc:postgresql://localhost:5432/postgres?currentSchema=model_db
     password: '1998'
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
   jpa:
     properties:
       hibernate:
@@ -11,7 +15,7 @@ spring:
           lob:
             non_contextual_creation: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 server:
   servlet:
     context-path: /3Dmodel

@@ -17,7 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
@@ -250,6 +254,49 @@ public class PrintModelController {
         } catch (IOException a) {
             System.out.println(a + "  -  " + path);
         }
+    }
+
+
+
+    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    public String handleFileUpload(
+                                                 @RequestParam("file") MultipartFile file){
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                BufferedOutputStream stream =
+                        new BufferedOutputStream(new FileOutputStream("uploaded"));
+                stream.write(bytes);
+                stream.close();
+
+                serializeService.deserializeObjDTO(bytes);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Пустой файл");
+        }
+        return "redirect:/models/admin";
+    }
+
+
+    @GetMapping("/serialization/{id}")
+    public String serializModel(Model model, @PathVariable(value = "id") Long id) {
+
+        PrintModel printModel = printModelService.getById(id);
+
+        System.out.println("start ser");
+
+        try {
+            serializeService.serializeDTO(mapperDTO.toPrintModelWebDTO(printModel));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("end ser");
+
+        return "redirect:/models/modelOBJ/" + id;
     }
 
 
