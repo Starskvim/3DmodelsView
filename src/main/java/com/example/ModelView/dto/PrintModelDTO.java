@@ -5,6 +5,7 @@ import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class PrintModelDTO {
 
     private Long id;

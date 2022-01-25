@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CreateDTOService {
     private final MapperDTO mapperDTO;
-
+    
     private ExecutorService executorService = Executors.newFixedThreadPool(8);
 
     private List<Future<PrintModelDTO>> futureList = new ArrayList<Future<PrintModelDTO>>();
@@ -71,6 +71,24 @@ public class CreateDTOService {
 
         return resultListStream;
     }
+
+//    public List<PrintModelDTO> createDTOlistStreamMapsStruct(Page<PrintModel> modelsPages) {
+//
+//        if (!futureList.isEmpty()) {
+//            futureList.clear();
+//        }
+//        if (!resultList.isEmpty()) {
+//            resultList.clear();
+//        }
+//
+//        List<PrintModelDTO> resultListStream = modelsPages
+//                .getContent()
+//                .parallelStream()
+//                .map(printModel -> )
+//                .collect(Collectors.toList());
+//
+//        return resultListStream;
+//    }
 
 }
 
