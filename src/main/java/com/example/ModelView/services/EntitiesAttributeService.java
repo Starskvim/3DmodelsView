@@ -1,5 +1,9 @@
 package com.example.ModelView.services;
 
+import com.example.ModelView.entities.ModelTag;
+import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.repositories.ModelRepositoryTagsJPA;
+import lombok.RequiredArgsConstructor;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
@@ -10,19 +14,36 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class EntitiesAttributeService {
 
+    private final CollectionsService collectionsService;
+    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
+
     private static volatile Boolean isSevenZipInitialized = false;
+    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet;
+    private HashSet<ModelTag> modelsTagsSavedSet;
+
+    private ConcurrentMap<String, ModelTag> assignTagMap = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    private void postConstruct() {
+        modelsTagsToSaveSet = collectionsService.getModelsTagsToSaveSet();
+        modelsTagsSavedSet = collectionsService.getModelsTagsSavedSet();
+    }
 
     public static void initSevenZip()
     {
@@ -140,6 +161,53 @@ public class EntitiesAttributeService {
             tags.add("[NSFW]");
         }
         return tags;
+    }
+
+    //////// ?
+    public void prapareDetectTags(){
+        modelsTagsSavedSet.addAll(modelRepositoryTagsJPA.findAll());
+        assignTagMap = modelsTagsSavedSet.parallelStream()
+                .collect(Collectors.toConcurrentMap(ModelTag::getTag, Function.identity()));
+    }
+
+    public void detectCreateObjTag (String path) {
+
+        String reg = "\\\\";
+        String[] splitString = path.split(reg);
+        for (String word : splitString) {
+            if (word.contains("[") && !word.equals("[3D PRINT]") && !word.equals("[Patreon]")) {
+                StringBuilder stringBuilder = new StringBuilder();
+                int status = 0;
+                for (char ch : word.toCharArray()) {
+                    if (ch == '[') {
+                        status++;
+                    }
+                    if(status > 0){
+                        stringBuilder.append(ch);
+                    }
+                    if(ch == ']'){
+                        status--;
+                    }
+                }
+                ModelTag modelTag = new ModelTag(stringBuilder.toString());
+                if(!modelsTagsSavedSet.contains(modelTag)){
+                    modelsTagsToSaveSet.add(modelTag);
+                    assignTagMap.put(modelTag.getTag(), modelTag);
+                }
+            }
+        }
+    }
+
+    public void assignTags (PrintModel printModel){
+
+        for (String key : assignTagMap.keySet()) {
+            if(printModel.getModelDerictory().contains(key)){
+
+                printModel.addTag(assignTagMap.get(key));
+
+            }
+        }
+
     }
 
 }

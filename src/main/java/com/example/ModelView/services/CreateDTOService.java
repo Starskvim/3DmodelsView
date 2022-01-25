@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CreateDTOService {
     private final MapperDTO mapperDTO;
-    
+
     private ExecutorService executorService = Executors.newFixedThreadPool(8);
 
     private List<Future<PrintModelDTO>> futureList = new ArrayList<Future<PrintModelDTO>>();

@@ -1,10 +1,12 @@
 package com.example.ModelView.services;
 
 import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.ModelRepositoryJPA;
 import com.example.ModelView.repositories.ModelRepositoryOTHJPA;
+import com.example.ModelView.repositories.ModelRepositoryTagsJPA;
 import com.example.ModelView.repositories.ModelRepositoryZIPJPA;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,7 @@ public class CollectionsService {
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
+    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
 
     private CopyOnWriteArraySet<PrintModel> printModelsToSaveList = new CopyOnWriteArraySet<>();
     private CopyOnWriteArraySet<ModelOTH> modelOTHList = new CopyOnWriteArraySet<>();
@@ -35,22 +38,14 @@ public class CollectionsService {
     private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>();
     private CopyOnWriteArraySet<String> printModelsToSaveNameStringSet = new CopyOnWriteArraySet<>();
 
+    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
 
-//    private HashSet<PrintModel> printModelsToSaveList = new HashSet<>();
-//    private HashSet<ModelOTH> modelOTHList = new HashSet<>();
-//    private HashSet<ModelZIP> modelZIPList = new HashSet<>();
-//    private ArrayList<String> zipFormatList = new ArrayList<>(6);
-//    private HashSet<String> printModelsToSaveNameStringSet = new HashSet<>(10000);
-
-
-
+    //// multi ?
     private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
-
-    //?
     private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
-
     private HashSet<String> printModelsSavedFilesAdressStringSet = new HashSet<>(30000);
 
+    private HashSet<ModelTag> modelsTagsSavedSet = new HashSet<>(400);
 
     public boolean checkPrintModelsNameStringSet(String name) {
         if (printModelsToSaveNameStringSet.isEmpty()) {
@@ -83,6 +78,17 @@ public class CollectionsService {
         }
         long fin3 = System.currentTimeMillis();
         System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
+
+
+
+        long start4 = System.currentTimeMillis();
+        if (!modelsTagsToSaveSet.isEmpty()) {
+            modelRepositoryTagsJPA.saveAll(modelsTagsToSaveSet);
+        }
+        long fin4 = System.currentTimeMillis();
+        System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
+
+
 
         long fin = System.currentTimeMillis();
         System.out.println("ALL SAVE saveAllListToJpaRepository time - " + (fin - start));

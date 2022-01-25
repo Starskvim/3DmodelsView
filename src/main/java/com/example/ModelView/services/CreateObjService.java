@@ -63,11 +63,12 @@ public class CreateObjService {
         printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
         filesListSize = filesList.size();
-
         JsProgressBarService.setTotalCount(filesListSize);
 
+        entitiesAttributeService.prapareDetectTags();
         filesList.parallelStream().forEach(file -> detectTypeCreate(file));
-
+        printModelsToSaveList.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory()));
+        printModelsToSaveList.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model));
 
 
         collectionsService.saveAllListToJpaRepository();
@@ -103,8 +104,8 @@ public class CreateObjService {
 
     private void createPrintModelOBJ(File file) {
         String category = entitiesAttributeService.detectPrintModelCategory(file);
-        ArrayList<String> modelTag = entitiesAttributeService.detectTag(file);
-        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category, modelTag);
+
+        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
         printModelsToSaveList.add(printModel);
     }

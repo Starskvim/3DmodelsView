@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-@Repository
+
 public interface ModelRepositoryZIPJPA extends JpaRepository<ModelZIP, Long> {
 
     @Query("Select nameModelZIP from ModelZIP ")

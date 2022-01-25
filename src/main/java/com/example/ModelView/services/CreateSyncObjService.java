@@ -136,8 +136,8 @@ public class CreateSyncObjService {
 
     public void createPrintModelOBJ(File file) {
         String category = entitiesAttributeService.detectPrintModelCategory(file);
-        ArrayList<String> modelTag = entitiesAttributeService.detectTag(file);
-        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category, modelTag);
+
+        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
         printModelsToSaveList.add(printModel);
     }

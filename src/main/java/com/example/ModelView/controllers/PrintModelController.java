@@ -170,9 +170,6 @@ public class PrintModelController {
         return "admin";
     }
 
-
-
-
     @GetMapping("/good")
     public String startGood() {
         return "good";
@@ -222,6 +219,9 @@ public class PrintModelController {
 
         model.addAttribute("printModelZIPList", printModelZIPList);
         model.addAttribute("printModel", printModel);
+
+
+//        System.out.println(printModel.getModelTags().toString());
 
 
         return "modelPage";

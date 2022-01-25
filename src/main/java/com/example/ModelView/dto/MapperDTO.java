@@ -51,7 +51,7 @@ public class MapperDTO {
         newPrintModelWebDTO.setModelName(printModel.getModelName());
         newPrintModelWebDTO.setModelDerictory(printModel.getModelDerictory());
         newPrintModelWebDTO.setModelCategory(printModel.getModelCategory());
-        newPrintModelWebDTO.setModelTags(printModel.getModelTags());
+
 
         Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
         for(ModelOTH modelOTH : modelOTHSet){

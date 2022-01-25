@@ -29,11 +29,8 @@ public class PrintModel implements Serializable {
 
     private String modelCategory;
 
-    //    cascade = CascadeType.ALL,
-
-    @ElementCollection
-    @CollectionTable
-    private List<String> modelTags;
+    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ModelTag> modelTagsObj = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn
@@ -44,11 +41,11 @@ public class PrintModel implements Serializable {
     private Set<ModelOTH> modelOTHSet = new HashSet<>();
 
 
-    public PrintModel(String modelName, String modelDerictory, String modelCategory, ArrayList<String> modelTags) {
+    public PrintModel(String modelName, String modelDerictory, String modelCategory) {
         this.modelName = modelName;
         this.modelDerictory = modelDerictory;
         this.modelCategory = modelCategory;
-        this.modelTags = modelTags;
+
     }
 
     public void addModelZIP(ModelZIP modelZIP) {
@@ -57,6 +54,10 @@ public class PrintModel implements Serializable {
 
     public void addModelOTH(ModelOTH modelOTH) {
         modelOTHSet.add(modelOTH);
+    }
+
+    public void addTag(ModelTag modelTag){
+        modelTagsObj.add(modelTag);
     }
 
     @Override

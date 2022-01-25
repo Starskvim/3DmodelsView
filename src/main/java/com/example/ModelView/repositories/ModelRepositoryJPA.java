@@ -14,13 +14,10 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-@Repository //?
+
 public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, JpaSpecificationExecutor<PrintModel> {
 
     Page<PrintModel> findAllBymodelNameLikeIgnoreCase(String name, Pageable page);
-
-//    Page<PrintModel> findAllBymodelNameContains(String name, Pageable page);
-//    Page<PrintModel> findAllByModelNameLike(String name, Pageable page);
 
     @Query("Select modelName from PrintModel")
     List<String> getAllNameModel();
