@@ -3,7 +3,7 @@ package com.example.ModelView.dto;
 
 //import com.example.ModelView.entities.ModelOTH;
 //import com.example.ModelView.entities.PrintModel;
-//import com.example.ModelView.services.ImageService;
+//import com.example.ModelView.services.image.ImageService;
 //import org.mapstruct.AfterMapping;
 //import org.mapstruct.Mapper;
 //import org.mapstruct.MappingTarget;

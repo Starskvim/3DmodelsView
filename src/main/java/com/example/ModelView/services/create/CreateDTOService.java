@@ -1,9 +1,10 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.create;
 
 
 import com.example.ModelView.dto.MapperDTO;
 import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.services.image.ImageWorkerThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class CreateDTOService {
 
     private ExecutorService executorService = Executors.newFixedThreadPool(8);
 
-    private List<Future<PrintModelDTO>> futureList = new ArrayList<Future<PrintModelDTO>>();
-    private List<PrintModelDTO> resultList = new ArrayList<PrintModelDTO>(40);
+    private List<Future<PrintModelDTO>> futureList = new ArrayList<>();
+    private List<PrintModelDTO> resultList = new ArrayList<>(40);
 
 
     public List<PrintModelDTO> createDTOlistThreads(Page<PrintModel> modelsPages) {
@@ -44,9 +45,7 @@ public class CreateDTOService {
             try {
                 PrintModelDTO result = future.get();
                 resultList.add(result);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
+            } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
         }

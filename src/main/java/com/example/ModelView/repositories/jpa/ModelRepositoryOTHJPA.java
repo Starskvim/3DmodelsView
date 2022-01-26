@@ -1,4 +1,4 @@
-package com.example.ModelView.repositories;
+package com.example.ModelView.repositories.jpa;
 
 import com.example.ModelView.entities.ModelOTH;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,8 +17,6 @@ public interface ModelRepositoryOTHJPA extends JpaRepository <ModelOTH, Long>  {
 
     @Query("Select modelOTHAdress from ModelOTH ")
     List<String> getAllmodelOTHAdress();
-
-    //ModelOTH getBymodelOTHAdress();
 
     ModelOTH getModelOTHByModelOTHAdress(String adress);
 

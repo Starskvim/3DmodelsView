@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "model_zip_files")
+@Table
 @NoArgsConstructor
 @Setter
 @Getter
@@ -21,19 +21,12 @@ public class ModelZIP implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nameModelZIP;
-
     private String modelName;
-
     private String fileClass;
-
     private String modelZIPAdress;
-
     private String modelZIPFormat;
-
     private Double sizeZIP;
-
     private Integer archiveRatio;
 
 

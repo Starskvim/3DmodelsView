@@ -8,6 +8,12 @@ import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
 import com.example.ModelView.services.*;
+import com.example.ModelView.services.create.CreateDTOService;
+import com.example.ModelView.services.create.CreateObjService;
+import com.example.ModelView.services.create.CreateSyncObjService;
+import com.example.ModelView.services.lokal.FolderSyncService;
+import com.example.ModelView.services.lokal.JProgressBarService;
+import com.example.ModelView.services.lokal.SerializeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
@@ -105,9 +110,6 @@ public class PrintModelController {
         long start = System.currentTimeMillis();
         try {
             createObjService.startCreateOBJService();
-
-            //printModelService.startFolderCreateService();
-
         } catch (IOException a) {
             System.out.println("IOException");
         }
@@ -126,12 +128,6 @@ public class PrintModelController {
         }
         long fin = System.currentTimeMillis();
         System.out.println("startSyncController time create - " + (fin - start));
-
-//        try {
-//            Thread.sleep(5000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
         return "admin";
     }
 
@@ -177,11 +173,8 @@ public class PrintModelController {
 
     @GetMapping("/testProgressBar")
     public String startTestBar() {
-
         JProgressBarService newProgressBar = new JProgressBarService("testBar", 100);
-
         int current = 0;
-
         for (int i = 0; i < 10; i++) {
             current += 10;
             try {
@@ -191,7 +184,6 @@ public class PrintModelController {
             }
             newProgressBar.updateBar(current);
         }
-
         return "good";
     }
 
@@ -220,30 +212,21 @@ public class PrintModelController {
         model.addAttribute("printModelZIPList", printModelZIPList);
         model.addAttribute("printModel", printModel);
 
-
-//        System.out.println(printModel.getModelTags().toString());
-
-
         return "modelPage";
     }
 
     @PostMapping("/modelPage")
     public String showModelListByPageController(Model model, @ModelAttribute(value = "page") int page) {
-
         model.addAttribute("models", printModelService.getAllModelListByPageService(page));
-
         return "models";
     }
 
-
     @PostMapping("/search_name")
     public String searchByNameController(Model model, @ModelAttribute(value = "word") String word) {
-
         model.addAttribute("word", word);
         model.addAttribute("models", printModelService.searchByModelNameService(word, 0));
         return "models";
     }
-
 
     @RequestMapping(value = "/open", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
@@ -255,8 +238,6 @@ public class PrintModelController {
             System.out.println(a + "  -  " + path);
         }
     }
-
-
 
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public String handleFileUpload(
@@ -279,7 +260,6 @@ public class PrintModelController {
         }
         return "redirect:/models/admin";
     }
-
 
     @GetMapping("/serialization/{id}")
     public String serializModel(Model model, @PathVariable(value = "id") Long id) {

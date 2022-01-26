@@ -3,16 +3,15 @@ package com.example.ModelView.services;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.*;
+import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 

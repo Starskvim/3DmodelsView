@@ -1,8 +1,8 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.create;
 
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.ModelRepositoryTagsJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
 import lombok.RequiredArgsConstructor;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
@@ -11,14 +11,12 @@ import net.sf.sevenzipjbinding.SevenZipNativeInitializationException;
 import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -33,6 +31,7 @@ public class EntitiesAttributeService {
     private final CollectionsService collectionsService;
     private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
 
+    //TODO need obj
     private static volatile Boolean isSevenZipInitialized = false;
     private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet;
     private HashSet<ModelTag> modelsTagsSavedSet;
@@ -163,7 +162,7 @@ public class EntitiesAttributeService {
         return tags;
     }
 
-    //////// ?
+    // TODO ?
     public void prapareDetectTags(){
         modelsTagsSavedSet.addAll(modelRepositoryTagsJPA.findAll());
         assignTagMap = modelsTagsSavedSet.parallelStream()
@@ -199,12 +198,11 @@ public class EntitiesAttributeService {
     }
 
     public void assignTags (PrintModel printModel){
-
         for (String key : assignTagMap.keySet()) {
             if(printModel.getModelDerictory().contains(key)){
-
-                printModel.addTag(assignTagMap.get(key));
-
+                ModelTag modelTag = assignTagMap.get(key);
+                modelTag.addModelInTag(printModel);
+                printModel.addTag(modelTag);
             }
         }
 

@@ -1,4 +1,4 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.lokal;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileUtils;
@@ -181,9 +181,7 @@ public class FolderSyncService {
         }
 
         for (File file : files) {
-
             System.out.println(file.getPath() + "--------" + file.getParent() + "--------" + file.getParentFile() + "--------" + FilenameUtils.getExtension(file.getName()));
-
         }
 
         long fin = System.currentTimeMillis();

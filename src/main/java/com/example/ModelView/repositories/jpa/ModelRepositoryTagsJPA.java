@@ -1,4 +1,4 @@
-package com.example.ModelView.repositories;
+package com.example.ModelView.repositories.jpa;
 
 
 import com.example.ModelView.entities.ModelOTH;

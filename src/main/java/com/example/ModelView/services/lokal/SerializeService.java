@@ -1,16 +1,15 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.lokal;
 
-import com.example.ModelView.dto.web.ModelOTHWebDTO;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.repositories.ModelRepositoryJPA;
+import com.example.ModelView.services.JsProgressBarService;
+import com.example.ModelView.services.create.CollectionsService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +41,6 @@ public class SerializeService {
         JsProgressBarService.setTotalCount(total);
 
         for (PrintModel printModel : outputList) {
-
 
             FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + printModel.getModelName() + ".ser");
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);

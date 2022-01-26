@@ -5,7 +5,7 @@ import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.services.ImageService;
+import com.example.ModelView.services.image.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

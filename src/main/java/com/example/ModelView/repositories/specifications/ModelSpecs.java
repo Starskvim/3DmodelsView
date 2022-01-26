@@ -24,7 +24,4 @@ public class ModelSpecs {
         return (Specification<PrintModel>) (root, query, criteriaBuilder) -> {return criteriaBuilder.like(root.get("modelCategory"), "%"+word+"%");};
     }
 
-//    public static Specification<PrintModel> modelNewSort (){
-//        return (Specification<PrintModel>) (root, query, criteriaBuilder) -> {return criteriaBuilder.desc(root.get("id"));};
-//    }
 }

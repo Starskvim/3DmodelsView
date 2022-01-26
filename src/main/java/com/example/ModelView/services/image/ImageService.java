@@ -1,4 +1,4 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.image;
 
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.PrintModel;

@@ -1,22 +1,19 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.create;
 
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.ModelRepositoryJPA;
-import com.example.ModelView.repositories.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.ModelRepositoryTagsJPA;
-import com.example.ModelView.repositories.ModelRepositoryZIPJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryOTHJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;

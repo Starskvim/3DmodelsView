@@ -13,7 +13,7 @@ import java.util.*;
 
 
 @Entity
-@Table(name = "MODELPRINT")
+@Table
 @NoArgsConstructor
 @Setter
 @Getter
@@ -22,11 +22,8 @@ public class PrintModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String modelName;
-
     private String modelDerictory;
-
     private String modelCategory;
 
     @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)

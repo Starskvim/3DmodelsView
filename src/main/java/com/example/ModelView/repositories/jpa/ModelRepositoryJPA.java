@@ -1,4 +1,4 @@
-package com.example.ModelView.repositories;
+package com.example.ModelView.repositories.jpa;
 
 import com.example.ModelView.entities.PrintModel;
 import org.springframework.data.domain.Page;

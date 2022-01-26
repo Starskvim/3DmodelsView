@@ -22,17 +22,11 @@ public class ModelOTH implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nameModelOTH;
-
     private String modelName;
-
     private String fileClass;
-
     private String modelOTHAdress;
-
     private String modelOTHFormat;
-
     private Double sizeOTH;
 
 

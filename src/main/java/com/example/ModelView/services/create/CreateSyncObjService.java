@@ -1,12 +1,14 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.create;
 
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.repositories.ModelRepositoryJPA;
-import com.example.ModelView.repositories.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.ModelRepositoryZIPJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryOTHJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
+import com.example.ModelView.services.lokal.JProgressBarService;
+import com.example.ModelView.services.JsProgressBarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
@@ -45,13 +47,9 @@ public class CreateSyncObjService {
     CopyOnWriteArrayList<String> zipFormatList;
     CopyOnWriteArraySet<String> printModelsToSaveNameStringSet;
 
-
-
     HashSet<String> printModelsSavedNameStringSet;
     HashSet<String> printModelsSavedFilesNameStringSet;
-
     HashSet<String> printModelsSavedFilesAdressStringSet;
-
 
     @PostConstruct
     private void postConstruct() {
@@ -61,12 +59,9 @@ public class CreateSyncObjService {
         zipFormatList = collectionsService.getZipFormatList();
         printModelsToSaveNameStringSet = collectionsService.getPrintModelsToSaveNameStringSet();
         printModelsSavedNameStringSet = collectionsService.getPrintModelsSavedNameStringSet();
-
         printModelsSavedFilesNameStringSet = collectionsService.getPrintModelsSavedFilesNameStringSet();
-
         printModelsSavedFilesAdressStringSet = collectionsService.getPrintModelsSavedFilesAdressStringSet();
     }
-
 
     @Transactional
     public void startSyncOBJRepository() throws IOException {
@@ -77,15 +72,11 @@ public class CreateSyncObjService {
         zipFormatList.add("rar");
 
         printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
-
-        //?
+        //TODO ?
         printModelsSavedFilesNameStringSet.addAll(modelRepositoryOTHJPA.getAllnameModelOTH());
         printModelsSavedFilesNameStringSet.addAll(modelRepositoryZIPJPA.getAllnameModelZIP());
-
         printModelsSavedFilesAdressStringSet.addAll(modelRepositoryOTHJPA.getAllmodelOTHAdress());
         printModelsSavedFilesAdressStringSet.addAll(modelRepositoryZIPJPA.getAllmodelZIPAdress());
-
-
         printModelsSavedNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
 
         int filesListSize = filesList.size();
@@ -94,6 +85,7 @@ public class CreateSyncObjService {
 
         //JProgressBarService newProgressBar = new JProgressBarService("SyncService", taskSize); windows bar
         JsProgressBarService.setTotalCount(taskSize);
+        entitiesAttributeService.prapareDetectTags(); // Tags
 
         for (File file : filesList) {
             if (collectionsService.checkPrintModelsFilesSavedNameStringSet(file.getName())) {
@@ -107,19 +99,20 @@ public class CreateSyncObjService {
                 //newProgressBar.updateBar(countDone); windows bar
                 JsProgressBarService.setCurrentCount(countDone);
                 JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - sync - " + file.getName());
-
                 System.out.println(countDone + "/" + filesListSize + " - sync - " + file.getName());
             }
         }
 
+        printModelsToSaveList.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory())); // Tags
+        printModelsToSaveList.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model)); // Tags
+
         collectionsService.saveAllListToJpaRepository();
 
-        // ? Очередность, вызов не существующих листов ?
+        //TODO ? Очередность
         checkAndDeleteOBJinListOTHandZIP(filesList);
         deleteModelsWhereDeletedFiles(filesList);
 
         collectionsService.saveAllListToJpaRepository();
-
 
         log.info("Входные файлы filesList size - {}", filesList.size());
         log.info("Итоговые модели printModelsList size - {}", printModelsToSaveList.size());
@@ -127,6 +120,7 @@ public class CreateSyncObjService {
     }
 
     public void checkAndCreateOBJ(File file) {
+
         if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
             createModelZIP(file);
         } else {
@@ -158,9 +152,7 @@ public class CreateSyncObjService {
     public void createModelZIP(File file) {
         Double size = entitiesAttributeService.getSizeFileToString(file);
         String format = FilenameUtils.getExtension(file.getName());
-
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
-
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
         modelZIPList.add(modelZIP);
         String nameModel = file.getParentFile().getName();
@@ -205,8 +197,7 @@ public class CreateSyncObjService {
 
     public void deleteModelsWhereDeletedFiles(Collection<File> files) {
         HashSet<String> deleteModelSet = printModelsSavedNameStringSet;
-
-        // mb stream
+        // TODO mb stream
         for (File file : files) {
             deleteModelSet.remove(file.getParentFile().getName());
         }
@@ -226,8 +217,6 @@ public class CreateSyncObjService {
         if (!printModelsSavedFilesAdressStringSet.isEmpty()) {
             for (String fileAbsPath : printModelsSavedFilesAdressStringSet) {
                 if (zipFormatList.contains(FilenameUtils.getExtension(fileAbsPath))) {
-
-
                     try {
                         ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
                         PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());
@@ -237,11 +226,7 @@ public class CreateSyncObjService {
                     } catch (Exception e){
                         System.out.println(e.getMessage());
                     }
-
-
-
                 } else {
-
                     try {
                         ModelOTH modelOTH = modelRepositoryOTHJPA.getModelOTHByModelOTHAdress(fileAbsPath);
                         PrintModel printModel = modelRepositoryJPA.getByModelName(modelOTH.getModelName());
@@ -251,14 +236,10 @@ public class CreateSyncObjService {
                     } catch (Exception e){
                         System.out.println(e.getMessage());
                     }
-
-
                 }
             }
             modelRepositoryOTHJPA.deleteAll(toDeleteOTHList);
             modelRepositoryZIPJPA.deleteAll(toDeleteZIPList);
         }
     }
-
-
 }

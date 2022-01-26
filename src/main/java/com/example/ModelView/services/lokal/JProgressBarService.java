@@ -1,4 +1,4 @@
-package com.example.ModelView.services;
+package com.example.ModelView.services.lokal;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
