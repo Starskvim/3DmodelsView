@@ -24,7 +24,7 @@
                 <form th:action="@{/models}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <button type="submit" class="btn btn-primary">Home Page
                         </button>
                     </div>
@@ -34,7 +34,7 @@
                 <form th:action="@{/models/good}"
                       method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 14%" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <button type="submit" class="btn btn-primary">Test
                         </button>
                     </div>
@@ -45,7 +45,7 @@
                 <form th:action="@{/models/admin}"
                       method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <button type="submit" class="btn btn-primary">Admin Page
                         </button>
                     </div>
@@ -59,7 +59,7 @@
                 <form th:action="@{/models/modelPage}"
                       method="post" class="form-horizontal">
                     <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <input type="number" th:name="page" placeholder="page (*)" class="form-control"/>
                         <button type="submit" class="btn btn-primary">Page</button>
                     </div>
@@ -70,7 +70,7 @@
                 <form th:action="@{/models/search_name}"
                       method="post" class="form-horizontal">
                     <div style="margin-bottom: 25px" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <input type="text" th:name="word" placeholder="by name (*)" class="form-control"/>
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
@@ -119,7 +119,7 @@
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
                 <form th:action="@{/models/open}" target="dummyframe">
                     <div style="margin-bottom: 14px; width: 10%"  class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <button   type="submit" th:name="path" th:value="${zip.modelZIPAdress}" class="btn btn-primary">
                             Open
                         </button>

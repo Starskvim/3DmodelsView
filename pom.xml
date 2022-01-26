@@ -138,7 +138,7 @@
                 <version>5.2.4</version>
                 <configuration>
                     <url>jdbc:postgresql://localhost:5432/postgres?currentSchema=boot</url>
-                    <user>postgres</user>
+                    <watcher>postgres</watcher>
                     <password>1998</password>
                     <schemas>
                         <schema>model_db</schema>

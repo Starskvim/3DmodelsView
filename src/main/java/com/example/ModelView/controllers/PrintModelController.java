@@ -187,11 +187,10 @@ public class PrintModelController {
         return "good";
     }
 
-    @GetMapping("/admin")
-    public String startAdmin() {
-        return "admin";
-    }
-
+//    @GetMapping("/admin")
+//    public String startAdmin() {
+//        return "admin";
+//    }
 
     @GetMapping("/modelOBJ/{id}")
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
