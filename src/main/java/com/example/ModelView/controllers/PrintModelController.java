@@ -4,6 +4,7 @@ import com.example.ModelView.dto.MapperDTO;
 import com.example.ModelView.dto.ModelOTHDTO;
 import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
@@ -45,8 +46,7 @@ public class PrintModelController {
     private final SerializeService serializeService;
 
     @GetMapping
-    public String modelsController(Model model,
-                                              Pageable pageable,
+    public String modelsController(Model model,Pageable pageable,
                                               @RequestParam(value = "wordName", required = false) String wordName,
                                               @RequestParam(value = "wordCategory", required = false) String wordCategory
 
@@ -208,10 +208,8 @@ public class PrintModelController {
         }
 
         model.addAttribute("printModelOTHList", resultListOTH);
-
         model.addAttribute("printModelZIPList", printModelZIPList);
         model.addAttribute("printModel", printModel);
-
         return "modelPage";
     }
 

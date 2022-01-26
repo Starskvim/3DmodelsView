@@ -189,7 +189,7 @@ public class EntitiesAttributeService {
                     }
                 }
                 ModelTag modelTag = new ModelTag(stringBuilder.toString());
-                if(!modelsTagsSavedSet.contains(modelTag)){
+                if(!modelsTagsSavedSet.contains(modelTag) && !modelsTagsToSaveSet.contains(modelTag)){
                     modelsTagsToSaveSet.add(modelTag);
                     assignTagMap.put(modelTag.getTag(), modelTag);
                 }
