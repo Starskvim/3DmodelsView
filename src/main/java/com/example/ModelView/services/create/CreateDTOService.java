@@ -28,7 +28,7 @@ public class CreateDTOService {
     private List<PrintModelDTO> resultList = new ArrayList<>(40);
 
 
-    public List<PrintModelDTO> createDTOlistThreads(Page<PrintModel> modelsPages) {
+    public List<PrintModelDTO> createDTOListThreads(Page<PrintModel> modelsPages) {
 
         if (!futureList.isEmpty()) {
             futureList.clear();
@@ -51,7 +51,6 @@ public class CreateDTOService {
         }
         return this.resultList;
     }
-
 
     public List<PrintModelDTO> createDTOlistStream(Page<PrintModel> modelsPages) {
 

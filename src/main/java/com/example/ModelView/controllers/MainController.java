@@ -18,7 +18,7 @@ public class MainController {
     }
 
     @GetMapping("/admin")
-    public String startAdmin() {
+    public String toAdmin() {
         return "admin";
     }
 }

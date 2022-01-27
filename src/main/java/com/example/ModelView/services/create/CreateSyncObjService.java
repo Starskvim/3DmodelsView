@@ -7,7 +7,7 @@ import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryOTHJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
-import com.example.ModelView.services.lokal.JProgressBarService;
+//import com.example.ModelView.services.lokal.JProgressBarService;
 import com.example.ModelView.services.JsProgressBarService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -38,7 +38,7 @@ public class CreateSyncObjService {
     private final EntitiesAttributeService entitiesAttributeService;
     private final CollectionsService collectionsService;
 
-    private final JProgressBarService jProgressBarService;
+//    private final JProgressBarService jProgressBarService;
     private final JsProgressBarService jsProgressBarService;
 
     CopyOnWriteArraySet<PrintModel> printModelsToSaveList;

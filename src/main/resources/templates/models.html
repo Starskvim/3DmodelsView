@@ -102,7 +102,7 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-                <th th:with="var2 = ${allPage + 1}">
+                <th th:with="var2 = ${allPage}">
                     <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"/>
                 </th>
             </tr>
@@ -115,10 +115,9 @@
                 <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
-                            th:value=${pageNumber}
-                            th:text=${var}></a></button>
+                            th:value="${pageNumber}"
+                            th:text="${var}"></button>
                 </th>
-
 
             </tr>
 
@@ -204,7 +203,7 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </th>
-                <th th:with="var2 = ${allPage + 1}">
+                <th th:with="var2 = ${allPage}">
                     <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"/>
                 </th>
             </tr>

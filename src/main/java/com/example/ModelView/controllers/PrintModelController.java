@@ -4,7 +4,6 @@ import com.example.ModelView.dto.MapperDTO;
 import com.example.ModelView.dto.ModelOTHDTO;
 import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
@@ -13,7 +12,7 @@ import com.example.ModelView.services.create.CreateDTOService;
 import com.example.ModelView.services.create.CreateObjService;
 import com.example.ModelView.services.create.CreateSyncObjService;
 import com.example.ModelView.services.lokal.FolderSyncService;
-import com.example.ModelView.services.lokal.JProgressBarService;
+//import com.example.ModelView.services.lokal.JProgressBarService;
 import com.example.ModelView.services.lokal.SerializeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,9 +45,9 @@ public class PrintModelController {
     private final SerializeService serializeService;
 
     @GetMapping
-    public String modelsController(Model model,Pageable pageable,
-                                              @RequestParam(value = "wordName", required = false) String wordName,
-                                              @RequestParam(value = "wordCategory", required = false) String wordCategory
+    public String modelsController(Model model, Pageable pageable,
+                                   @RequestParam(value = "wordName", required = false) String wordName,
+                                   @RequestParam(value = "wordCategory", required = false) String wordCategory
 
     ) {
 
@@ -67,10 +66,10 @@ public class PrintModelController {
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(spec, pageable);
 
         long start = System.currentTimeMillis();
-        List<PrintModelDTO> resultList = createDTOService.createDTOlistThreads(modelsPages);
+        List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
 
         long fin = System.currentTimeMillis();
-        System.out.println("Create page "+ pageable.getPageNumber() + " Time " + (fin - start));
+        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin - start));
 
         model.addAttribute("models", resultList);
 
@@ -171,21 +170,21 @@ public class PrintModelController {
         return "good";
     }
 
-    @GetMapping("/testProgressBar")
-    public String startTestBar() {
-        JProgressBarService newProgressBar = new JProgressBarService("testBar", 100);
-        int current = 0;
-        for (int i = 0; i < 10; i++) {
-            current += 10;
-            try {
-                TimeUnit.SECONDS.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            newProgressBar.updateBar(current);
-        }
-        return "good";
-    }
+//    @GetMapping("/testProgressBar")
+//    public String startTestBar() {
+//        JProgressBarService newProgressBar = new JProgressBarService("testBar", 100);
+//        int current = 0;
+//        for (int i = 0; i < 10; i++) {
+//            current += 10;
+//            try {
+//                TimeUnit.SECONDS.sleep(1);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            newProgressBar.updateBar(current);
+//        }
+//        return "good";
+//    }
 
 //    @GetMapping("/admin")
 //    public String startAdmin() {
@@ -236,9 +235,9 @@ public class PrintModelController {
         }
     }
 
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public String handleFileUpload(
-                                                 @RequestParam("file") MultipartFile file){
+            @RequestParam("file") MultipartFile file) {
         if (!file.isEmpty()) {
             try {
                 byte[] bytes = file.getBytes();
@@ -277,31 +276,19 @@ public class PrintModelController {
     }
 
 
-    public ArrayList<Integer> preparePageInt(int current, int totalPages) {
+    private List<Integer> preparePageInt(int current, int totalPages) {
 
-        ArrayList<Integer> pageNumbers = new ArrayList<>();
+        List<Integer> pageNumbers = new ArrayList<>();
 
+        int start = Math.max(current - 3, 0);
+        int end = Math.min(totalPages, start + 9);
         pageNumbers.add(0);
-        if (current >= 2) {
-            pageNumbers.add(current - 1);
-            pageNumbers.add(current);
-        } else if (current == 1 || current == 0){
-            pageNumbers.add(1);
-        }
-        for (int i = 0; i < 11; i++) {
-            current += 1;
-            if (current > totalPages - 2){
-                for ( i = current; i < totalPages - current; i++){
-                    current++;
-                    pageNumbers.add(current);
-                }
-                break;
-            }
-            if (!(current == 1)) {
-                pageNumbers.add(current);
+        for (int i = start; i < end; i++) {
+            if (i != 0 && i != totalPages - 1) {
+                pageNumbers.add(i);
             }
         }
-        pageNumbers.add(totalPages);
+        pageNumbers.add(totalPages - 1);
         return pageNumbers;
     }
 
