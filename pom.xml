@@ -120,6 +120,13 @@
             <version>1.4.2.Final</version>
         </dependency>
 
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.1</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -138,7 +145,7 @@
                 <version>5.2.4</version>
                 <configuration>
                     <url>jdbc:postgresql://localhost:5432/postgres?currentSchema=boot</url>
-                    <watcher>postgres</watcher>
+                    <user>postgres</user>
                     <password>1998</password>
                     <schemas>
                         <schema>model_db</schema>
