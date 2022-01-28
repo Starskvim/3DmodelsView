@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -129,7 +130,10 @@ public class CreateObjService {
     private void getModelListZIPService(File file, ModelZIP modelZip) {
         for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
-                printModel.addModelZIP(modelZip);
+
+                Set<ModelZIP> modelZIPSet = printModel.getModelZIPSet();
+                modelZIPSet.add(modelZip);
+
                 break;
             }
         }
@@ -138,7 +142,10 @@ public class CreateObjService {
     private void getModelListOTHRepositoryService(File file, ModelOTH modelOTH) {
         for (PrintModel printModel : printModelsToSaveList) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
-                printModel.addModelOTH(modelOTH);
+
+                Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
+                modelOTHSet.add(modelOTH);
+
                 break;
             }
         }

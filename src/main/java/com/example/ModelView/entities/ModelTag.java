@@ -23,15 +23,12 @@ public class ModelTag {
 
     private String tag;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY,
+            mappedBy="modelTagsObj")
     private List<PrintModel> printModels = new ArrayList<>();
 
     public ModelTag (String tag) {
         this.tag = tag;
-    }
-
-    public void addModelInTag (PrintModel printModel) {
-        printModels.add(printModel);
     }
 
     @Override

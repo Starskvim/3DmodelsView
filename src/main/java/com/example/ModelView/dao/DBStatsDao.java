@@ -1,4 +1,4 @@
-package com.example.ModelView.repositories;
+package com.example.ModelView.dao;
 
 
 import com.example.ModelView.controllers.response.DBStatsResponse;

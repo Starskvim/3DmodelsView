@@ -173,8 +173,8 @@
                 <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
-                            th:value=${pageNumber}
-                            th:text=${var}></a></button>
+                            th:value="${pageNumber}"
+                            th:text="${var}"></a></button>
                 </th>
             </tr>
         </table>

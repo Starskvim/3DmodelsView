@@ -55,28 +55,6 @@ public class CollectionsService {
 
         long start = System.currentTimeMillis();
 
-        long start1 = System.currentTimeMillis();
-        if (!printModelsToSaveList.isEmpty()) {
-            modelRepositoryJPA.saveAll(printModelsToSaveList);
-        }
-        long fin1 = System.currentTimeMillis();
-        System.out.println("modelRepositoryJPA.saveAll time - " + (fin1 - start1));
-
-        long start2 = System.currentTimeMillis();
-        if (!modelZIPList.isEmpty()) {
-            modelRepositoryZIPJPA.saveAll(modelZIPList);
-        }
-        long fin2 = System.currentTimeMillis();
-        System.out.println("modelRepositoryZIPJPA.saveAll time - " + (fin2 - start2));
-
-        long start3 = System.currentTimeMillis();
-        if (!modelOTHList.isEmpty()) {
-            modelRepositoryOTHJPA.saveAll(modelOTHList);
-        }
-        long fin3 = System.currentTimeMillis();
-        System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
-
-
 
         long start4 = System.currentTimeMillis();
         if (!modelsTagsToSaveSet.isEmpty()) {
@@ -84,6 +62,37 @@ public class CollectionsService {
         }
         long fin4 = System.currentTimeMillis();
         System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
+
+
+//        long start1 = System.currentTimeMillis();
+//        if (!printModelsToSaveList.isEmpty()) {
+//            modelRepositoryJPA.saveAll(printModelsToSaveList);
+//        }
+//        long fin1 = System.currentTimeMillis();
+//        System.out.println("modelRepositoryJPA.saveAll time - " + (fin1 - start1));
+
+//        long start2 = System.currentTimeMillis();
+//        if (!modelZIPList.isEmpty()) {
+//            modelRepositoryZIPJPA.saveAll(modelZIPList);
+//        }
+//        long fin2 = System.currentTimeMillis();
+//        System.out.println("modelRepositoryZIPJPA.saveAll time - " + (fin2 - start2));
+//
+//        long start3 = System.currentTimeMillis();
+//        if (!modelOTHList.isEmpty()) {
+//            modelRepositoryOTHJPA.saveAll(modelOTHList);
+//        }
+//        long fin3 = System.currentTimeMillis();
+//        System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
+
+
+//        long start4 = System.currentTimeMillis();
+//        if (!modelsTagsToSaveSet.isEmpty()) {
+//            modelRepositoryTagsJPA.saveAll(modelsTagsToSaveSet);
+//        }
+//        long fin4 = System.currentTimeMillis();
+//        System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
+
 
 
 

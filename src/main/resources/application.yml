@@ -16,6 +16,7 @@ spring:
             non_contextual_creation: 'true'
     hibernate:
       ddl-auto: update
+    show-sql: true
 server:
   servlet:
     context-path: /3Dmodel

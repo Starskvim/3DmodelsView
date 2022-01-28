@@ -63,13 +63,16 @@ public class PrintModelController {
         }
 
 
+        long start1 = System.currentTimeMillis();
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(spec, pageable);
+        long fin1 = System.currentTimeMillis();
+        System.out.println("Create selects " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 
-        long start = System.currentTimeMillis();
+
+        long start2 = System.currentTimeMillis();
         List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
-
-        long fin = System.currentTimeMillis();
-        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin - start));
+        long fin2 = System.currentTimeMillis();
+        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
         model.addAttribute("models", resultList);
 

@@ -12,6 +12,7 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -197,12 +198,18 @@ public class EntitiesAttributeService {
         }
     }
 
+    @Transactional
     public void assignTags (PrintModel printModel){
         for (String key : assignTagMap.keySet()) {
             if(printModel.getModelDerictory().contains(key)){
                 ModelTag modelTag = assignTagMap.get(key);
-                modelTag.addModelInTag(printModel);
-                printModel.addTag(modelTag);
+
+                List<PrintModel> printModels = modelTag.getPrintModels();
+                printModels.add(printModel);
+
+                List<ModelTag> modelTagsObj = printModel.getModelTagsObj();
+                modelTagsObj.add(modelTag);
+
             }
         }
 
