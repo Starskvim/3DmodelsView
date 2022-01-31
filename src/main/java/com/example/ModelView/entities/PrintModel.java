@@ -13,12 +13,12 @@ import java.util.*;
 
 
 @Entity
-//@NamedEntityGraph(
-//        name = "printModelGraph",
-//        attributeNodes = {
+@NamedEntityGraph(
+        name = "PrintModel.all",
+        attributeNodes = {
 //                @NamedAttributeNode("modelTagsObj"),
 //                @NamedAttributeNode("modelZIPSet"),
-//                @NamedAttributeNode("modelOTHSet")})
+                @NamedAttributeNode("modelOTHSet")})
 @Table
 @NoArgsConstructor
 @Setter

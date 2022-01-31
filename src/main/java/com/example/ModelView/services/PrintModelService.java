@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +44,10 @@ public class PrintModelService {
     }
 
     public PrintModel getById (Long id) {
-        return modelRepositoryJPA.findById(id).orElse(null);
+
+        Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
+
+        return printModel.orElse(null);
     }
 
     public void openFolderOrFile (String adress) throws IOException {
