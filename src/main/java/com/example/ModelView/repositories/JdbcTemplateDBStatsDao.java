@@ -25,7 +25,12 @@ public class JdbcTemplateDBStatsDao implements DBStatsDao {
     @Override
     public DBStatsResponse getStats() {
 
-        String SQL = "SELECT (SELECT COUNT(*)FROM model_db.print_model) AS totalModels,(SELECT COUNT(*)FROM model_db.modelzip) AS totalZIP,(SELECT COUNT(*)FROM model_db.model_other_files) AS totalOTH,(SELECT sum (modelzip.sizezip) / 1024 FROM model_db.modelzip) AS totalSize;";
+        String SQL = "SELECT (SELECT COUNT(*)FROM model_db.print_model) AS totalModels," +
+                "(SELECT COUNT(*)FROM model_db.modelzip) AS totalZIP," +
+                "(SELECT COUNT(*)FROM model_db.model_other_files) AS totalOTH," +
+                "(SELECT sum (modelzip.sizezip) / 1024 FROM model_db.modelzip) AS totalSize," +
+                "(SELECT avg (modelzip.archive_ratio) FROM model_db.modelzip) AS ratioAvg," +
+                "(SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY archive_ratio) FROM model_db.modelzip) AS ratioMed;";
 
         DBStatsResponse dbStatsResponse = jdbcTemplate.queryForObject(SQL, new DBStatsResponseMapper());
 

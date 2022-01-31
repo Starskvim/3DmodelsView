@@ -10,6 +10,8 @@
     var statsZIP = document.getElementById("statsZIP")
     var statsOTH = document.getElementById("statsOTH")
     var statsSIZE = document.getElementById("statsSIZE")
+    var statsAVG = document.getElementById("statsAVG")
+    var statsMED = document.getElementById("statsMED")
 
 
 
@@ -65,13 +67,17 @@
 
         let Models = statsDB.totalModels
         let ZIP = statsDB.totalZIP
-        let OTH = statsDB.totalZIP
+        let OTH = statsDB.totalOTH
         let SIZE = statsDB.totalSize
+        let AVG = statsDB.ratioAvg
+        let MED = statsDB.ratioMed
 
         statsModels.innerHTML = Models
         statsZIP.innerHTML = ZIP
         statsOTH.innerHTML = OTH
         statsSIZE.innerHTML = SIZE + " GB"
+        statsAVG.innerHTML = AVG + " %"
+        statsMED.innerHTML = MED + " %"
 
         statsTable.classList.remove("invisibleLoad")
 

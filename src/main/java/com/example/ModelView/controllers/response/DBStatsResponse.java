@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class DBStatsResponse {
 
@@ -16,5 +15,10 @@ public class DBStatsResponse {
     private Integer totalZIP;
 
     private Double totalSize;
+
+    private Integer ratioAvg;
+
+    private Integer ratioMed;
+
 
 }
