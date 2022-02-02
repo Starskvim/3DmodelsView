@@ -1,7 +1,6 @@
 package com.example.ModelView.services;
 
-import com.example.ModelView.dto.ModelOTHDTO;
-import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.*;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,32 +25,37 @@ public class PrintModelService {
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
 
-    public List<PrintModel> getAllModelListService(){
+    public List<PrintModel> getAllModelListService() {
         return modelRepositoryJPA.findAll();
     }
 
-    public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable){
+    public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable) {
         return modelRepositoryJPA.findAll(modelSpecification, pageable);
     }
 
-    public Page<ModelZIP> getAllZIPListByPageService(Pageable pageable){
+    public Page<ModelZIP> getAllZIPListByPageService(Pageable pageable) {
         return modelRepositoryZIPJPA.findAll(pageable);
     }
 
-    public void startFolderScanService () throws IOException {
+    public void startFolderScanService() throws IOException {
         folderScanRepository.startScanRepository(true);
     }
 
-    public PrintModel getById (Long id) {
+    public PrintModel getById(Long id) {
         Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
+
+        if (printModel.isEmpty()) {
+            throw new ModelNotFoundException(id);
+        }
+
         return printModel.orElse(null);
     }
 
-    public void openFolderOrFile (String adress) throws IOException {
+    public void openFolderOrFile(String adress) throws IOException {
         Runtime.getRuntime().exec("explorer.exe /select," + adress);
     }
 
-    public List<PrintModel> searchByModelNameService (String word, int page) {
+    public List<PrintModel> searchByModelNameService(String word, int page) {
         return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
     }
 

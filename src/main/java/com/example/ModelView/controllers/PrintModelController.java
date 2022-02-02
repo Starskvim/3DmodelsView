@@ -47,7 +47,7 @@ public class PrintModelController {
         }
         if (wordCategory != null) {
             spec = spec.and(ModelSpecs.modelCategoryContains(wordCategory));
-            filters.append("@word-" + wordCategory);
+            filters.append("@word-").append(wordCategory);
         }
 
         long start1 = System.currentTimeMillis();
@@ -84,6 +84,7 @@ public class PrintModelController {
     public String startGood() {
         return "good";
     }
+
 
     @GetMapping("/modelOBJ/{id}")
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
