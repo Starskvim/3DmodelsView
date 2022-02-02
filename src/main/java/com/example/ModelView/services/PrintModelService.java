@@ -1,5 +1,7 @@
 package com.example.ModelView.services;
 
+import com.example.ModelView.dto.ModelOTHDTO;
+import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.*;
@@ -13,6 +15,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +29,6 @@ public class PrintModelService {
 
     public List<PrintModel> getAllModelListService(){
         return modelRepositoryJPA.findAll();
-    }
-
-    public List<PrintModel> getAllModelListByPageService(int page){
-        return modelRepositoryJPA.findAll(PageRequest.of(page, 40)).toList();
     }
 
     public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable){
@@ -44,9 +44,7 @@ public class PrintModelService {
     }
 
     public PrintModel getById (Long id) {
-
         Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
-
         return printModel.orElse(null);
     }
 
@@ -58,5 +56,18 @@ public class PrintModelService {
         return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
     }
 
+    public List<Integer> preparePageIntService(int current, int totalPages) {
+        List<Integer> pageNumbers = new ArrayList<>();
+        int start = Math.max(current - 3, 0);
+        int end = Math.min(totalPages, start + 9);
+        pageNumbers.add(0);
+        for (int i = start; i < end; i++) {
+            if (i != 0 && i != totalPages - 1) {
+                pageNumbers.add(i);
+            }
+        }
+        pageNumbers.add(totalPages - 1);
+        return pageNumbers;
+    }
 
 }

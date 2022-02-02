@@ -22,7 +22,7 @@
         <thead>
         <tr>
             <th>
-                <form th:action="@{/models/start}"
+                <form th:action="@{/admin/start}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -32,7 +32,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/startCreate}"
+                <form th:action="@{/admin/startCreate}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -42,7 +42,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/sync}"
+                <form th:action="@{/admin/sync}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -52,7 +52,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/syncFolder}"
+                <form th:action="@{/admin/syncFolder}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -93,7 +93,7 @@
         </tr>
         <tr>
             <th>
-                <form th:action="@{/models/serialization}"
+                <form th:action="@{/admin/serialization}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -103,7 +103,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/deserialization}"
+                <form th:action="@{/admin/deserialization}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -118,20 +118,12 @@
 
 <div class="container">
 
-    <form method="POST" enctype="multipart/form-data" th:action="@{/models/upload}">
+    <form method="POST" enctype="multipart/form-data" th:action="@{/admin/upload}">
         <table id="serialization" class="table table-hover ">
             <tr>
-
                 <input class="btn" type="file" name="file">
-
             </tr>
-<!--            <tr>-->
-
-<!--                <input type="text" name="name">-->
-
-<!--            </tr>-->
             <tr>
-
                 <input class="btn" type="submit" value="Upload"> Upload
             </tr>
         </table>

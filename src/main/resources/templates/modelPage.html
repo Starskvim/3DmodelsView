@@ -32,7 +32,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{'/models/serialization/' + ${printModel.id}}"
+                <form th:action="@{'/admin/serialization/' + ${printModel.id}}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 10%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -147,7 +147,6 @@
             <td th:text="${fileOTH.modelOTHFormat}"/>
             <td th:text="${fileOTH.sizeOTH + ' mb.'}"/>
 
-
             <td>
                 <iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
                 <form th:action="@{/models/open}" target="dummyframe">
@@ -161,17 +160,14 @@
                 </form>
             </td>
 
-
         </tr>
         </tbody>
     </table>
 
     <tr th:each="fileOTH : ${printModelOTHList}">
-
         <th>
             <img th:src="'data:image/png;base64,' + ${fileOTH.fullPreview}" alt="Red dot" class="imageFull"/>
         </th>
-
     </tr>
 
 

@@ -1,11 +1,13 @@
 package com.example.ModelView.services.lokal;
 
+import com.example.ModelView.dto.MapperDTO;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
+import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.CollectionsService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Collection;
@@ -27,6 +30,8 @@ public class SerializeService {
     private final FolderScanRepository folderScanRepository;
     private final CollectionsService collectionsService;
     private final JsProgressBarService jsProgressBarService;
+    private final MapperDTO mapperDTO;
+    private final PrintModelService printModelService;
 
     private static Integer total = 0;
     private static volatile int count = 0;
@@ -34,8 +39,16 @@ public class SerializeService {
     @Value("${scan.adressSer}")
     private String adressSer;
 
-    public void serializeObj(List<PrintModel> outputList) throws IOException {
+    public void serializeOneModelService(Long id) {
+        PrintModel printModel = printModelService.getById(id);
+        try {
+            serializeDTO(mapperDTO.toPrintModelWebDTO(printModel));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void serializeObj(List<PrintModel> outputList) throws IOException {
 
         total = outputList.size();
         JsProgressBarService.setTotalCount(total);
@@ -52,7 +65,6 @@ public class SerializeService {
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
             System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
-
 
         }
     }
@@ -136,11 +148,22 @@ public class SerializeService {
         System.out.println(printModelWebDTO.getModelOTHList().size() + " size list");
 
 
-        List<String> list = printModelWebDTO.getModelTags();
+    }
 
-        for(String tag: list){
-            System.out.println(tag);
+    public void handleFileUploadService(MultipartFile file) {
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+//                BufferedOutputStream stream =
+//                        new BufferedOutputStream(new FileOutputStream("uploaded"));
+//                stream.write(bytes);
+//                stream.close();
+                deserializeObjDTO(bytes);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            System.out.println("Пустой файл");
         }
-
     }
 }

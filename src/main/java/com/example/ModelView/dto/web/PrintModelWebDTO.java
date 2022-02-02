@@ -20,7 +20,6 @@ public class PrintModelWebDTO implements Serializable {
     private String modelName;
     private String modelDerictory;
     private String modelCategory;
-    private List<String> modelTags;
     private String compressedPreview;
     private Double totalSize;
     private Collection<ModelOTHWebDTO> modelOTHList = new ArrayList<>();

@@ -2,7 +2,9 @@ package com.example.ModelView.services.create;
 
 
 import com.example.ModelView.dto.MapperDTO;
+import com.example.ModelView.dto.ModelOTHDTO;
 import com.example.ModelView.dto.PrintModelDTO;
+import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.services.image.ImageWorkerThreadService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -27,6 +30,13 @@ public class CreateDTOService {
     private List<Future<PrintModelDTO>> futureList = new ArrayList<>();
     private List<PrintModelDTO> resultList = new ArrayList<>(40);
 
+    public Collection<ModelOTHDTO> prepareOTHListDTOService (Collection<ModelOTH> printModelOTHList){
+        Collection<ModelOTHDTO> resultListOTHDTO = new ArrayList<>(10);
+        for (ModelOTH modelOTH : printModelOTHList) {
+            resultListOTHDTO.add(mapperDTO.toModelOTHDTO(modelOTH));
+        }
+        return resultListOTHDTO;
+    }
 
     public List<PrintModelDTO> createDTOListThreads(Page<PrintModel> modelsPages) {
 
