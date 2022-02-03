@@ -25,6 +25,9 @@ public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, Jp
 
     void deleteAllByModelNameIn(Collection<String> deletModelSet);
 
+    @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
+    Page<PrintModel> findAllByModelTagsObj_TagContaining(String nameTag, Pageable pageable);
+
     // old
     @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAllBymodelNameLikeIgnoreCase(String name, Pageable page);

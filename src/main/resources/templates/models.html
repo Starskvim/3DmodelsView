@@ -8,16 +8,12 @@
     <!--                  -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
 
-
     <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
-
-
     <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
-
 
 </head>
 <body>
@@ -26,7 +22,6 @@
 <div class="container">
     <table class="table table-hover">
         <thead>
-
         <tr>
             <th>
                 <a th:href="@{/models?size=40&page=0}"
@@ -60,7 +55,6 @@
                     </div>
                 </form>
             </th>
-
             <th>
                 <form th:action="@{/admin}"
                       method="get" target=»_blank» class="form-horizontal myButtonHead">
@@ -76,6 +70,60 @@
 </div>
 
 <div class="container">
+    <table class="table table-hover">
+        <tr>
+            <th>
+                <form th:action="@{/models/modelsByTag}"
+                      method="get" class="form-horizontal">
+                    <div id="carousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <button target=»_blank» type="submit"
+                                        th:name="tag"
+                                        th:value="${modelTagList.get(0)}"
+                                        th:text="${modelTagList.get(0).toString()}"></button>
+                            </div>
+                            <div th:each="tagName : ${modelTagList}" class="carousel-item">
+                                <button target=»_blank» type="submit"
+                                        th:name="tag"
+                                        th:value="${tagName}"
+                                        th:text="${tagName.toString()}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    <table class="table table-hover">
+        <tr>
+            <th>
+                    <div id="carousel" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+
+                                <a th:href="@{'/models/modelsByTag?tag=' + ${modelTagList.get(0)}}" target=»_blank»
+                                   th:text="${modelTagList.get(0).toString()}"></a>
+
+                            </div>
+
+                            <div th:each="tagName : ${modelTagList}" class="carousel-item">
+
+                                <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
+                                   th:text="${tagName.toString()}"></a>
+
+                            </div>
+                        </div>
+                    </div>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
     <form th:action="@{/models}"
           method="get" class="form-horizontal">
         <table class="table table-hover">
@@ -103,24 +151,20 @@
                     </div>
                 </th>
                 <th th:with="var2 = ${allPage}">
-                    <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"/>
+                    <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"></span>
                 </th>
             </tr>
-
         </table>
 
         <table class="table table-hover">
             <tr>
-
                 <th th:each="pageNumber : ${pageNumbers}" th:with="var = ${pageNumber + 1}">
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
                             th:value="${pageNumber}"
                             th:text="${var}"></button>
                 </th>
-
             </tr>
-
         </table>
     </form>
 </div>
@@ -129,18 +173,14 @@
 <div class="container">
     <table class="table table-hover">
         <thead>
-
-        <span th:text="${'Всего моделей на странице ' + models.size()}"/>
+        <span th:text="${'Всего моделей на странице ' + models.size()}"></span>
         <br>
-
         <tr>
             <th>Preview</th>
-            <!--            <th>ID</th>-->
             <th>Category</th>
             <th>modelName</th>
             <th>Действия</th>
         </tr>
-
         </thead>
         <tbody>
         <tr th:each="model : ${models}">
@@ -148,19 +188,14 @@
                 <img th:src="'data:image/png;base64,' + ${model.compressPreview}" alt="None"
                      class="imagePreveiw"/>
             </th>
-            <!--            <td th:text="${model.id}"/>-->
-            <td th:text="${model.modelCategory}"/>
-            <td th:text="${model.modelName}"/>
+            <td th:text="${model.modelCategory}"></td>
+            <td th:text="${model.modelName}"></td>
             <td class="Link">
-                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотр"/>
+                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотр"></a>
             </td>
-
         </tr>
         </tbody>
-
     </table>
-
-
 </div>
 
 
@@ -174,7 +209,7 @@
                     <button th:class="${pageNumber == currentPage}? 'btn btn-success' : 'btn btn-info'" type="submit"
                             th:name="page"
                             th:value="${pageNumber}"
-                            th:text="${var}"></a></button>
+                            th:text="${var}"></button>
                 </th>
             </tr>
         </table>
@@ -204,7 +239,7 @@
                     </div>
                 </th>
                 <th th:with="var2 = ${allPage}">
-                    <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"/>
+                    <span style="vertical-align: middle" th:text="${'Всего страниц ' + var2}"></span>
                 </th>
             </tr>
 

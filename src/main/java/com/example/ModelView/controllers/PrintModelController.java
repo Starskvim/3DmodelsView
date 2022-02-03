@@ -3,6 +3,7 @@ package com.example.ModelView.controllers;
 import com.example.ModelView.dto.ModelOTHDTO;
 import com.example.ModelView.dto.PrintModelDTO;
 import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
@@ -53,12 +54,19 @@ public class PrintModelController {
         long start1 = System.currentTimeMillis();
         Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(spec, pageable);
         long fin1 = System.currentTimeMillis();
-        System.out.println("Create selects " + pageable.getPageNumber() + " Time " + (fin1 - start1));
+        System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 
         long start2 = System.currentTimeMillis();
         List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
         long fin2 = System.currentTimeMillis();
         System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+
+        long start3 = System.currentTimeMillis();
+        List<String> modelTagList = printModelService.getAllTagsName();
+        long fin3 = System.currentTimeMillis();
+        System.out.println("Create page modelTagList " + pageable.getPageNumber() + " Time " + (fin3 - start3));
+
+        model.addAttribute("modelTagList", modelTagList);
 
         model.addAttribute("models", resultList);
         model.addAttribute("allPage", modelsPages.getTotalPages());
@@ -69,6 +77,29 @@ public class PrintModelController {
         model.addAttribute("pageNumbers",
                 printModelService.preparePageIntService(pageable.getPageNumber(), modelsPages.getTotalPages()));
         return "models";
+    }
+
+    @GetMapping("/modelsByTag")
+    public String showTagPage (Model model, Pageable pageable, @RequestParam(value = "tag") String tag){
+
+
+        System.out.println(tag);
+
+        Page<PrintModel> modelsPages = printModelService.getAllModelByTagService(tag, pageable);
+
+        long start2 = System.currentTimeMillis();
+        List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
+        long fin2 = System.currentTimeMillis();
+        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+
+        model.addAttribute("tag", tag);
+        model.addAttribute("models", resultList);
+        model.addAttribute("allPage", modelsPages.getTotalPages());
+        model.addAttribute("currentPage", pageable.getPageNumber());
+        model.addAttribute("pageNumbers",
+                printModelService.preparePageIntService(pageable.getPageNumber(), modelsPages.getTotalPages()));
+
+        return "modelsByTag";
     }
 
     @GetMapping("/zipPage")

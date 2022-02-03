@@ -1,10 +1,12 @@
 package com.example.ModelView.services;
 
 import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
+import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.*;
 import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,8 @@ public class PrintModelService {
     private final FolderScanRepository folderScanRepository;
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
+
+    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
 
     public List<PrintModel> getAllModelListService() {
         return modelRepositoryJPA.findAll();
@@ -52,6 +56,14 @@ public class PrintModelService {
 
     public List<PrintModel> searchByModelNameService(String word, int page) {
         return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
+    }
+
+    public List<String> getAllTagsName(){
+        return modelRepositoryTagsJPA.getAllNameTags();
+    }
+
+    public Page<PrintModel> getAllModelByTagService(String tag, Pageable pageable){
+        return modelRepositoryJPA.findAllByModelTagsObj_TagContaining(tag, pageable);
     }
 
     public List<Integer> preparePageIntService(int current, int totalPages) {
