@@ -43,12 +43,7 @@ public class PrintModelService {
 
     public PrintModel getById(Long id) {
         Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
-
-        if (printModel.isEmpty()) {
-            throw new ModelNotFoundException(id);
-        }
-
-        return printModel.orElse(null);
+        return printModel.orElseThrow(() -> new ModelNotFoundException(id));
     }
 
     public void openFolderOrFile(String adress) throws IOException {
