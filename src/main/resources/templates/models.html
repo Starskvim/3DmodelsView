@@ -6,29 +6,28 @@
     <!--  Иконка вкладки  -->
     <link rel="shortcut icon" th:href="@{/img/favicon.png}" type="image/png">
     <!--                  -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+
 
     <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
             crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
 </head>
 <body>
 
-
-<div class="container">
-    <table class="table table-hover">
-        <thead>
+<div class="container-fluid myNavBarAllDiv" >
+    <table class="table table-sm myNavBarTab">
         <tr>
             <th>
                 <a th:href="@{/models?size=40&page=0}"
                    class="form-horizontal">
-                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
-                        <button type="submit" class="btn btn-primary">Home Page
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead myNavBarDiv">
+                        <button type="submit" class="btn btn-primary myNavBarBut">Home Page
                         </button>
                     </div>
                 </a>
@@ -36,9 +35,8 @@
             <th>
                 <form th:action="@{/models/zipPage}"
                       method="get" target=»_blank» class="form-horizontal">
-                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
-                        <button type="submit" class="btn btn-primary">Zip Page
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead myNavBarDiv">
+                        <button type="submit" class="btn btn-primary myNavBarBut">Zip Page
                         </button>
                         <input type="hidden" name="size" th:value="200">
                         <input type="hidden" name="sort" value="archiveRatio,desc">
@@ -47,10 +45,9 @@
             </th>
             <th>
                 <form th:action="@{/models/good}"
-                      method="get" target=»_blank» class="form-horizontal myButtonHead">
-                    <div style="margin-bottom: 14px; width: 14%" class="input-group">
-                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
-                        <button type="submit" class="btn btn-primary">Test
+                      method="get" target=»_blank» class="form-horizontal myButtonHead ">
+                    <div style="margin-bottom: 14px; width: 14%" class="input-group myNavBarDiv">
+                        <button type="submit" class="btn btn-primary myNavBarBut">Test
                         </button>
                     </div>
                 </form>
@@ -58,7 +55,7 @@
             <th>
                 <form th:action="@{/admin}"
                       method="get" target=»_blank» class="form-horizontal myButtonHead">
-                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myNavBarDiv" >
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
                         <button type="submit" class="btn btn-primary">Admin Page
                         </button>
@@ -68,6 +65,7 @@
         </tr>
     </table>
 </div>
+
 
 <div class="container">
     <table class="table table-hover">
@@ -101,23 +99,23 @@
     <table class="table table-hover">
         <tr>
             <th>
-                    <div id="carousel" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
+                <div id="carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
 
-                                <a th:href="@{'/models/modelsByTag?tag=' + ${modelTagList.get(0)}}" target=»_blank»
-                                   th:text="${modelTagList.get(0).toString()}"></a>
+                            <a th:href="@{'/models/modelsByTag?tag=' + ${modelTagList.get(0)}}" target=»_blank»
+                               th:text="${modelTagList.get(0).toString()}"></a>
 
-                            </div>
+                        </div>
 
-                            <div th:each="tagName : ${modelTagList}" class="carousel-item">
+                        <div th:each="tagName : ${modelTagList}" class="carousel-item">
 
-                                <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
-                                   th:text="${tagName.toString()}"></a>
+                            <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
+                               th:text="${tagName.toString()}"></a>
 
-                            </div>
                         </div>
                     </div>
+                </div>
             </th>
         </tr>
     </table>

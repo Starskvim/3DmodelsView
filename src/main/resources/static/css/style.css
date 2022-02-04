@@ -17,9 +17,6 @@ body {
   top: 0;
 }
 
-
-
-
 div {
   z-index: 10;
   background: rgba(126, 100, 100, 0.7);
@@ -39,7 +36,7 @@ th {
   margin-right: auto;
 }
 
-/* -------------------------------------------------- */
+/* ---------------------image----------------------------- */
 .imagePreveiw {
   height: 250px;
   max-width: 450px; /*????*/
@@ -159,3 +156,15 @@ td {
   display: none;
 }
 /* --------------------------------------------------------------- */
+.myNavBarAllDiv{
+
+}
+.myNavBarDiv{
+  background: transparent;
+}
+.myNavBarTab{
+
+}
+.myNavBarBut{
+
+}
