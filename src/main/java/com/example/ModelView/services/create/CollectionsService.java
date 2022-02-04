@@ -35,14 +35,13 @@ public class CollectionsService {
     private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>();
     private CopyOnWriteArraySet<String> printModelsToSaveNameStringSet = new CopyOnWriteArraySet<>();
 
-    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
-
-    //// multi ?
+    // TODO multi ?
     private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
     private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
     private HashSet<String> printModelsSavedFilesAdressStringSet = new HashSet<>(30000);
 
     private HashSet<ModelTag> modelsTagsSavedSet = new HashSet<>(400);
+    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
 
     public boolean checkPrintModelsNameStringSet(String name) {
         if (printModelsToSaveNameStringSet.isEmpty()) {
@@ -54,7 +53,6 @@ public class CollectionsService {
     public void saveAllListToJpaRepository () {
 
         long start = System.currentTimeMillis();
-
 
         long start4 = System.currentTimeMillis();
         if (!modelsTagsToSaveSet.isEmpty()) {
@@ -84,17 +82,6 @@ public class CollectionsService {
 //        }
 //        long fin3 = System.currentTimeMillis();
 //        System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
-
-
-//        long start4 = System.currentTimeMillis();
-//        if (!modelsTagsToSaveSet.isEmpty()) {
-//            modelRepositoryTagsJPA.saveAll(modelsTagsToSaveSet);
-//        }
-//        long fin4 = System.currentTimeMillis();
-//        System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
-
-
-
 
         long fin = System.currentTimeMillis();
         System.out.println("ALL SAVE saveAllListToJpaRepository time - " + (fin - start));

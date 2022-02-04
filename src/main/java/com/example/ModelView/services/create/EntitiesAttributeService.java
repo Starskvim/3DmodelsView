@@ -3,7 +3,7 @@ package com.example.ModelView.services.create;
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
 import net.sf.sevenzipjbinding.SevenZipException;
@@ -27,6 +27,8 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Getter
+@Setter
 public class EntitiesAttributeService {
 
     private final CollectionsService collectionsService;
@@ -114,9 +116,7 @@ public class EntitiesAttributeService {
         return 0;
     }
 
-    public Double getSizeFileToString (File file) {
-//        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
-
+    public Double getSizeFileToDouble(File file) {
         double inputSize = file.length() / 1024.0 / 1024.0;
         double scale = Math.pow(10, 3);
         return Math.round(inputSize * scale) / scale;
@@ -134,44 +134,13 @@ public class EntitiesAttributeService {
         }
     }
 
-    public ArrayList<String> detectTag (File file) {
-        ArrayList<String> tags = new ArrayList<>();
-        String inputString = file.getPath();
-        String reg = "\\\\";
-        String[] splitString = inputString.split(reg);
-        for (String word : splitString) {
-            if (word.contains("[") && !word.equals("[3D PRINT]") && !word.equals("[Patreon]")) {
-                StringBuilder stringBuilder = new StringBuilder();
-                int status = 0;
-                for (char ch : word.toCharArray()) {
-                    if (ch == '[') {
-                        status++;
-                    }
-                    if(status > 0){
-                        stringBuilder.append(ch);
-                    }
-                    if(ch == ']'){
-                        status--;
-                    }
-                }
-                tags.add(stringBuilder.toString());
-            }
-        }
-        if(inputString.contains("NSFW")){
-            tags.add("[NSFW]");
-        }
-        return tags;
-    }
-
-    // TODO ?
     public void prapareDetectTags(){
         modelsTagsSavedSet.addAll(modelRepositoryTagsJPA.findAll());
-        assignTagMap = modelsTagsSavedSet.parallelStream()
+        assignTagMap = modelsTagsSavedSet.stream()
                 .collect(Collectors.toConcurrentMap(ModelTag::getTag, Function.identity()));
     }
 
     public void detectCreateObjTag (String path) {
-
         String reg = "\\\\";
         String[] splitString = path.split(reg);
         for (String word : splitString) {
@@ -201,7 +170,7 @@ public class EntitiesAttributeService {
     @Transactional
     public void assignTags (PrintModel printModel){
         for (String key : assignTagMap.keySet()) {
-            if(printModel.getModelDerictory().contains(key)){
+            if(printModel.getModelDerictory().contains(key)){ // TODO <- non optimal
                 ModelTag modelTag = assignTagMap.get(key);
 
                 List<PrintModel> printModels = modelTag.getPrintModels();

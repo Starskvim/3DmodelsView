@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,10 +42,10 @@ public class CreateSyncObjService {
 //    private final JProgressBarService jProgressBarService;
     private final JsProgressBarService jsProgressBarService;
 
-    CopyOnWriteArraySet<PrintModel> printModelsToSaveList;
-    CopyOnWriteArraySet<ModelOTH> modelOTHList;
-    CopyOnWriteArraySet<ModelZIP> modelZIPList;
-    CopyOnWriteArrayList<String> zipFormatList;
+    CopyOnWriteArraySet<PrintModel> printModelsToSaveSet;
+    CopyOnWriteArraySet<ModelOTH> modelOTHToSaveSet;
+    CopyOnWriteArraySet<ModelZIP> modelZIPToSaveSet;
+    CopyOnWriteArrayList<String> zipFormatToSaveSet;
     CopyOnWriteArraySet<String> printModelsToSaveNameStringSet;
 
     HashSet<String> printModelsSavedNameStringSet;
@@ -56,10 +54,10 @@ public class CreateSyncObjService {
 
     @PostConstruct
     private void postConstruct() {
-        printModelsToSaveList = collectionsService.getPrintModelsToSaveList();
-        modelOTHList = collectionsService.getModelOTHList();
-        modelZIPList = collectionsService.getModelZIPList();
-        zipFormatList = collectionsService.getZipFormatList();
+        printModelsToSaveSet = collectionsService.getPrintModelsToSaveList();
+        modelOTHToSaveSet = collectionsService.getModelOTHList();
+        modelZIPToSaveSet = collectionsService.getModelZIPList();
+        zipFormatToSaveSet = collectionsService.getZipFormatList();
         printModelsToSaveNameStringSet = collectionsService.getPrintModelsToSaveNameStringSet();
         printModelsSavedNameStringSet = collectionsService.getPrintModelsSavedNameStringSet();
         printModelsSavedFilesNameStringSet = collectionsService.getPrintModelsSavedFilesNameStringSet();
@@ -70,9 +68,9 @@ public class CreateSyncObjService {
     public void startSyncOBJRepository() throws IOException {
 
         Collection<File> filesList = folderScanRepository.startScanRepository(true);
-        zipFormatList.add("zip");
-        zipFormatList.add("7z");
-        zipFormatList.add("rar");
+        zipFormatToSaveSet.add("zip");
+        zipFormatToSaveSet.add("7z");
+        zipFormatToSaveSet.add("rar");
 
         printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
         //TODO ?
@@ -106,8 +104,8 @@ public class CreateSyncObjService {
             }
         }
 
-        printModelsToSaveList.stream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory())); // Tags
-        printModelsToSaveList.stream().forEach(model -> entitiesAttributeService.assignTags(model)); // Tags
+        printModelsToSaveSet.stream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory())); // Tags
+        printModelsToSaveSet.stream().forEach(model -> entitiesAttributeService.assignTags(model)); // Tags
 
         collectionsService.saveAllListToJpaRepository();
 
@@ -118,13 +116,13 @@ public class CreateSyncObjService {
         collectionsService.saveAllListToJpaRepository();
 
         log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveList.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
 
     }
 
     public void checkAndCreateOBJ(File file) {
 
-        if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
+        if (zipFormatToSaveSet.contains(FilenameUtils.getExtension(file.getName()))) {
             createModelZIP(file);
         } else {
             createModelOTH(file);
@@ -136,14 +134,14 @@ public class CreateSyncObjService {
 
         PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
-        printModelsToSaveList.add(printModel);
+        printModelsToSaveSet.add(printModel);
     }
 
     public void createModelOTH(File file) {
-        Double size = entitiesAttributeService.getSizeFileToString(file);
+        Double size = entitiesAttributeService.getSizeFileToDouble(file);
         String format = FilenameUtils.getExtension(file.getName());
         ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
-        modelOTHList.add(modelOTH);
+        modelOTHToSaveSet.add(modelOTH);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
             addInSavedModelOTHList(modelOTH, nameModel);
@@ -153,11 +151,11 @@ public class CreateSyncObjService {
     }
 
     public void createModelZIP(File file) {
-        Double size = entitiesAttributeService.getSizeFileToString(file);
+        Double size = entitiesAttributeService.getSizeFileToDouble(file);
         String format = FilenameUtils.getExtension(file.getName());
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
         ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
-        modelZIPList.add(modelZIP);
+        modelZIPToSaveSet.add(modelZIP);
         String nameModel = file.getParentFile().getName();
         if (printModelsSavedNameStringSet.contains(nameModel)) {
             addInSavedModelZIPList(modelZIP, nameModel);
@@ -175,7 +173,7 @@ public class CreateSyncObjService {
 
 
 
-        printModelsToSaveList.add(printModel);
+        printModelsToSaveSet.add(printModel);
     }
 
     public void addInSavedModelOTHList(ModelOTH modelOTH, String nameModel) {
@@ -187,11 +185,11 @@ public class CreateSyncObjService {
         modelOTHSet.add(modelOTH);
 
 
-        printModelsToSaveList.add(printModel);
+        printModelsToSaveSet.add(printModel);
     }
 
     public void addToSaveModelListZIP(File file, ModelZIP modelZip) {
-        for (PrintModel printModel : printModelsToSaveList) {
+        for (PrintModel printModel : printModelsToSaveSet) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
 
                 Set<ModelZIP> modelZIPSet = printModel.getModelZIPSet();
@@ -204,7 +202,7 @@ public class CreateSyncObjService {
     }
 
     public void addToSaveModelListOTH(File file, ModelOTH modelOTH) {
-        for (PrintModel printModel : printModelsToSaveList) {
+        for (PrintModel printModel : printModelsToSaveSet) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
                 Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
                 modelOTHSet.add(modelOTH);
@@ -234,7 +232,7 @@ public class CreateSyncObjService {
 
         if (!printModelsSavedFilesAdressStringSet.isEmpty()) {
             for (String fileAbsPath : printModelsSavedFilesAdressStringSet) {
-                if (zipFormatList.contains(FilenameUtils.getExtension(fileAbsPath))) {
+                if (zipFormatToSaveSet.contains(FilenameUtils.getExtension(fileAbsPath))) {
                     try {
                         ModelZIP modelZIP = modelRepositoryZIPJPA.getModelZIPByModelZIPAdress(fileAbsPath);
                         PrintModel printModel = modelRepositoryJPA.getByModelName(modelZIP.getModelName());

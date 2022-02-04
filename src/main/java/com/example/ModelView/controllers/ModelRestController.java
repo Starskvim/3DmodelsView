@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 public class ModelRestController {
-
     private final JsProgressBarService jsProgressBarService;
 
     private final JdbcTemplateDBStatsDao jdbcTemplateDBStatsDao;
