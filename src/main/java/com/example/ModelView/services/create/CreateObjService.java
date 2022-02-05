@@ -64,7 +64,7 @@ public class CreateObjService {
         filesListSize = filesList.size();
         JsProgressBarService.setTotalCount(filesListSize);
 
-        entitiesAttributeService.prapareDetectTags();
+        entitiesAttributeService.prepareDetectTags();
         filesList.parallelStream().forEach(file -> detectTypeCreate(file));
         printModelsToSaveSet.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory()));
         printModelsToSaveSet.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model));

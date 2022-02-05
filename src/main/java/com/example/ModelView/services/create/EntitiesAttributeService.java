@@ -134,7 +134,7 @@ public class EntitiesAttributeService {
         }
     }
 
-    public void prapareDetectTags(){
+    public void prepareDetectTags(){
         modelsTagsSavedSet.addAll(modelRepositoryTagsJPA.findAll());
         assignTagMap = modelsTagsSavedSet.stream()
                 .collect(Collectors.toConcurrentMap(ModelTag::getTag, Function.identity()));

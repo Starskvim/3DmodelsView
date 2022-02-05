@@ -3,6 +3,7 @@ package com.example.ModelView.dto;
 import com.example.ModelView.dto.web.ModelOTHWebDTO;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.services.image.ImageService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -49,31 +51,28 @@ public class MapperDTO {
 
         PrintModelWebDTO newPrintModelWebDTO = new PrintModelWebDTO();
         newPrintModelWebDTO.setModelName(printModel.getModelName());
-        newPrintModelWebDTO.setModelDerictory(printModel.getModelDerictory());
+        newPrintModelWebDTO.setModelPath(printModel.getModelDerictory());
         newPrintModelWebDTO.setModelCategory(printModel.getModelCategory());
 
-
         Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
-        for(ModelOTH modelOTH : modelOTHSet){
-            String format = modelOTH.getModelOTHFormat();
-            if(format.equals("jpg") || format.equals("jpeg") || format.equals("png")){
-                newPrintModelWebDTO.setCompressedPreview(imageService.getBaseSFimgWeb(modelOTH, true, 0.2f));
-                break;
-            }
+        List<ModelTag> tagsList = printModel.getModelTagsObj();
+
+        List<String> tagsNamesList = new ArrayList<>();
+        for (ModelTag modelTag: tagsList){
+            tagsNamesList.add(modelTag.getTag());
         }
         ArrayList<ModelOTHWebDTO> resiltList = new ArrayList<>();
         for(ModelOTH modelOTH : modelOTHSet){
             resiltList.add(toModelOTHWebDTO(modelOTH));
         }
-
-        newPrintModelWebDTO.setModelOTHList(resiltList);
-
         Double totalSize = 0d;
         for (ModelZIP modelZIP: printModel.getModelZIPSet()){
             totalSize += modelZIP.getSizeZIP();
         }
 
-        newPrintModelWebDTO.setTotalSize(totalSize);
+        newPrintModelWebDTO.setModelTagsNames(tagsNamesList);
+        newPrintModelWebDTO.setModelSize(totalSize);
+        newPrintModelWebDTO.setModelOTHList(resiltList);
 
         return newPrintModelWebDTO;
     }
@@ -81,15 +80,12 @@ public class MapperDTO {
     public ModelOTHWebDTO toModelOTHWebDTO (ModelOTH modelOTH){
 
         ModelOTHWebDTO newModelOTHWebDTO = new ModelOTHWebDTO();
-
         newModelOTHWebDTO.setNameModelOTH(modelOTH.getNameModelOTH());
         newModelOTHWebDTO.setModelName(modelOTH.getModelName());
         newModelOTHWebDTO.setFileClass(modelOTH.getFileClass());
-        newModelOTHWebDTO.setModelOTHAdress(modelOTH.getModelOTHAdress());
         newModelOTHWebDTO.setModelOTHFormat(modelOTH.getModelOTHFormat());
         newModelOTHWebDTO.setSizeOTH(modelOTH.getSizeOTH());
-
-        newModelOTHWebDTO.setFullPreview(imageService.getBaseSFimgWeb(modelOTH, true, 0.5f));
+        newModelOTHWebDTO.setPreviewOth(imageService.getBaseSFimgWeb(modelOTH, true, 0.5f));
 
         return newModelOTHWebDTO;
     }

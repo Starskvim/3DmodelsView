@@ -86,7 +86,7 @@ public class CreateSyncObjService {
 
         //JProgressBarService newProgressBar = new JProgressBarService("SyncService", taskSize); windows bar
         JsProgressBarService.setTotalCount(taskSize);
-        entitiesAttributeService.prapareDetectTags(); // Tags
+        entitiesAttributeService.prepareDetectTags(); // Tags
 
         for (File file : filesList) {
             if (collectionsService.checkPrintModelsFilesSavedNameStringSet(file.getName())) {

@@ -39,7 +39,7 @@ public class SerializeService {
     @Value("${scan.adressSer}")
     private String adressSer;
 
-    public void serializeOneModelService(Long id) {
+    public void serializeOneModelToWebDtoService(Long id) {
         PrintModel printModel = printModelService.getById(id);
         try {
             serializeDTO(mapperDTO.toPrintModelWebDTO(printModel));
@@ -131,10 +131,9 @@ public class SerializeService {
 
         collectionsService.saveAllListToJpaRepository();
 
-    }
+    } // TODO not working
 
     public void deserializeObjDTO(byte[] bytes) throws IOException, ClassNotFoundException {
-
 
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
@@ -144,11 +143,9 @@ public class SerializeService {
         JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelWebDTO.getModelName());
         System.out.println(count + "/" + total + " deserializeObj " + printModelWebDTO.getModelName());
 
-        System.out.println(printModelWebDTO.getTotalSize());
         System.out.println(printModelWebDTO.getModelOTHList().size() + " size list");
 
-
-    }
+    } // TODO not working
 
     public void handleFileUploadService(MultipartFile file) {
         if (!file.isEmpty()) {

@@ -1,7 +1,5 @@
 package com.example.ModelView.dto.web;
 
-
-import com.example.ModelView.entities.ModelOTH;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,13 +13,22 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrintModelWebDTO implements Serializable {
-
-    private Long id;
     private String modelName;
-    private String modelDerictory;
+    private String modelPath;
+    private Double modelSize;
     private String modelCategory;
-    private String compressedPreview;
-    private Double totalSize;
+    private Collection<String> modelTagsNames;
     private Collection<ModelOTHWebDTO> modelOTHList = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "PrintModelWebDTO{" +
+                "modelName='" + modelName + '\'' +
+                ", modelPath='" + modelPath + '\'' +
+                ", modelSize=" + modelSize +
+                ", modelCategory='" + modelCategory + '\'' +
+                ", modelTagsNames=" + modelTagsNames +
+                ", modelOTHList=" + modelOTHList +
+                '}';
+    }
 }

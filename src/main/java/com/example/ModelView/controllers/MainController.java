@@ -1,6 +1,5 @@
 package com.example.ModelView.controllers;
 
-import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.CreateObjService;
 import com.example.ModelView.services.create.CreateSyncObjService;
@@ -114,7 +113,7 @@ public class MainController {
     @GetMapping("/admin/serialization/{id}")
     public String serializModel(Model model, @PathVariable(value = "id") Long id) {
         System.out.println("start ser");
-        serializeService.serializeOneModelService(id);
+        serializeService.serializeOneModelToWebDtoService(id);
         System.out.println("end ser");
         return "redirect:/models/modelOBJ/" + id;
     }
