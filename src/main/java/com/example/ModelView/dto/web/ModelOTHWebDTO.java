@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelOTHWebDTO implements Serializable {
+public class ModelOTHWebDTO {
     private String nameModelOTH;
     private String modelName;
     private String fileClass;

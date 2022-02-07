@@ -9,12 +9,17 @@ import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.CollectionsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.SerializationUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -32,6 +37,8 @@ public class SerializeService {
     private final JsProgressBarService jsProgressBarService;
     private final MapperDTO mapperDTO;
     private final PrintModelService printModelService;
+
+    private final ObjectMapper objectMapper;
 
     private static Integer total = 0;
     private static volatile int count = 0;
@@ -75,10 +82,8 @@ public class SerializeService {
 //        JsProgressBarService.setTotalCount(total);
 
         String modelName = printModelWebDTO.getModelName();
-        FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + modelName + "WEB.ser");
-        ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-        objectOutputStream.writeObject(printModelWebDTO);
-        objectOutputStream.close();
+        String modelString = objectMapper.writeValueAsString(printModelWebDTO);
+        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + "WEB.json"), modelString);
 
 //        count++;
 //        JsProgressBarService.setCurrentCount(count);
@@ -163,4 +168,6 @@ public class SerializeService {
             System.out.println("Пустой файл");
         }
     }
+
+
 }
