@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>MODELS</title>
@@ -62,6 +63,12 @@
                     </div>
                 </form>
             </th>
+            <th sec:authorize="isAuthenticated()">
+                <div style="background: transparent; display: flex;" th:text="${#authentication.name}">
+
+                </div>
+            </th>
+
         </tr>
     </table>
 </div>
