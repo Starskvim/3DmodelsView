@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Service
@@ -82,7 +83,7 @@ public class CreateSyncObjService {
 
         int filesListSize = filesList.size();
         int taskSize = Math.abs(filesListSize - printModelsSavedFilesAdressStringSet.size());
-        int countDone = 0;
+        AtomicInteger countDone = new AtomicInteger(0);
 
         //JProgressBarService newProgressBar = new JProgressBarService("SyncService", taskSize); windows bar
         JsProgressBarService.setTotalCount(taskSize);
@@ -96,7 +97,7 @@ public class CreateSyncObjService {
                     createPrintModelOBJ(file);
                     checkAndCreateOBJ(file);
                 }
-                countDone += 1;
+                countDone.incrementAndGet();
                 //newProgressBar.updateBar(countDone); windows bar
                 JsProgressBarService.setCurrentCount(countDone);
                 JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - sync - " + file.getName());
@@ -104,8 +105,8 @@ public class CreateSyncObjService {
             }
         }
 
-        printModelsToSaveSet.stream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory())); // Tags
-        printModelsToSaveSet.stream().forEach(model -> entitiesAttributeService.assignTags(model)); // Tags
+        printModelsToSaveSet.forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory())); // Tags
+        printModelsToSaveSet.forEach(model -> entitiesAttributeService.assignTags(model)); // Tags
 
         collectionsService.saveAllListToJpaRepository();
 

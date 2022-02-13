@@ -26,6 +26,7 @@ import java.io.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -41,7 +42,7 @@ public class SerializeService {
     private final ObjectMapper objectMapper;
 
     private static Integer total = 0;
-    private static volatile int count = 0;
+    private static volatile AtomicInteger count = new AtomicInteger(0);
 
     @Value("${scan.adressSer}")
     private String adressSer;
@@ -67,7 +68,7 @@ public class SerializeService {
             objectOutputStream.writeObject(printModel);
             objectOutputStream.close();
 
-            count++;
+            count.incrementAndGet();
 
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
@@ -102,7 +103,7 @@ public class SerializeService {
 
         Collection<File> inputSer = folderScanRepository.startScanRepository(false);
 
-        int count = 0;
+        AtomicInteger count = new AtomicInteger(0);
         int total = inputSer.size();
         JsProgressBarService.setTotalCount(total);
 
@@ -124,7 +125,7 @@ public class SerializeService {
 
             printModelsToSaveList.add(printModel);
 
-            count++;
+            count.incrementAndGet();
             JsProgressBarService.setCurrentCount(count);
             JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModel.getModelName());
             System.out.println(count + "/" + total + " deserializeObj " + printModel.getModelName());

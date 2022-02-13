@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +33,7 @@ public class CreateObjService {
     private final JsProgressBarService jsProgressBarService;
 
     private int filesListSize = 0;
-    private volatile int countDone = 0;
+    private volatile AtomicInteger countDone = new AtomicInteger(0);
 
 
     CopyOnWriteArraySet<PrintModel> printModelsToSaveSet;
@@ -85,7 +86,8 @@ public class CreateObjService {
             createPrintModelOBJ(file);
             checkAndCreateOBJ(file);
         }
-        countDone += 1;
+        countDone.incrementAndGet();
+
         JsProgressBarService.setCurrentCount(countDone);
         JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - create - " + file.getName());
         System.out.println(countDone + "/" + filesListSize + " - create - " + file.getName());
