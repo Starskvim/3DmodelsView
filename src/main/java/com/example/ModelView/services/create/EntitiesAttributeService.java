@@ -13,6 +13,7 @@ import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
@@ -167,7 +168,6 @@ public class EntitiesAttributeService {
         }
     }
 
-    @Transactional
     public void assignTags (PrintModel printModel){
         for (String key : assignTagMap.keySet()) {
             if(printModel.getModelDerictory().contains(key)){ // TODO <- non optimal
@@ -184,4 +184,9 @@ public class EntitiesAttributeService {
 
     }
 
+    public Integer detectMyRateForModel(String nameFolderModel) {
+        int myRate = StringUtils.countOccurrencesOf(nameFolderModel, "+");
+        myRate = myRate == 1 ? 0 : Math.max(myRate - 1, 0);
+        return myRate;
+    }
 }

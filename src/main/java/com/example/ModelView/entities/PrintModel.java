@@ -31,6 +31,7 @@ public class PrintModel implements Serializable {
     private String modelName;
     private String modelDerictory;
     private String modelCategory;
+    private Integer myRate = 0;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(

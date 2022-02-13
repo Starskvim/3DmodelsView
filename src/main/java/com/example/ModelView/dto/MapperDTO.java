@@ -6,9 +6,11 @@ import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.services.create.EntitiesAttributeService;
 import com.example.ModelView.services.image.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,7 +25,8 @@ public class MapperDTO {
 
     public PrintModelDTO toPrintModelDTO(PrintModel printModel){
         Long id = printModel.getId();
-        String modelName = printModel.getModelName();
+        String modelNameOld = StringUtils.trimLeadingCharacter(printModel.getModelName(), '+'); // TODO old name
+        String modelName = StringUtils.trimTrailingWhitespace(modelNameOld);
         String modelDerictory = printModel.getModelDerictory();
         String modelCategory = printModel.getModelCategory();
         Collection<ModelZIP> modelZIPList = printModel.getModelZIPSet();

@@ -131,8 +131,8 @@ public class CreateSyncObjService {
 
     public void createPrintModelOBJ(File file) {
         String category = entitiesAttributeService.detectPrintModelCategory(file);
-
         PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
+        printModel.setMyRate(entitiesAttributeService.detectMyRateForModel(file.getParentFile().getName()));
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
         printModelsToSaveSet.add(printModel);
     }
@@ -171,8 +171,6 @@ public class CreateSyncObjService {
         Set<ModelZIP> modelZIPSet = printModel.getModelZIPSet();
         modelZIPSet.add(modelZIP);
 
-
-
         printModelsToSaveSet.add(printModel);
     }
 
@@ -180,10 +178,8 @@ public class CreateSyncObjService {
         PrintModel printModel = modelRepositoryJPA.getByModelName(nameModel);
         System.out.println("------addInSavedModelOTHList - " + nameModel + " -to- " + printModel.getModelName());
 
-
         Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
         modelOTHSet.add(modelOTH);
-
 
         printModelsToSaveSet.add(printModel);
     }
@@ -191,11 +187,8 @@ public class CreateSyncObjService {
     public void addToSaveModelListZIP(File file, ModelZIP modelZip) {
         for (PrintModel printModel : printModelsToSaveSet) {
             if (printModel.getModelName().equals(file.getParentFile().getName())) {
-
                 Set<ModelZIP> modelZIPSet = printModel.getModelZIPSet();
                 modelZIPSet.add(modelZip);
-
-
                 break;
             }
         }
