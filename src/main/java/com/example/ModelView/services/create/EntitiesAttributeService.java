@@ -12,7 +12,6 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
@@ -182,6 +181,11 @@ public class EntitiesAttributeService {
             }
         }
 
+    }
+
+    public String trimStringNameModel (String modelName){
+        String modelNameOld = StringUtils.trimLeadingCharacter(modelName, '+');
+        return StringUtils.trimTrailingWhitespace(modelNameOld);
     }
 
     public Integer detectMyRateForModel(String nameFolderModel) {

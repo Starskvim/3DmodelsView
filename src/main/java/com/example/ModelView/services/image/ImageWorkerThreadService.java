@@ -24,6 +24,6 @@ public class ImageWorkerThreadService implements Callable<PrintModelPreviewDto> 
 
     @Override
     public PrintModelPreviewDto call(){
-        return mapperAbstract.toPrintModelDTO(printModel);
+        return mapperAbstract.toPrintModelPreviewDTO(printModel);
     }
 }

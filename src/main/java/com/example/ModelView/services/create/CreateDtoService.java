@@ -74,7 +74,7 @@ public class CreateDtoService {
         List<PrintModelPreviewDto> resultListStream = modelsPages
                 .getContent()
                 .parallelStream()
-                .map(printModel -> mapperAbstract.toPrintModelDTO(printModel))
+                .map(mapperAbstract::toPrintModelPreviewDTO)
                 .collect(Collectors.toList());
 
         return resultListStream;

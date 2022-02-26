@@ -109,6 +109,7 @@ public class SerializeService {
             FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
             PrintModel printModel = (PrintModel) objectInputStream.readObject();
+            fileInputStream.close();
             objectInputStream.close();
 
             printModel.setId(0L);

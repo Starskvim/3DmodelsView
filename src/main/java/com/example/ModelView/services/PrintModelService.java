@@ -1,6 +1,8 @@
 package com.example.ModelView.services;
 
 import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
+import com.example.ModelView.dto.MapperAbstract;
+import com.example.ModelView.dto.PrintModelDto;
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
@@ -29,6 +31,8 @@ public class PrintModelService {
 
     private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
 
+    private final MapperAbstract mapperAbstract;
+
     public List<PrintModel> getAllModelListService() {
         return modelRepositoryJPA.findAll();
     }
@@ -54,10 +58,6 @@ public class PrintModelService {
         Runtime.getRuntime().exec("explorer.exe /select," + adress);
     }
 
-    public List<PrintModel> searchByModelNameService(String word, int page) {
-        return modelRepositoryJPA.findAllBymodelNameLikeIgnoreCase(word, PageRequest.of(page, 50)).toList();
-    }
-
     public List<String> getAllTagsName(){
         return modelRepositoryTagsJPA.getAllNameTags();
     }
@@ -80,4 +80,7 @@ public class PrintModelService {
         return pageNumbers;
     }
 
+    public PrintModelDto createDto(PrintModel printModel) {
+        return mapperAbstract.toPrintModelDto(printModel);
+    }
 }

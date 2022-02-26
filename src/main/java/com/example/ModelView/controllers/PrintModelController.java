@@ -1,6 +1,7 @@
 package com.example.ModelView.controllers;
 
 import com.example.ModelView.dto.ModelOTHDto;
+import com.example.ModelView.dto.PrintModelDto;
 import com.example.ModelView.dto.PrintModelPreviewDto;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
@@ -119,6 +120,7 @@ public class PrintModelController {
     @GetMapping("/modelOBJ/{id}")
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
         PrintModel printModel = printModelService.getById(id);
+        PrintModelDto printModelDto = printModelService.createDto(printModel);
         Collection<ModelOTH> printModelOTHList = printModel.getModelOTHSet();
         Collection<ModelZIP> printModelZIPList = printModel.getModelZIPSet();
 
@@ -126,7 +128,7 @@ public class PrintModelController {
 
         model.addAttribute("printModelOTHList", resultListOTH);
         model.addAttribute("printModelZIPList", printModelZIPList);
-        model.addAttribute("printModel", printModel);
+        model.addAttribute("printModel", printModelDto);
         return "modelPage";
     }
 

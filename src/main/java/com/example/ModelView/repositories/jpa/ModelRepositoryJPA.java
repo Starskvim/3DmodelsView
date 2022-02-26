@@ -17,19 +17,19 @@ import java.util.Optional;
 public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, JpaSpecificationExecutor<PrintModel> {
 
     // actual
-    @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PrintModel-all", type = EntityGraph.EntityGraphType.LOAD)
     Optional<PrintModel> findById(Long id);
 
-    @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAll(Specification<PrintModel> modelSpecification, Pageable pageable);
 
     void deleteAllByModelNameIn(Collection<String> deletModelSet);
 
-    @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAllByModelTagsObj_TagContaining(String nameTag, Pageable pageable);
 
     // old
-    @EntityGraph(value = "PrintModel.all", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAllBymodelNameLikeIgnoreCase(String name, Pageable page);
 
     @Query("Select modelName from PrintModel")

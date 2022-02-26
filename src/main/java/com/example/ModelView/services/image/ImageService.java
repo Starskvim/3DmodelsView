@@ -50,17 +50,16 @@ public class ImageService {
     }
 
     public String getFullBaseSFimg (ModelOTH modelOTH) {
-        try {
-            String adress = getPicture(modelOTH);
-            File file =  new File(adress);
-            FileInputStream fileInputStreamReader = new FileInputStream(file);
+
+        try (FileInputStream fileInputStreamReader = new FileInputStream(getPicture(modelOTH))) {
+            File file =  new File(getPicture(modelOTH));
             byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
             return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
         return null;
     }
 

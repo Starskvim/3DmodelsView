@@ -22,17 +22,6 @@ public class MapperDto {
 
     private final ImageService imageService;
 
-    public PrintModelPreviewDto toPrintModelDTO(PrintModel printModel){
-        Long id = printModel.getId();
-        String modelNameOld = StringUtils.trimLeadingCharacter(printModel.getModelName(), '+'); // TODO old name
-        String modelName = StringUtils.trimTrailingWhitespace(modelNameOld);
-        String modelDerictory = printModel.getModelDerictory();
-        String modelCategory = printModel.getModelCategory();
-        String compressPreview = imageService.getPreviewBaseSFimg(printModel, true);
-
-        return new PrintModelPreviewDto(id, modelName, modelDerictory, modelCategory,compressPreview);
-    }
-
     public PrintModelWebDTO toPrintModelWebDTO (PrintModel printModel){
 
         PrintModelWebDTO newPrintModelWebDTO = new PrintModelWebDTO();
