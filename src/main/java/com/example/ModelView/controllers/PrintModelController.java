@@ -1,14 +1,13 @@
 package com.example.ModelView.controllers;
 
-import com.example.ModelView.dto.ModelOTHDTO;
-import com.example.ModelView.dto.PrintModelDTO;
+import com.example.ModelView.dto.ModelOTHDto;
+import com.example.ModelView.dto.PrintModelPreviewDto;
 import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.repositories.specifications.ModelSpecs;
 import com.example.ModelView.services.*;
-import com.example.ModelView.services.create.CreateDTOService;
+import com.example.ModelView.services.create.CreateDtoService;
 //import com.example.ModelView.services.lokal.JProgressBarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -31,7 +30,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class PrintModelController {
     private final PrintModelService printModelService;
-    private final CreateDTOService createDTOService;
+    private final CreateDtoService createDTOService;
 
     @GetMapping
     public String modelsController(Model model, Pageable pageable,
@@ -57,7 +56,7 @@ public class PrintModelController {
         System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 
         long start2 = System.currentTimeMillis();
-        List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
+        List<PrintModelPreviewDto> resultList = createDTOService.createDTOListThreads(modelsPages);
         long fin2 = System.currentTimeMillis();
         System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
@@ -88,7 +87,7 @@ public class PrintModelController {
         Page<PrintModel> modelsPages = printModelService.getAllModelByTagService(tag, pageable);
 
         long start2 = System.currentTimeMillis();
-        List<PrintModelDTO> resultList = createDTOService.createDTOListThreads(modelsPages);
+        List<PrintModelPreviewDto> resultList = createDTOService.createDTOListThreads(modelsPages);
         long fin2 = System.currentTimeMillis();
         System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
@@ -123,7 +122,7 @@ public class PrintModelController {
         Collection<ModelOTH> printModelOTHList = printModel.getModelOTHSet();
         Collection<ModelZIP> printModelZIPList = printModel.getModelZIPSet();
 
-        Collection<ModelOTHDTO> resultListOTH = createDTOService.prepareOTHListDTOService(printModelOTHList);
+        Collection<ModelOTHDto> resultListOTH = createDTOService.prepareOTHListDTOService(printModelOTHList);
 
         model.addAttribute("printModelOTHList", resultListOTH);
         model.addAttribute("printModelZIPList", printModelZIPList);

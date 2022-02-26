@@ -49,8 +49,6 @@ public class ImageService {
         }
     }
 
-
-
     public String getFullBaseSFimg (ModelOTH modelOTH) {
         try {
             String adress = getPicture(modelOTH);

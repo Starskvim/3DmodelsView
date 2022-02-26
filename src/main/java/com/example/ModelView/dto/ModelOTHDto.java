@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ModelOTHDTO {
+public class ModelOTHDto {
     private Long id;
     private String nameModelOTH;
     private String modelName;

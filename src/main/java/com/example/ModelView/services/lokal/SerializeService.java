@@ -1,6 +1,6 @@
 package com.example.ModelView.services.lokal;
 
-import com.example.ModelView.dto.MapperDTO;
+import com.example.ModelView.dto.MapperDto;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
@@ -9,17 +9,14 @@ import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.CollectionsService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.SerializationUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -36,7 +33,7 @@ public class SerializeService {
     private final FolderScanRepository folderScanRepository;
     private final CollectionsService collectionsService;
     private final JsProgressBarService jsProgressBarService;
-    private final MapperDTO mapperDTO;
+    private final MapperDto mapperDTO;
     private final PrintModelService printModelService;
 
     private final ObjectMapper objectMapper;

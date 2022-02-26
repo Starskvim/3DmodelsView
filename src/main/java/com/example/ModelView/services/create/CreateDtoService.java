@@ -1,9 +1,9 @@
 package com.example.ModelView.services.create;
 
 
-import com.example.ModelView.dto.MapperDTO;
-import com.example.ModelView.dto.ModelOTHDTO;
-import com.example.ModelView.dto.PrintModelDTO;
+import com.example.ModelView.dto.MapperAbstract;
+import com.example.ModelView.dto.ModelOTHDto;
+import com.example.ModelView.dto.PrintModelPreviewDto;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.PrintModel;
 import com.example.ModelView.services.image.ImageWorkerThreadService;
@@ -22,23 +22,23 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class CreateDTOService {
-    private final MapperDTO mapperDTO;
+public class CreateDtoService {
+    private final MapperAbstract mapperAbstract;
 
-    private ExecutorService executorService = Executors.newFixedThreadPool(8);
+    private final ExecutorService executorService = Executors.newFixedThreadPool(8);
 
-    private List<Future<PrintModelDTO>> futureList = new ArrayList<>();
-    private List<PrintModelDTO> resultList = new ArrayList<>(40);
+    private List<Future<PrintModelPreviewDto>> futureList = new ArrayList<>();
+    private List<PrintModelPreviewDto> resultList = new ArrayList<>(40);
 
-    public Collection<ModelOTHDTO> prepareOTHListDTOService (Collection<ModelOTH> printModelOTHList){
-        Collection<ModelOTHDTO> resultListOTHDTO = new ArrayList<>(10);
+    public Collection<ModelOTHDto> prepareOTHListDTOService (Collection<ModelOTH> printModelOTHList){
+        Collection<ModelOTHDto> resultListOTHDTO = new ArrayList<>(10);
         for (ModelOTH modelOTH : printModelOTHList) {
-            resultListOTHDTO.add(mapperDTO.toModelOTHDTO(modelOTH));
+            resultListOTHDTO.add(mapperAbstract.toModelOTHDTO(modelOTH));
         }
         return resultListOTHDTO;
     }
 
-    public List<PrintModelDTO> createDTOListThreads(Page<PrintModel> modelsPages) {
+    public List<PrintModelPreviewDto> createDTOListThreads(Page<PrintModel> modelsPages) {
 
         if (!futureList.isEmpty()) {
             futureList.clear();
@@ -47,13 +47,13 @@ public class CreateDTOService {
             resultList.clear();
         }
         for (PrintModel printModel : modelsPages.getContent()) {
-            Future<PrintModelDTO> future = executorService.submit(new ImageWorkerThreadService(printModel, mapperDTO));
+            Future<PrintModelPreviewDto> future = executorService.submit(new ImageWorkerThreadService(printModel, mapperAbstract));
             futureList.add(future);
         }
 
-        for (Future<PrintModelDTO> future : futureList) {
+        for (Future<PrintModelPreviewDto> future : futureList) {
             try {
-                PrintModelDTO result = future.get();
+                PrintModelPreviewDto result = future.get();
                 resultList.add(result);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -62,7 +62,7 @@ public class CreateDTOService {
         return this.resultList;
     }
 
-    public List<PrintModelDTO> createDTOlistStream(Page<PrintModel> modelsPages) {
+    public List<PrintModelPreviewDto> createDTOlistStream(Page<PrintModel> modelsPages) {
 
         if (!futureList.isEmpty()) {
             futureList.clear();
@@ -71,32 +71,14 @@ public class CreateDTOService {
             resultList.clear();
         }
 
-        List<PrintModelDTO> resultListStream = modelsPages
+        List<PrintModelPreviewDto> resultListStream = modelsPages
                 .getContent()
                 .parallelStream()
-                .map(printModel -> mapperDTO.toPrintModelDTO(printModel))
+                .map(printModel -> mapperAbstract.toPrintModelDTO(printModel))
                 .collect(Collectors.toList());
 
         return resultListStream;
     }
-
-//    public List<PrintModelDTO> createDTOlistStreamMapsStruct(Page<PrintModel> modelsPages) {
-//
-//        if (!futureList.isEmpty()) {
-//            futureList.clear();
-//        }
-//        if (!resultList.isEmpty()) {
-//            resultList.clear();
-//        }
-//
-//        List<PrintModelDTO> resultListStream = modelsPages
-//                .getContent()
-//                .parallelStream()
-//                .map(printModel -> )
-//                .collect(Collectors.toList());
-//
-//        return resultListStream;
-//    }
 
 }
 
