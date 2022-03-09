@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org" lang="en"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Model page</title>
@@ -19,9 +21,8 @@
 
 
 
-<div class="container">
-    <table class="table table-hover">
-        <thead>
+<div class="container-fluid myNavBarAllDiv">
+    <table class="table table-sm myNavBarTab">
         <tr>
             <th>
                 <form th:action="@{/models}"

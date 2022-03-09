@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tags page</title>
+    <!--  Иконка вкладки  -->
+    <link rel="shortcut icon" th:href="@{/img/favicon.png}" type="image/png">
+    <!--                  -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}">
+</head>
+<body>
+
+
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                <form th:action="@{/models}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button type="submit" class="btn btn-primary myButtonHead">Home Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{/admin}"
+                      method="get" target=»_blank» class="form-horizontal myButtonHead">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myNavBarDiv">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button type="submit" class="btn btn-primary">Admin Page
+                        </button>
+                    </div>
+                </form>
+            </th>
+        </tr>
+    </table>
+</div>
+
+<div class="container">
+    <table class="table table-hover">
+
+        <form th:action="@{/models/modelsByTag}" method="get">
+
+            <tr th:each="tagName : ${modelTagList}">
+                <th>
+
+                    <div>
+
+                        <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
+                           th:text="${tagName.toString()}"></a>
+
+                    </div>
+
+                </th>
+            </tr>
+
+        </form>
+    </table>
+</div>
+
+<svg id="stage" width="1400" height="600"></svg>
+<script src='https://unpkg.co/gsap@3/dist/gsap.min.js'></script>
+<script th:src="@{/js/scriptRandom.js}"></script>
+
+</body>
+</html>

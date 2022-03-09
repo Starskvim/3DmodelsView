@@ -111,6 +111,15 @@ public class PrintModelController {
         return "zipPage";
     }
 
+    @GetMapping("/tagsPage")
+    public String showTagsListController(Model model) {
+
+        List<String> modelTagList = printModelService.getAllTagsName();
+
+        model.addAttribute("modelTagList", modelTagList);
+        return "tagsPage";
+    }
+
     @GetMapping("/good")
     public String startGood() {
         return "good";

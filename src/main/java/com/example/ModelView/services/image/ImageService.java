@@ -69,7 +69,7 @@ public class ImageService {
         if (format.contains("jpg") || format.contains("png") || format.contains("jpeg")) {
             adress = modelOTH.getModelOTHAdress();
         } else {
-            adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
+            adress = "";
         }
         return adress;
     }
@@ -81,7 +81,7 @@ public class ImageService {
             if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
                 adress = modelOTH.getModelOTHAdress();
             } else {
-                adress = "F:\\[3D PRINT]\\Модели\\[Patreon]\\[Other]\\[aService]\\111.png";
+                adress = "";
             }
         }
         return adress;

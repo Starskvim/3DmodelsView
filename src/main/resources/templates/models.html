@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       lang="en">
 <head>
     <meta charset="UTF-8">
@@ -45,6 +47,17 @@
                 </form>
             </th>
             <th>
+                <form th:action="@{/models/tagsPage}"
+                      method="get" target=»_blank» class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead myNavBarDiv">
+                        <button type="submit" class="btn btn-primary myNavBarBut">Tags Page
+                        </button>
+<!--                        <input type="hidden" name="size" th:value="200">-->
+<!--                        <input type="hidden" name="sort" value="archiveRatio,desc">-->
+                    </div>
+                </form>
+            </th>
+            <th>
                 <form th:action="@{/models/good}"
                       method="get" target=»_blank» class="form-horizontal myButtonHead ">
                     <div style="margin-bottom: 14px; width: 14%" class="input-group myNavBarDiv">
@@ -74,33 +87,6 @@
 </div>
 
 
-<div class="container">
-    <table class="table table-hover">
-        <tr>
-            <th>
-                <form th:action="@{/models/modelsByTag}"
-                      method="get" class="form-horizontal">
-                    <div id="carousel" class="carousel slide" data-ride="carousel">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <button target=»_blank» type="submit"
-                                        th:name="tag"
-                                        th:value="${modelTagList.get(0)}"
-                                        th:text="${modelTagList.get(0).toString()}"></button>
-                            </div>
-                            <div th:each="tagName : ${modelTagList}" class="carousel-item">
-                                <button target=»_blank» type="submit"
-                                        th:name="tag"
-                                        th:value="${tagName}"
-                                        th:text="${tagName.toString()}"></button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </th>
-        </tr>
-    </table>
-</div>
 
 <div class="container">
     <table class="table table-hover">
