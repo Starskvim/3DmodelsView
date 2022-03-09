@@ -9,6 +9,7 @@ import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.CollectionsService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +48,7 @@ public class SerializeService {
     public void serializeOneModelToWebDtoService(Long id) {
         PrintModel printModel = printModelService.getById(id);
         try {
-            serializeDTO(mapperDTO.toPrintModelWebDTO(printModel));
+            serializeDtoAndSave(mapperDTO.toPrintModelWebDTO(printModel));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,24 +73,26 @@ public class SerializeService {
             System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
 
         }
-    }
+    } // TODO not working
 
-    public void serializeDTO(PrintModelWebDTO printModelWebDTO) throws IOException {
-
-//        total = outputList.size();
-//        JsProgressBarService.setTotalCount(total);
-
+    public void serializeDtoAndSave(PrintModelWebDTO printModelWebDTO) throws IOException {
         String modelName = printModelWebDTO.getModelName();
         String modelString = objectMapper.writeValueAsString(printModelWebDTO);
         FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + "WEB.json"), modelString);
-
-//        count++;
-//        JsProgressBarService.setCurrentCount(count);
-        JsProgressBarService.setCurrentTask(" - ser - " + modelName);
         System.out.println(" serializeObj " + modelName);
 
-
     }
+
+    public String serializeDto (PrintModelWebDTO printModelWebDTO)  {
+        String result = null;
+        try {
+            result = objectMapper.writeValueAsString(printModelWebDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 
     @Transactional
     public void deserializeObj() throws IOException, ClassNotFoundException {

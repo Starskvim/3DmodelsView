@@ -2,6 +2,7 @@ package com.example.ModelView.services;
 
 import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
 import com.example.ModelView.dto.MapperAbstract;
+import com.example.ModelView.dto.MapperDto;
 import com.example.ModelView.dto.PrintModelDto;
 import com.example.ModelView.entities.ModelTag;
 import com.example.ModelView.entities.ModelZIP;
@@ -11,11 +12,13 @@ import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,9 +31,12 @@ public class PrintModelService {
     private final FolderScanRepository folderScanRepository;
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-
     private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
 
+
+    private final WebRestService webRestService;
+
+    private final MapperDto mapperDto;
     private final MapperAbstract mapperAbstract;
 
     public List<PrintModel> getAllModelListService() {
@@ -52,6 +58,11 @@ public class PrintModelService {
     public PrintModel getById(Long id) {
         Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
         return printModel.orElseThrow(() -> new ModelNotFoundException(id));
+    }
+
+    @Transactional
+    public void deleteModelById(Long id) {
+        modelRepositoryJPA.deleteById(id);
     }
 
     public void openFolderOrFile(String adress) throws IOException {
@@ -82,5 +93,11 @@ public class PrintModelService {
 
     public PrintModelDto createDto(PrintModel printModel) {
         return mapperAbstract.toPrintModelDto(printModel);
+    }
+
+    public void postModelOnWeb(Long id) {
+        PrintModel printModel = getById(id);
+        System.out.println("get - " + printModel.getModelName());
+        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
     }
 }

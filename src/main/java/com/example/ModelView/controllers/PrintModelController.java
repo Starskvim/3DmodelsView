@@ -132,6 +132,21 @@ public class PrintModelController {
         return "modelPage";
     }
 
+    @PostMapping("/modelOBJ/{id}/delete")
+    public String deleteModel (@PathVariable(value = "id") Long id){
+        printModelService.deleteModelById(id);
+        System.out.println("delete model with id - " + id);
+        return "redirect:/models";
+    }
+
+    @GetMapping("/modelOBJ/{id}/postOnWeb")
+    public String postModelOnWeb (@PathVariable(value = "id") Long id){
+        System.out.println("post - " + id);
+        printModelService.postModelOnWeb(id);
+
+        return "redirect:/models/modelOBJ/" + id;
+    }
+
     @RequestMapping(value = "/open", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     @ResponseBody

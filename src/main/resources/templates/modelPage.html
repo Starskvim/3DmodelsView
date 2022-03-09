@@ -43,6 +43,26 @@
                     </div>
                 </form>
             </th>
+            <th>
+                <form th:action="@{'/models/modelOBJ/' + ${printModel.id} + '/postOnWeb'}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button type="submit" class="btn btn-primary myButtonHead">Post on WEB
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
+                <form th:action="@{'/models/modelOBJ/' + ${printModel.id} + '/delete'}"
+                      method="post" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 10%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button type="submit" class="btn btn-primary myButtonHead">Delete
+                        </button>
+                    </div>
+                </form>
+            </th>
         </tr>
     </table>
 </div>
