@@ -11,6 +11,8 @@ import com.example.ModelView.repositories.*;
 import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
 import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
+import com.example.ModelView.services.create.CreateSyncObjService;
+import com.example.ModelView.services.lokal.FolderSyncService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PrintModelService {
     private final FolderScanRepository folderScanRepository;
+    private final FolderSyncService folderSyncService;
+    private final CreateSyncObjService createSyncObjService;
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
@@ -61,7 +65,7 @@ public class PrintModelService {
     }
 
     public List<PrintModel> getModelsByNames(ArrayList<String> modelsNames){
-        return modelRepositoryJPA.findAllByModelName(modelsNames);
+        return modelRepositoryJPA.findAllByModelNameIn(modelsNames);
     }
 
     @Transactional
@@ -112,5 +116,17 @@ public class PrintModelService {
 
     public List<String> getAllModelsName() {
         return modelRepositoryJPA.getAllNameModel();
+    }
+
+    public void startSyncFolderService() {
+        folderSyncService.startSyncFolderService();
+    }
+
+    public void startSyncObjService() {
+        try {
+            createSyncObjService.startSyncOBJRepository();
+        } catch (IOException a) {
+            System.out.println("IOException");
+        }
     }
 }

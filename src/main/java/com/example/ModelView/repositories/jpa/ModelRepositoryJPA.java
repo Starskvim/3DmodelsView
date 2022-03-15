@@ -22,7 +22,7 @@ public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, Jp
     Optional<PrintModel> findById(Long id);
 
     @EntityGraph(value = "PrintModel-all", type = EntityGraph.EntityGraphType.LOAD)
-    List<PrintModel> findAllByModelName(ArrayList<String> modelsNames);
+    List<PrintModel> findAllByModelNameIn(ArrayList<String> modelsNames);
 
     @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAll(Specification<PrintModel> modelSpecification, Pageable pageable);

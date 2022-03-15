@@ -1,6 +1,7 @@
 package com.example.ModelView.controllers;
 
 import com.example.ModelView.services.PrintModelService;
+import com.example.ModelView.services.WebSyncService;
 import com.example.ModelView.services.create.CreateObjService;
 import com.example.ModelView.services.create.CreateSyncObjService;
 import com.example.ModelView.services.lokal.FolderSyncService;
@@ -18,10 +19,9 @@ import java.io.IOException;
 public class MainController {
 
     private final CreateObjService createObjService;
-    private final CreateSyncObjService createSyncObjService;
     private final PrintModelService printModelService;
-    private final FolderSyncService folderSyncService;
     private final SerializeService serializeService;
+    private final WebSyncService webSyncService;
 
 
     @GetMapping("/login")
@@ -65,7 +65,7 @@ public class MainController {
     @GetMapping("/admin/syncFolder")
     public String startSyncFolderController() {
         long start = System.currentTimeMillis();
-        folderSyncService.startSyncFolderService();
+        printModelService.startSyncFolderService();
         long fin = System.currentTimeMillis();
         System.out.println("startSyncFolderController time sync - " + (fin - start));
         return "admin";
@@ -74,13 +74,15 @@ public class MainController {
     @GetMapping("/admin/sync")
     public String startSyncController() {
         long start = System.currentTimeMillis();
-        try {
-            createSyncObjService.startSyncOBJRepository();
-        } catch (IOException a) {
-            System.out.println("IOException");
-        }
+        printModelService.startSyncObjService();
         long fin = System.currentTimeMillis();
         System.out.println("startSyncController time create - " + (fin - start));
+        return "admin";
+    }
+
+    @GetMapping("/admin/syncWeb")
+    public String startSincWebController(){
+        webSyncService.startSyncWeb();
         return "admin";
     }
 
@@ -111,7 +113,7 @@ public class MainController {
     }
 
     @GetMapping("/admin/serialization/{id}")
-    public String serializModel(Model model, @PathVariable(value = "id") Long id) {
+    public String serializeModel(Model model, @PathVariable(value = "id") Long id) {
         System.out.println("start ser");
         serializeService.serializeOneModelToWebDtoService(id);
         System.out.println("end ser");

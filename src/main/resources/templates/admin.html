@@ -116,11 +116,11 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/good}"
+                <form th:action="@{/admin/syncWeb}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
-                        <button type="submit" class="btn btn-primary myButtonHead">Test
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Sync Web
                         </button>
                     </div>
                 </form>
@@ -154,8 +154,17 @@
                     </div>
                 </form>
             </th>
+            <th>
+                <form th:action="@{/models/good}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button type="submit" class="btn btn-primary myButtonHead">Test
+                        </button>
+                    </div>
+                </form>
+            </th>
         </tr>
-
     </table>
 </div>
 

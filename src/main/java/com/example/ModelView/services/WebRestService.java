@@ -19,8 +19,11 @@ import java.util.Collections;
 @Setter
 public class WebRestService {
 
-    @Value("${webApp.urlWeb}")
-    private String urlWebApp;
+    @Value("${webApp.urlPostWeb}")
+    private String urlPostWebApp;
+
+    @Value("${webApp.urlGetWeb}")
+    private String urlGetWebApp;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -28,7 +31,7 @@ public class WebRestService {
     public void createPostModel (PrintModelWebDTO printModelWebDTO){
 
         System.out.println("create post - " + printModelWebDTO.getModelName());
-        System.out.println("url " + urlWebApp);
+        System.out.println("url " + urlPostWebApp);
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -38,7 +41,7 @@ public class WebRestService {
 
         HttpEntity<PrintModelWebDTO> entity = new HttpEntity<>(printModelWebDTO, headers);
 
-        ResponseEntity<String> response = restTemplate.postForEntity(urlWebApp, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp, entity, String.class);
 
         if (response.getStatusCode() != HttpStatus.OK){
             throw new WebSyncPostException(printModelWebDTO.getModelName());
@@ -47,9 +50,7 @@ public class WebRestService {
     }
 
     public String[] getWebModelList() {
-        ResponseEntity<String[]> response = restTemplate.getForEntity(urlWebApp, String[].class);
-
-
+        ResponseEntity<String[]> response = restTemplate.getForEntity(urlGetWebApp, String[].class);
         if(response.getStatusCode() == HttpStatus.OK){
             return response.getBody();
         } else {
