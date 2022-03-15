@@ -39,6 +39,9 @@ public class WebRestService {
 
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 
+//        headers.setConnection("keep-alive");
+//        headers.setB
+
         HttpEntity<PrintModelWebDTO> entity = new HttpEntity<>(printModelWebDTO, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp, entity, String.class);

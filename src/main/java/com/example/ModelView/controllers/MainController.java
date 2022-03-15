@@ -23,7 +23,6 @@ public class MainController {
     private final SerializeService serializeService;
     private final WebSyncService webSyncService;
 
-
     @GetMapping("/login")
     public String login() {
         return "login";
