@@ -1,5 +1,7 @@
 package com.example.ModelView.services;
 
+import com.example.ModelView.controllers.exceptions.WebSyncGetException;
+import com.example.ModelView.controllers.exceptions.WebSyncPostException;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-
 
 
 @Service
@@ -39,8 +40,20 @@ public class WebRestService {
 
         ResponseEntity<String> response = restTemplate.postForEntity(urlWebApp, entity, String.class);
 
-        System.out.println(response);
+        if (response.getStatusCode() != HttpStatus.OK){
+            throw new WebSyncPostException(printModelWebDTO.getModelName());
+        }
 
     }
 
+    public String[] getWebModelList() {
+        ResponseEntity<String[]> response = restTemplate.getForEntity(urlWebApp, String[].class);
+
+
+        if(response.getStatusCode() == HttpStatus.OK){
+            return response.getBody();
+        } else {
+            throw new WebSyncGetException();
+        }
+    }
 }

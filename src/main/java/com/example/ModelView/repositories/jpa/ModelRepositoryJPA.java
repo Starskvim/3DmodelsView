@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +20,9 @@ public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, Jp
     // actual
     @EntityGraph(value = "PrintModel-all", type = EntityGraph.EntityGraphType.LOAD)
     Optional<PrintModel> findById(Long id);
+
+    @EntityGraph(value = "PrintModel-all", type = EntityGraph.EntityGraphType.LOAD)
+    List<PrintModel> findAllByModelName(ArrayList<String> modelsNames);
 
     @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
     Page<PrintModel> findAll(Specification<PrintModel> modelSpecification, Pageable pageable);

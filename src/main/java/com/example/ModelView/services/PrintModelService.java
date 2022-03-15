@@ -60,6 +60,10 @@ public class PrintModelService {
         return printModel.orElseThrow(() -> new ModelNotFoundException(id));
     }
 
+    public List<PrintModel> getModelsByNames(ArrayList<String> modelsNames){
+        return modelRepositoryJPA.findAllByModelName(modelsNames);
+    }
+
     @Transactional
     public void deleteModelById(Long id) {
         modelRepositoryJPA.deleteById(id);
@@ -97,7 +101,16 @@ public class PrintModelService {
 
     public void postModelOnWeb(Long id) {
         PrintModel printModel = getById(id);
-        System.out.println("get - " + printModel.getModelName());
+        System.out.println("post get - " + printModel.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
+    }
+
+    public void postSyncModelOnWeb(PrintModel printModel) {
+        System.out.println("postSync get - " + printModel.getModelName());
+        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
+    }
+
+    public List<String> getAllModelsName() {
+        return modelRepositoryJPA.getAllNameModel();
     }
 }
