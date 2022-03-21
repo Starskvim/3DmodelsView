@@ -30,7 +30,7 @@ public interface ModelRepositoryJPA extends JpaRepository <PrintModel, Long>, Jp
     void deleteAllByModelNameIn(Collection<String> deletModelSet);
 
     @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)
-    Page<PrintModel> findAllByModelTagsObj_TagContaining(String nameTag, Pageable pageable);
+    Page<PrintModel> findAllByModelTagsObj_TagContaining(String nameTag, Pageable pageable); // TODO bad
 
     // old
     @EntityGraph(value = "PrintModel-oth", type = EntityGraph.EntityGraphType.LOAD)

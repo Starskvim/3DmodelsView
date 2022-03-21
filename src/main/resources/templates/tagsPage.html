@@ -15,8 +15,8 @@
 <body>
 
 
-<div class="container">
-    <table class="table table-hover">
+<div class="container-fluid myNavBarAllDiv">
+    <table class="table table-sm myNavBarTab">
         <thead>
         <tr>
             <th>
@@ -54,7 +54,7 @@
                     <div>
 
                         <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
-                           th:text="${tagName.toString()}"></a>
+                           th:text="${tagName}"></a>
 
                     </div>
 

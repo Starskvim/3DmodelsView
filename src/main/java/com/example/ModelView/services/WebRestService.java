@@ -7,11 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 
 @Service
@@ -34,30 +37,40 @@ public class WebRestService {
         System.out.println("url " + urlPostWebApp);
 
         HttpHeaders headers = new HttpHeaders();
-
         headers.setContentType(MediaType.APPLICATION_JSON);
-
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-//        headers.setConnection("keep-alive");
-//        headers.setB
-
         HttpEntity<PrintModelWebDTO> entity = new HttpEntity<>(printModelWebDTO, headers);
-
         ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp, entity, String.class);
 
         if (response.getStatusCode() != HttpStatus.OK){
             throw new WebSyncPostException(printModelWebDTO.getModelName());
         }
-
     }
 
-    public String[] getWebModelList() {
-        ResponseEntity<String[]> response = restTemplate.getForEntity(urlGetWebApp, String[].class);
+    public List<String> getWebModelList() {
+
+//        new ParameterizedTypeReference<List<String>>() {};
+//        ResponseEntity<List<String>> response = restTemplate.getForEntity(urlGetWebApp, (Class<List<String>>)result.getClass());
+//        ResponseEntity<List> response = restTemplate.getForEntity(urlGetWebApp, List.class);
+//        ResponseEntity<List> response = restTemplate.getForEntity(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
+
+        List<String> resultWebList = this.exchangeAsList(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
+
+        return resultWebList;
+    }
+
+
+    public <T> List<T> exchangeAsList(String uri, ParameterizedTypeReference<List<T>> responseType) {
+
+        ResponseEntity<List<T>> response = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
+
         if(response.getStatusCode() == HttpStatus.OK){
             return response.getBody();
         } else {
             throw new WebSyncGetException();
         }
+
     }
+
+
 }

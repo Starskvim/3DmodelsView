@@ -19,19 +19,34 @@ public class WebSyncService {
 
     public void startSyncWeb (){
 
-        List<String> listWebModels = Arrays.stream(webRestService.getWebModelList()).collect(Collectors.toList());
+        List<String> listWebModels = webRestService.getWebModelList();
+
+        for (String model: listWebModels){
+            System.out.println(model + " - ");
+        }
 
         ArrayList<String> listLocalModels = (ArrayList<String>) printModelService.getAllModelsName();
 
+        System.out.println("listLocalModels size - " + listLocalModels.size());
+
         listLocalModels.removeAll(listWebModels);
+
+        System.out.println("listLocalModels after size - " + listLocalModels.size());
 
         List<PrintModel> printModelToPostList = printModelService.getModelsByNames(listLocalModels);
 
-        if(!printModelToPostList.isEmpty()){
+        List<PrintModel> printModelToPostListTest = new ArrayList<>();
+
+        printModelToPostList.stream().limit(5).forEach(printModelToPostListTest::add);
+
+        System.out.println("listLocalModelsTest size - " + printModelToPostListTest.size());
+
+        if(!printModelToPostListTest.isEmpty()){
             Iterator<PrintModel> i = printModelToPostList.listIterator();
-            while (i.hasNext()){ // TODO test
+            while (i.hasNext()){ // TODO need test
                 PrintModel modelToPost = i.next();
                 printModelService.postSyncModelOnWeb(modelToPost);
+                System.out.println("Post ready" + modelToPost.getModelName());
                 i.remove();
             }
         }
