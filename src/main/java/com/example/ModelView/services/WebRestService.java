@@ -48,28 +48,17 @@ public class WebRestService {
     }
 
     public List<String> getWebModelList() {
-
-//        new ParameterizedTypeReference<List<String>>() {};
-//        ResponseEntity<List<String>> response = restTemplate.getForEntity(urlGetWebApp, (Class<List<String>>)result.getClass());
-//        ResponseEntity<List> response = restTemplate.getForEntity(urlGetWebApp, List.class);
-//        ResponseEntity<List> response = restTemplate.getForEntity(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
-
-        List<String> resultWebList = this.exchangeAsList(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
-
-        return resultWebList;
+        return this.exchangeAsList(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
     }
 
 
     public <T> List<T> exchangeAsList(String uri, ParameterizedTypeReference<List<T>> responseType) {
-
         ResponseEntity<List<T>> response = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
-
         if(response.getStatusCode() == HttpStatus.OK){
             return response.getBody();
         } else {
             throw new WebSyncGetException();
         }
-
     }
 
 

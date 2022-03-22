@@ -11,10 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @AllArgsConstructor
@@ -32,10 +29,13 @@ public class MapperDto {
         Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
         List<ModelTag> tagsList = printModel.getModelTagsObj();
 
-        List<String> tagsNamesList = new ArrayList<>();
+        Set<String> tagsNamesList = new HashSet<>();
         for (ModelTag modelTag: tagsList){
             tagsNamesList.add(modelTag.getTag());
         }
+
+        System.out.println("toPrintModelWebDTO size out tags list - " + tagsNamesList.size());
+
         ArrayList<ModelOTHWebDTO> resiltList = new ArrayList<>();
         for(ModelOTH modelOTH : modelOTHSet){
             resiltList.add(toModelOTHWebDTO(modelOTH));

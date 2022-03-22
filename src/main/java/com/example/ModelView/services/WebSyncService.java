@@ -37,12 +37,12 @@ public class WebSyncService {
 
         List<PrintModel> printModelToPostListTest = new ArrayList<>();
 
-        printModelToPostList.stream().limit(5).forEach(printModelToPostListTest::add);
+        printModelToPostList.stream().limit(5).forEach(printModelToPostListTest::add); // TODO test sync web size 5 model
 
         System.out.println("listLocalModelsTest size - " + printModelToPostListTest.size());
 
         if(!printModelToPostListTest.isEmpty()){
-            Iterator<PrintModel> i = printModelToPostList.listIterator();
+            Iterator<PrintModel> i = printModelToPostListTest.listIterator();
             while (i.hasNext()){ // TODO need test
                 PrintModel modelToPost = i.next();
                 printModelService.postSyncModelOnWeb(modelToPost);
