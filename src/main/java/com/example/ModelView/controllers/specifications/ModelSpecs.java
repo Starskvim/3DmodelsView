@@ -1,4 +1,4 @@
-package com.example.ModelView.repositories.specifications;
+package com.example.ModelView.controllers.specifications;
 
 
 import com.example.ModelView.entities.PrintModel;

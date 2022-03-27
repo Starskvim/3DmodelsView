@@ -1,12 +1,14 @@
 package com.example.ModelView.controllers;
 
+import com.example.ModelView.controllers.request.SearchRequestParams;
+import com.example.ModelView.controllers.specifications.SpecificationBuilder;
 import com.example.ModelView.dto.ModelOTHDto;
 import com.example.ModelView.dto.PrintModelDto;
 import com.example.ModelView.dto.PrintModelPreviewDto;
 import com.example.ModelView.entities.ModelOTH;
 import com.example.ModelView.entities.ModelZIP;
 import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.specifications.ModelSpecs;
+import com.example.ModelView.controllers.specifications.ModelSpecs;
 import com.example.ModelView.services.*;
 import com.example.ModelView.services.create.CreateDtoService;
 //import com.example.ModelView.services.lokal.JProgressBarService;
@@ -32,6 +34,7 @@ import java.util.*;
 public class PrintModelController {
     private final PrintModelService printModelService;
     private final CreateDtoService createDTOService;
+    private final SpecificationBuilder specBuilder;
 
     @GetMapping
     public String modelsController(Model model, Pageable pageable,
@@ -40,9 +43,16 @@ public class PrintModelController {
 
     ) {
 
+
+        SearchRequestParams searchParams = SearchRequestParams.builder()
+                .wordName(wordName)
+                .wordCategory(wordCategory)
+                .build();
+
+        Specification<PrintModel> searchCpec  = specBuilder.createSpec(searchParams);
+
         Specification<PrintModel> spec = Specification.where(null);
         StringBuilder filters = new StringBuilder();
-
         if (wordName != null) {
             spec = spec.and(ModelSpecs.modelNameContains(wordName));
         }
@@ -52,7 +62,7 @@ public class PrintModelController {
         }
 
         long start1 = System.currentTimeMillis();
-        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(spec, pageable);
+        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(searchCpec, pageable);
         long fin1 = System.currentTimeMillis();
         System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 
