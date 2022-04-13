@@ -2,9 +2,7 @@ package com.example.ModelView.controllers;
 
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.WebSyncService;
-import com.example.ModelView.services.create.CreateObjService;
-import com.example.ModelView.services.create.CreateSyncObjService;
-import com.example.ModelView.services.lokal.FolderSyncService;
+import com.example.ModelView.services.create.locale.CreateObjService;
 import com.example.ModelView.services.lokal.SerializeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

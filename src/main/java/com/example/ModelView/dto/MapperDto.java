@@ -1,15 +1,14 @@
 package com.example.ModelView.dto;
 
-import com.example.ModelView.dto.web.ModelOTHWebDTO;
+import com.example.ModelView.dto.web.PrintModelOTHWebDTO;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelTag;
-import com.example.ModelView.entities.ModelZIP;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.ModelTag;
+import com.example.ModelView.entities.locale.ModelZIP;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.services.image.ImageService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 
@@ -36,7 +35,7 @@ public class MapperDto {
 
         System.out.println("toPrintModelWebDTO size out tags list - " + tagsNamesList.size());
 
-        ArrayList<ModelOTHWebDTO> resiltList = new ArrayList<>();
+        ArrayList<PrintModelOTHWebDTO> resiltList = new ArrayList<>();
         for(ModelOTH modelOTH : modelOTHSet){
             resiltList.add(toModelOTHWebDTO(modelOTH));
         }
@@ -52,17 +51,17 @@ public class MapperDto {
         return newPrintModelWebDTO;
     }
 
-    public ModelOTHWebDTO toModelOTHWebDTO (ModelOTH modelOTH){
+    public PrintModelOTHWebDTO toModelOTHWebDTO (ModelOTH modelOTH){
 
-        ModelOTHWebDTO newModelOTHWebDTO = new ModelOTHWebDTO();
-        newModelOTHWebDTO.setNameModelOTH(modelOTH.getNameModelOTH());
-        newModelOTHWebDTO.setModelName(modelOTH.getModelName());
-        newModelOTHWebDTO.setFileClass(modelOTH.getFileClass());
-        newModelOTHWebDTO.setModelOTHFormat(modelOTH.getModelOTHFormat());
-        newModelOTHWebDTO.setSizeOTH(modelOTH.getSizeOTH());
-        newModelOTHWebDTO.setPreviewOth(imageService.getBaseSFimgWeb(modelOTH, true, 0.5f));
+        PrintModelOTHWebDTO newPrintModelOTHWebDTO = new PrintModelOTHWebDTO();
+        newPrintModelOTHWebDTO.setNameModelOTH(modelOTH.getNameModelOTH());
+        newPrintModelOTHWebDTO.setModelName(modelOTH.getModelName());
+        newPrintModelOTHWebDTO.setFileClass(modelOTH.getFileClass());
+        newPrintModelOTHWebDTO.setModelOTHFormat(modelOTH.getModelOTHFormat());
+        newPrintModelOTHWebDTO.setSizeOTH(modelOTH.getSizeOTH());
+        newPrintModelOTHWebDTO.setPreviewOth(imageService.getBaseSFimgWeb(modelOTH, true, 0.5f));
 
-        return newModelOTHWebDTO;
+        return newPrintModelOTHWebDTO;
     }
 
 }

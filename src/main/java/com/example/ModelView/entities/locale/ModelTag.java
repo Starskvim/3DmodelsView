@@ -1,4 +1,4 @@
-package com.example.ModelView.entities;
+package com.example.ModelView.entities.locale;
 
 
 import lombok.Getter;

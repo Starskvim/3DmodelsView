@@ -2,7 +2,7 @@ package com.example.ModelView.services.image;
 
 import com.example.ModelView.dto.MapperAbstract;
 import com.example.ModelView.dto.PrintModelPreviewDto;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.PrintModel;
 import lombok.*;
 import java.util.concurrent.Callable;
 

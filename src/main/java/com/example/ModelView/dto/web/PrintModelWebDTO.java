@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.io.Serializable;
 import java.util.*;
 
 @Getter
@@ -18,7 +17,7 @@ public class PrintModelWebDTO {
     private Double modelSize;
     private String modelCategory;
     private Collection<String> modelTagsNames;
-    private Collection<ModelOTHWebDTO> modelOTHList = new ArrayList<>();
+    private Collection<PrintModelOTHWebDTO> modelOTHList = new ArrayList<>();
 
     @Override
     public String toString() {

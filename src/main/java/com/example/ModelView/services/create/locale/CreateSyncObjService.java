@@ -1,14 +1,16 @@
-package com.example.ModelView.services.create;
+package com.example.ModelView.services.create.locale;
 
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelZIP;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.ModelZIP;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
-import com.example.ModelView.repositories.jpa.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryOTHJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryZIPJPA;
 //import com.example.ModelView.services.lokal.JProgressBarService;
 import com.example.ModelView.services.JsProgressBarService;
+import com.example.ModelView.services.create.EntitiesAttributeService;
+import com.example.ModelView.services.create.locale.CollectionsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;

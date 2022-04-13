@@ -1,6 +1,6 @@
-package com.example.ModelView.repositories.jpa;
+package com.example.ModelView.repositories.jpa.locale;
 
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.PrintModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

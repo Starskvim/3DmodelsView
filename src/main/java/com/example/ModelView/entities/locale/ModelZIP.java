@@ -1,7 +1,6 @@
-package com.example.ModelView.entities;
+package com.example.ModelView.entities.locale;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

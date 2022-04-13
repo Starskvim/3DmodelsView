@@ -5,12 +5,12 @@ import com.example.ModelView.controllers.specifications.SpecificationBuilder;
 import com.example.ModelView.dto.ModelOTHDto;
 import com.example.ModelView.dto.PrintModelDto;
 import com.example.ModelView.dto.PrintModelPreviewDto;
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelZIP;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.ModelZIP;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.controllers.specifications.ModelSpecs;
 import com.example.ModelView.services.*;
-import com.example.ModelView.services.create.CreateDtoService;
+import com.example.ModelView.services.create.locale.CreateDtoService;
 //import com.example.ModelView.services.lokal.JProgressBarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -49,7 +49,7 @@ public class PrintModelController {
                 .wordCategory(wordCategory)
                 .build();
 
-        Specification<PrintModel> searchCpec  = specBuilder.createSpec(searchParams);
+        Specification<PrintModel> searchSpec  = specBuilder.createSpec(searchParams);
 
         Specification<PrintModel> spec = Specification.where(null);
         StringBuilder filters = new StringBuilder();
@@ -62,7 +62,7 @@ public class PrintModelController {
         }
 
         long start1 = System.currentTimeMillis();
-        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(searchCpec, pageable);
+        Page<PrintModel> modelsPages = printModelService.findAllModelByPageAndSpecsService(searchSpec, pageable);
         long fin1 = System.currentTimeMillis();
         System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 

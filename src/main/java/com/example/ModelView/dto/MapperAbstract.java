@@ -1,8 +1,8 @@
 package com.example.ModelView.dto;
 
 
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.services.create.EntitiesAttributeService;
 import com.example.ModelView.services.image.ImageService;
 import org.mapstruct.Mapper;

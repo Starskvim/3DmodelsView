@@ -1,7 +1,8 @@
 package com.example.ModelView.services.create;
 
-import com.example.ModelView.entities.ModelTag;
-import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
+import com.example.ModelView.entities.locale.ModelTag;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
+import com.example.ModelView.services.create.locale.CollectionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

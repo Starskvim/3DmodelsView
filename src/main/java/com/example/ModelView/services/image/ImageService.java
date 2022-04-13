@@ -1,7 +1,7 @@
 package com.example.ModelView.services.image;
 
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.PrintModel;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 

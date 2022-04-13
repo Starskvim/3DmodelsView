@@ -1,13 +1,13 @@
-package com.example.ModelView.services.create;
+package com.example.ModelView.services.create.locale;
 
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelTag;
-import com.example.ModelView.entities.ModelZIP;
-import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.jpa.ModelRepositoryJPA;
-import com.example.ModelView.repositories.jpa.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
-import com.example.ModelView.repositories.jpa.ModelRepositoryZIPJPA;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.ModelTag;
+import com.example.ModelView.entities.locale.ModelZIP;
+import com.example.ModelView.entities.locale.PrintModel;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryOTHJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryZIPJPA;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

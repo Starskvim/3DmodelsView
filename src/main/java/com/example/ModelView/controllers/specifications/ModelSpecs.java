@@ -1,7 +1,7 @@
 package com.example.ModelView.controllers.specifications;
 
 
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.PrintModel;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ModelSpecs {

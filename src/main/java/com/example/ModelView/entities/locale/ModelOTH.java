@@ -1,15 +1,12 @@
-package com.example.ModelView.entities;
+package com.example.ModelView.entities.locale;
 
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 import javax.persistence.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 @Entity

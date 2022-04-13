@@ -2,13 +2,13 @@ package com.example.ModelView.services.lokal;
 
 import com.example.ModelView.dto.MapperDto;
 import com.example.ModelView.dto.web.PrintModelWebDTO;
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelZIP;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.ModelZIP;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.repositories.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.PrintModelService;
-import com.example.ModelView.services.create.CollectionsService;
+import com.example.ModelView.services.create.locale.CollectionsService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
@@ -61,10 +61,11 @@ public class SerializeService {
 
         for (PrintModel printModel : outputList) {
 
-            FileOutputStream outputStream = new FileOutputStream(adressSer + "/" + printModel.getModelName() + ".ser");
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(printModel);
-            objectOutputStream.close();
+            PrintModelWebDTO printModelWebDTO = mapperDTO.toPrintModelWebDTO(printModel);
+            String modelName = printModelWebDTO.getModelName();
+            String modelString = objectMapper.writeValueAsString(printModelWebDTO);
+            FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".WEB.json"), modelString);
+            System.out.println(" serializeObj " + modelName);
 
             count.incrementAndGet();
 
@@ -73,12 +74,12 @@ public class SerializeService {
             System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
 
         }
-    } // TODO not working
+    }
 
     public void serializeDtoAndSave(PrintModelWebDTO printModelWebDTO) throws IOException {
         String modelName = printModelWebDTO.getModelName();
         String modelString = objectMapper.writeValueAsString(printModelWebDTO);
-        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + "WEB.json"), modelString);
+        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".WEB.json"), modelString);
         System.out.println(" serializeObj " + modelName);
 
     }

@@ -1,12 +1,9 @@
-package com.example.ModelView.repositories.jpa;
+package com.example.ModelView.repositories.jpa.locale;
 
-import com.example.ModelView.entities.ModelOTH;
+import com.example.ModelView.entities.locale.ModelOTH;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 

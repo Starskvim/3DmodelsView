@@ -1,9 +1,7 @@
-package com.example.ModelView.repositories.jpa;
+package com.example.ModelView.repositories.jpa.locale;
 
 
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.ModelTag;
-import org.springframework.data.jpa.repository.EntityGraph;
+import com.example.ModelView.entities.locale.ModelTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,8 +1,9 @@
 package com.example.ModelView.services.create;
 
-import com.example.ModelView.entities.ModelTag;
-import com.example.ModelView.entities.PrintModel;
-import com.example.ModelView.repositories.jpa.ModelRepositoryTagsJPA;
+import com.example.ModelView.entities.locale.ModelTag;
+import com.example.ModelView.entities.locale.PrintModel;
+import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
+import com.example.ModelView.services.create.locale.CollectionsService;
 import lombok.*;
 import net.sf.sevenzipjbinding.IInArchive;
 import net.sf.sevenzipjbinding.SevenZip;
@@ -183,12 +184,12 @@ public class EntitiesAttributeService {
 
     }
 
-    public String trimStringNameModel (String modelName){
+    public static String trimStringNameModel (String modelName){
         String modelNameOld = StringUtils.trimLeadingCharacter(modelName, '+');
         return StringUtils.trimTrailingWhitespace(modelNameOld);
     }
 
-    public Integer detectMyRateForModel(String nameFolderModel) {
+    public static Integer detectMyRateForModel(String nameFolderModel) {
         int myRate = StringUtils.countOccurrencesOf(nameFolderModel, "+");
         myRate = myRate == 1 ? 0 : Math.max(myRate - 1, 0);
         return myRate;

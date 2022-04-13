@@ -1,11 +1,11 @@
-package com.example.ModelView.services.create;
+package com.example.ModelView.services.create.locale;
 
 
 import com.example.ModelView.dto.MapperAbstract;
 import com.example.ModelView.dto.ModelOTHDto;
 import com.example.ModelView.dto.PrintModelPreviewDto;
-import com.example.ModelView.entities.ModelOTH;
-import com.example.ModelView.entities.PrintModel;
+import com.example.ModelView.entities.locale.ModelOTH;
+import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.services.image.ImageWorkerThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
