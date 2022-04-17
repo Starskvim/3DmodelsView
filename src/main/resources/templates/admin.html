@@ -145,6 +145,16 @@
                 </form>
             </th>
             <th>
+                <form th:action="@{/admin/serialization/sync}"
+                      method="get" class="form-horizontal">
+                    <div style="margin-bottom: 14px; width: 25%" class="input-group">
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
+                        <button onclick="test()" type="submit" class="btn btn-primary myButtonHead">Sync Serialization
+                        </button>
+                    </div>
+                </form>
+            </th>
+            <th>
                 <form th:action="@{/admin/deserialization}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">

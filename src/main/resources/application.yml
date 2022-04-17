@@ -25,9 +25,9 @@ server:
   port: 8189
 scan:
   adressSer: G:\testJava
-  adress1: F:\[3D PRINT]\Модели\[Patreon]\[Figure]
-  adress2: F:\[3D PRINT]\Модели\[Patreon]\[Pack]
-  adress3: F:\[3D PRINT]\Модели\[Patreon]\[Other]
+  adress1: D:\[Patreon]\[Figure]
+  adress2: D:\[Patreon]\[Other]
+  adress3: D:\[Patreon]\[Pack]
 webApp:
   urlPostWeb: http://localhost:8999/3Dmodel/sync/addModel
   urlGetWeb: http://localhost:8999/3Dmodel/sync/getModels

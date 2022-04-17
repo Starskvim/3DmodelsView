@@ -12,6 +12,7 @@ import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
 import com.example.ModelView.repositories.jpa.locale.ModelRepositoryZIPJPA;
 import com.example.ModelView.services.create.locale.CreateSyncObjService;
 import com.example.ModelView.services.lokal.FolderSyncService;
+import com.example.ModelView.services.lokal.SyncSerializeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,11 +31,11 @@ import java.util.Optional;
 public class PrintModelService {
     private final FolderScanRepository folderScanRepository;
     private final FolderSyncService folderSyncService;
+    private final SyncSerializeService syncSerializeService;
     private final CreateSyncObjService createSyncObjService;
     private final ModelRepositoryJPA modelRepositoryJPA;
     private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
     private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
-
 
     private final WebRestService webRestService;
 
@@ -42,6 +44,10 @@ public class PrintModelService {
 
     public List<PrintModel> getAllModelListService() {
         return modelRepositoryJPA.findAll();
+    }
+
+    public Collection<PrintModel> getSyncSerModelListService() {
+        return syncSerializeService.getModelForSer();
     }
 
     public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable) {
@@ -126,4 +132,5 @@ public class PrintModelService {
             System.out.println("IOException");
         }
     }
+
 }

@@ -14,9 +14,12 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+
+import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +35,7 @@ public class CollectionsService {
     private CopyOnWriteArraySet<PrintModel> printModelsToSaveList = new CopyOnWriteArraySet<>();
     private CopyOnWriteArraySet<ModelOTH> modelOTHList = new CopyOnWriteArraySet<>();
     private CopyOnWriteArraySet<ModelZIP> modelZIPList = new CopyOnWriteArraySet<>();
-    private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>();
+    private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>(ZIP_FORMATS);
     private CopyOnWriteArraySet<String> printModelsToSaveNameStringSet = new CopyOnWriteArraySet<>();
 
     // TODO multi ?

@@ -35,22 +35,33 @@ public class FolderScanRepository {
     private String adressSer;
 
 
-    public Collection<File> startScanRepository(Boolean mode) throws IOException {
+    public Collection<File> startScanRepository(Boolean mode)  {
 
-        Collection<File> files;
+        Collection<File> files = new ArrayList<>(10000);
+        Collection<File> files2 = new ArrayList<>(10000);
+        Collection<File> files3 = new ArrayList<>(10000);
+
         long start = System.currentTimeMillis();
         if(mode) {
             File input1 = new File(adress1);
             File input2 = new File(adress2);
             File input3 = new File(adress3);
-            files = FileUtils.streamFiles(input1, true, null).collect(Collectors.toList());
-            Collection<File> files2 = FileUtils.streamFiles(input2, true, null).collect(Collectors.toList());
-            Collection<File> files3 = FileUtils.streamFiles(input3, true, null).collect(Collectors.toList());
+            try {
+                files = FileUtils.streamFiles(input1, true, null).collect(Collectors.toList());
+                files2 = FileUtils.streamFiles(input2, true, null).collect(Collectors.toList());
+                files3 = FileUtils.streamFiles(input3, true, null).collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             files.addAll(files2);
             files.addAll(files3);
         } else {
             File inpuSer = new File(adressSer);
-            files = FileUtils.streamFiles(inpuSer, true, null).collect(Collectors.toList());
+            try {
+                files = FileUtils.streamFiles(inpuSer, true, null).collect(Collectors.toList());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         long fin = System.currentTimeMillis();

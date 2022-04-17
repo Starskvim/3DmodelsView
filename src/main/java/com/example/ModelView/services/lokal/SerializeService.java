@@ -54,32 +54,41 @@ public class SerializeService {
         }
     }
 
-    public void serializeObj(List<PrintModel> outputList) throws IOException {
+    public void serializeObj(Collection<PrintModel> outputList) {
 
         total = outputList.size();
         JsProgressBarService.setTotalCount(total);
 
-        for (PrintModel printModel : outputList) {
+        outputList.stream().parallel().forEach(printModel -> streamSerialize(printModel));
+    }
 
-            PrintModelWebDTO printModelWebDTO = mapperDTO.toPrintModelWebDTO(printModel);
-            String modelName = printModelWebDTO.getModelName();
-            String modelString = objectMapper.writeValueAsString(printModelWebDTO);
-            FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".WEB.json"), modelString);
-            System.out.println(" serializeObj " + modelName);
-
-            count.incrementAndGet();
-
-            JsProgressBarService.setCurrentCount(count);
-            JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
-            System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
-
+    private void streamSerialize(PrintModel printModel) { // TODO need test
+        PrintModelWebDTO printModelWebDTO = mapperDTO.toPrintModelWebDTO(printModel);
+        String modelName = printModelWebDTO.getModelName();
+        String modelString = null;
+        try {
+            modelString = objectMapper.writeValueAsString(printModelWebDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
+        try {
+            FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".json"), modelString);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(" serializeObj " + modelName);
+
+        count.incrementAndGet();
+
+        JsProgressBarService.setCurrentCount(count);
+        JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
+        System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
     }
 
     public void serializeDtoAndSave(PrintModelWebDTO printModelWebDTO) throws IOException {
         String modelName = printModelWebDTO.getModelName();
         String modelString = objectMapper.writeValueAsString(printModelWebDTO);
-        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".WEB.json"), modelString);
+        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".json"), modelString);
         System.out.println(" serializeObj " + modelName);
 
     }

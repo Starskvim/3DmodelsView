@@ -49,11 +49,7 @@ public class MainController {
     @GetMapping("/admin/startCreate")
     public String startCreateController() {
         long start = System.currentTimeMillis();
-        try {
-            createObjService.startCreateOBJService();
-        } catch (IOException a) {
-            System.out.println(a.getMessage());
-        }
+        createObjService.startCreateOBJService();
         long fin = System.currentTimeMillis();
         System.out.println("startCreateController time create - " + (fin - start));
         return "redirect:/models";
@@ -86,13 +82,18 @@ public class MainController {
     @GetMapping("/admin/serialization")
     public String startSerializationController() {
         long start = System.currentTimeMillis();
-        try {
-            serializeService.serializeObj(printModelService.getAllModelListService());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        serializeService.serializeObj(printModelService.getAllModelListService());
         long fin = System.currentTimeMillis();
         System.out.println("startSerializationController time ser - " + (fin - start));
+        return "admin";
+    }
+
+    @GetMapping("/admin/serialization/sync")
+    public String startSerializationSyncController() {
+        long start = System.currentTimeMillis();
+        serializeService.serializeObj(printModelService.getSyncSerModelListService());
+        long fin = System.currentTimeMillis();
+        System.out.println("startSerializationSyncController time create + ser - " + (fin - start));
         return "admin";
     }
 

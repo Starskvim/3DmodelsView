@@ -17,6 +17,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -54,15 +55,32 @@ public class CreateObjService {
         printModelsToSaveNameStringSet = collectionsService.getPrintModelsToSaveNameStringSet();
     }
 
-
-    public void startCreateOBJService() throws IOException {
-
+    public void startCreateOBJService() {
         Collection<File> filesList = folderScanRepository.startScanRepository(true);
-        zipFormatList.add("zip");
-        zipFormatList.add("7z");
-        zipFormatList.add("rar");
+        createOBJService(filesList);
 
-        printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel());
+        collectionsService.saveAllListToJpaRepository();
+
+        log.info("Входные файлы filesList size - {}", filesList.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
+    }
+
+    public Set<PrintModel> startCreateOBJService(Collection<File> filesList) {
+        createOBJService(filesList);
+
+        log.info("Входные файлы filesList size - {}", filesList.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
+
+        return printModelsToSaveSet;
+    }
+
+    public void createOBJService(Collection<File> filesList) {
+
+
+//        zipFormatList.add("zip");
+//        zipFormatList.add("7z");
+//        zipFormatList.add("rar");
+//        printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel()); TODO ???
 
         filesListSize = filesList.size();
         JsProgressBarService.setTotalCount(filesListSize);
@@ -87,6 +105,7 @@ public class CreateObjService {
         } else {
             createPrintModelOBJ(file);
             checkAndCreateOBJ(file);
+            System.err.println("Model - create - " + file.getParentFile().getName());
         }
         countDone.incrementAndGet();
 
