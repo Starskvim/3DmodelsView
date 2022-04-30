@@ -181,5 +181,12 @@ public class SerializeService {
         }
     }
 
+    public void deserializePrintModelWebDTO(byte[] bytes) throws IOException{
+
+        PrintModelWebDTO printModelWebDTO = objectMapper.readValue(bytes, PrintModelWebDTO.class);
+
+
+    }
+
 
 }

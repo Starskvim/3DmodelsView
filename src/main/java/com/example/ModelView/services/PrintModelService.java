@@ -4,6 +4,7 @@ import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
 import com.example.ModelView.dto.MapperAbstract;
 import com.example.ModelView.dto.MapperDto;
 import com.example.ModelView.dto.PrintModelDto;
+import com.example.ModelView.dto.web.PrintModelWebDTO;
 import com.example.ModelView.entities.locale.ModelZIP;
 import com.example.ModelView.entities.locale.PrintModel;
 import com.example.ModelView.repositories.*;
@@ -115,6 +116,11 @@ public class PrintModelService {
     public void postSyncModelOnWeb(PrintModel printModel) {
         System.out.println("postSync get - " + printModel.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
+    }
+
+    public void postSyncModelOnWeb(PrintModelWebDTO printModel) {
+        System.out.println("postSync get - " + printModel.getModelName());
+        webRestService.createPostModel(printModel);
     }
 
     public List<String> getAllModelsName() {

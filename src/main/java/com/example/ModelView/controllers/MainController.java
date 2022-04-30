@@ -74,8 +74,11 @@ public class MainController {
     }
 
     @GetMapping("/admin/syncWeb")
-    public String startSincWebController(){
+    public String startSyncWebController(){
+        long start = System.currentTimeMillis();
         webSyncService.startSyncWeb();
+        long fin = System.currentTimeMillis();
+        System.out.println("startSyncWeb() time ser - " + (fin - start));
         return "admin";
     }
 
