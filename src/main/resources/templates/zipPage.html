@@ -109,9 +109,9 @@
 
 
             <td th:text="${zip.id}"/>
-            <td th:text="${zip.nameModelZIP}"/>
-            <td th:text="${zip.modelZIPFormat}"/>
-            <td th:text="${zip.sizeZIP}"/>
+            <td th:text="${zip.getNameModelZip}"/>
+            <td th:text="${zip.getZipFormat}"/>
+            <td th:text="${zip.getZipSize}"/>
             <td th:text="${zip.archiveRatio}"/>
 
 
@@ -120,7 +120,7 @@
                 <form th:action="@{/models/open}" target="dummyframe">
                     <div style="margin-bottom: 14px; width: 10%"  class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
-                        <button   type="submit" th:name="path" th:value="${zip.modelZIPAdress}" class="btn btn-primary">
+                        <button type="submit" th:name="path" th:value="${zip.getZipAddress}" class="btn btn-primary">
                             Open
                         </button>
                     </div>

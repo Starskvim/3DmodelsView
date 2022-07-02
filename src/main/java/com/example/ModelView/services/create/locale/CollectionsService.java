@@ -1,25 +1,21 @@
 package com.example.ModelView.services.create.locale;
 
-import com.example.ModelView.entities.locale.ModelOTH;
-import com.example.ModelView.entities.locale.ModelTag;
-import com.example.ModelView.entities.locale.ModelZIP;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryJPA;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryOTHJPA;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryZIPJPA;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelTagData;
+import com.example.ModelView.model.entities.locale.PrintModelZipData;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.persistance.repositories.locale.ModelRepository;
+import com.example.ModelView.persistance.repositories.locale.ModelRepositoryOth;
+import com.example.ModelView.persistance.repositories.locale.ModelRepositoryTags;
+import com.example.ModelView.persistance.repositories.locale.ModelRepositoryZip;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-
-import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +23,15 @@ import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
 @Getter
 public class CollectionsService {
 
-    private final ModelRepositoryJPA modelRepositoryJPA;
-    private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-    private final ModelRepositoryOTHJPA modelRepositoryOTHJPA;
-    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
+    private final ModelRepository modelRepository;
+    private final ModelRepositoryZip modelRepositoryZip;
+    private final ModelRepositoryOth modelRepositoryOth;
+    private final ModelRepositoryTags modelRepositoryTags;
 
-    private CopyOnWriteArraySet<PrintModel> printModelsToSaveList = new CopyOnWriteArraySet<>();
-    private CopyOnWriteArraySet<ModelOTH> modelOTHList = new CopyOnWriteArraySet<>();
-    private CopyOnWriteArraySet<ModelZIP> modelZIPList = new CopyOnWriteArraySet<>();
-    private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>(ZIP_FORMATS);
+    private CopyOnWriteArraySet<PrintModelData> printModelsToSaveListData = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<PrintModelOthData> printModelOthDataList = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<PrintModelZipData> printModelZipDataList = new CopyOnWriteArraySet<>();
+//    private CopyOnWriteArrayList<String> zipFormatList = new CopyOnWriteArrayList<>(ZIP_FORMATS);
     private CopyOnWriteArraySet<String> printModelsToSaveNameStringSet = new CopyOnWriteArraySet<>();
 
     // TODO multi ?
@@ -43,8 +39,8 @@ public class CollectionsService {
     private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
     private HashSet<String> printModelsSavedFilesAdressStringSet = new HashSet<>(30000);
 
-    private HashSet<ModelTag> modelsTagsSavedSet = new HashSet<>(400);
-    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
+    private HashSet<PrintModelTagData> modelsTagsSavedSet = new HashSet<>(400);
+    private CopyOnWriteArraySet<PrintModelTagData> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
 
     public boolean checkPrintModelsNameStringSet(String name) {
         if (printModelsToSaveNameStringSet.isEmpty()) {
@@ -59,7 +55,7 @@ public class CollectionsService {
 
         long start4 = System.currentTimeMillis();
         if (!modelsTagsToSaveSet.isEmpty()) {
-            modelRepositoryTagsJPA.saveAll(modelsTagsToSaveSet);
+            modelRepositoryTags.saveAll(modelsTagsToSaveSet);
         }
         long fin4 = System.currentTimeMillis();
         System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));

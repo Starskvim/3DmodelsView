@@ -1,28 +1,31 @@
 package com.example.ModelView.services;
 
-import com.example.ModelView.controllers.exceptions.ModelNotFoundException;
-import com.example.ModelView.dto.MapperAbstract;
-import com.example.ModelView.dto.MapperDto;
-import com.example.ModelView.dto.PrintModelDto;
-import com.example.ModelView.dto.web.PrintModelWebDTO;
-import com.example.ModelView.entities.locale.ModelZIP;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.*;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryJPA;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryZIPJPA;
+import com.example.ModelView.mapping.OldPrintModelMapper;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelZipData;
+import com.example.ModelView.model.rest.PrintModelOth;
+import com.example.ModelView.model.rest.PrintModelPreview;
+import com.example.ModelView.persistance.FolderScanRepository;
+import com.example.ModelView.persistance.PrintModelDataService;
+import com.example.ModelView.rest.exceptions.ModelNotFoundException;
+import com.example.ModelView.mapping.MapperDto;
+import com.example.ModelView.model.rest.PrintModel;
+import com.example.ModelView.model.rest.PrintModelWeb;
+import com.example.ModelView.rest.request.PrintModelRequest;
+import com.example.ModelView.services.create.locale.CreateDtoService;
 import com.example.ModelView.services.create.locale.CreateSyncObjService;
 import com.example.ModelView.services.lokal.FolderSyncService;
 import com.example.ModelView.services.lokal.SyncSerializeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -34,97 +37,112 @@ public class PrintModelService {
     private final FolderSyncService folderSyncService;
     private final SyncSerializeService syncSerializeService;
     private final CreateSyncObjService createSyncObjService;
-    private final ModelRepositoryJPA modelRepositoryJPA;
-    private final ModelRepositoryZIPJPA modelRepositoryZIPJPA;
-    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
+    private final PrintModelDataService dataService;
+
+
+    private final CreateDtoService createDTOService;
 
     private final WebRestService webRestService;
 
     private final MapperDto mapperDto;
-    private final MapperAbstract mapperAbstract;
+    private final OldPrintModelMapper oldPrintModelMapper;
 
-    public List<PrintModel> getAllModelListService() {
-        return modelRepositoryJPA.findAll();
+
+    public Page<PrintModelPreview> getPage(Specification<PrintModelData> searchSpec, Pageable pageable) {
+
+        long start1 = System.currentTimeMillis();
+        Page<PrintModelData> modelsPage = dataService.findAllWithSpecs(searchSpec, pageable);
+        long fin1 = System.currentTimeMillis();
+        System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
+
+        long start2 = System.currentTimeMillis();
+        List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPage);
+        long fin2 = System.currentTimeMillis();
+        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+
+        return new PageImpl<>(resultList, pageable, resultList.size());
     }
 
-    public Collection<PrintModel> getSyncSerModelListService() {
+    public PrintModelRequest getOneModelForPage(Long id) {
+        PrintModelData printModelData = getById(id);
+        PrintModel printModel = createDto(printModelData);
+        Collection<PrintModelOthData> printPrintModelOthDataList = printModelData.getPrintModelOthDataSet();
+        Collection<PrintModelZipData> printPrintModelZipDataList = printModelData.getPrintModelZipDataSet();
+        Collection<PrintModelOth> resultListOTH = createDTOService.prepareOTHListDTOService(printPrintModelOthDataList);
+        return new PrintModelRequest(printModel, printPrintModelZipDataList, resultListOTH);
+    }
+
+    public List<String> getAllTagsNameWithPage(Pageable pageable){
+        long start3 = System.currentTimeMillis();
+        List<String> modelTagList = dataService.getAllNameTags();
+        long fin3 = System.currentTimeMillis();
+        System.out.println("Create page modelTagList " + pageable.getPageNumber() + " Time " + (fin3 - start3));
+        return modelTagList;
+    }
+
+    public List<String> getAllTagsName(){
+        return dataService.getAllNameTags();
+    }
+
+    public Page<PrintModelPreview> getTagPage(String tag, Pageable pageable) {
+
+        Page<PrintModelData> modelsPages = dataService.findAllByModelTagsObj_TagContaining(tag, pageable);
+        long start2 = System.currentTimeMillis();
+        List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPages);
+        long fin2 = System.currentTimeMillis();
+        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+
+        return new PageImpl<>(resultList, pageable, resultList.size());
+    }
+
+    public List<PrintModelData> getAllModelListService() {
+        return dataService.findAll();
+    }
+
+    public Collection<PrintModelData> getSyncSerModelListService() {
         return syncSerializeService.getModelForSer();
     }
 
-    public Page<PrintModel> findAllModelByPageAndSpecsService(Specification<PrintModel> modelSpecification, Pageable pageable) {
-        return modelRepositoryJPA.findAll(modelSpecification, pageable);
-    }
-
-    public Page<ModelZIP> getAllZIPListByPageService(Pageable pageable) {
-        return modelRepositoryZIPJPA.findAll(pageable);
+    public Page<PrintModelZipData> getAllZipsListByPageService(Pageable pageable) {
+        return dataService.findAllZips(pageable);
     }
 
     public void startFolderScanService() throws IOException {
         folderScanRepository.startScanRepository(true);
     }
 
-    public PrintModel getById(Long id) {
-        Optional<PrintModel> printModel = modelRepositoryJPA.findById(id);
+    public PrintModelData getById(Long id) {
+        Optional<PrintModelData> printModel = dataService.findById(id);
         return printModel.orElseThrow(() -> new ModelNotFoundException(id));
-    }
-
-    public List<PrintModel> getModelsByNames(ArrayList<String> modelsNames){
-        return modelRepositoryJPA.findAllByModelNameIn(modelsNames);
     }
 
     @Transactional
     public void deleteModelById(Long id) {
-        modelRepositoryJPA.deleteById(id);
+        dataService.deleteById(id);
     }
 
     public void openFolderOrFile(String adress) throws IOException {
         Runtime.getRuntime().exec("explorer.exe /select," + adress);
     }
 
-    public List<String> getAllTagsName(){
-        return modelRepositoryTagsJPA.getAllNameTags();
-    }
-
-    public Page<PrintModel> getAllModelByTagService(String tag, Pageable pageable){
-        return modelRepositoryJPA.findAllByModelTagsObj_TagContaining(tag, pageable);
-    }
-
-    public List<Integer> preparePageIntService(int current, int totalPages) {
-        List<Integer> pageNumbers = new ArrayList<>();
-        int start = Math.max(current - 3, 0);
-        int end = Math.min(totalPages, start + 9);
-        pageNumbers.add(0);
-        for (int i = start; i < end; i++) {
-            if (i != 0 && i != totalPages - 1) {
-                pageNumbers.add(i);
-            }
-        }
-        pageNumbers.add(totalPages - 1);
-        return pageNumbers;
-    }
-
-    public PrintModelDto createDto(PrintModel printModel) {
-        return mapperAbstract.toPrintModelDto(printModel);
+    public PrintModel createDto(PrintModelData printModelData) {
+        return oldPrintModelMapper.toPrintModelDto(printModelData);
     }
 
     public void postModelOnWeb(Long id) {
-        PrintModel printModel = getById(id);
-        System.out.println("post get - " + printModel.getModelName());
-        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
+        PrintModelData printModelData = getById(id);
+        System.out.println("post get - " + printModelData.getModelName());
+        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
     }
 
-    public void postSyncModelOnWeb(PrintModel printModel) {
-        System.out.println("postSync get - " + printModel.getModelName());
-        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModel));
+    public void postSyncModelOnWeb(PrintModelData printModelData) {
+        System.out.println("postSync get - " + printModelData.getModelName());
+        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
     }
 
-    public void postSyncModelOnWeb(PrintModelWebDTO printModel) {
+    public void postSyncModelOnWeb(PrintModelWeb printModel) {
         System.out.println("postSync get - " + printModel.getModelName());
         webRestService.createPostModel(printModel);
-    }
-
-    public List<String> getAllModelsName() {
-        return modelRepositoryJPA.getAllNameModel();
     }
 
     public void startSyncFolderService() {
@@ -138,5 +156,4 @@ public class PrintModelService {
             System.out.println("IOException");
         }
     }
-
 }

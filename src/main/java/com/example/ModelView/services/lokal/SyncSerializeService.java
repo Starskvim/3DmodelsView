@@ -1,7 +1,7 @@
 package com.example.ModelView.services.lokal;
 
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.FolderScanRepository;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.persistance.FolderScanRepository;
 import com.example.ModelView.services.create.locale.CreateObjService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class SyncSerializeService {
     private final FolderScanRepository folderScanRepository;
     private final CreateObjService createObjService;
 
-    public Collection<PrintModel> getModelForSer() {
+    public Collection<PrintModelData> getModelForSer() {
 
         Collection<File> inputSer = folderScanRepository.startScanRepository(false);
         Collection<File> inputFiles = folderScanRepository.startScanRepository(true);

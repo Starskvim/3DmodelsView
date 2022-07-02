@@ -1,8 +1,8 @@
 package com.example.ModelView.services;
 
-import com.example.ModelView.controllers.exceptions.WebSyncGetException;
-import com.example.ModelView.controllers.exceptions.WebSyncPostException;
-import com.example.ModelView.dto.web.PrintModelWebDTO;
+import com.example.ModelView.rest.exceptions.WebSyncGetException;
+import com.example.ModelView.rest.exceptions.WebSyncPostException;
+import com.example.ModelView.model.rest.PrintModelWeb;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,19 +30,19 @@ public class WebRestService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public void createPostModel (PrintModelWebDTO printModelWebDTO){
+    public void createPostModel (PrintModelWeb printModelWeb){
 
-        System.out.println("create post - " + printModelWebDTO.getModelName());
+        System.out.println("create post - " + printModelWeb.getModelName());
         System.out.println("url " + urlPostWebApp);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        HttpEntity<PrintModelWebDTO> entity = new HttpEntity<>(printModelWebDTO, headers);
+        HttpEntity<PrintModelWeb> entity = new HttpEntity<>(printModelWeb, headers);
         ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp, entity, String.class);
 
         if (response.getStatusCode() != HttpStatus.OK){
-            throw new WebSyncPostException(printModelWebDTO.getModelName());
+            throw new WebSyncPostException(printModelWeb.getModelName());
         }
     }
 
@@ -60,6 +59,7 @@ public class WebRestService {
             throw new WebSyncGetException();
         }
     }
+
 
 
 }

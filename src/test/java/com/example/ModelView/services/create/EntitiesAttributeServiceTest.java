@@ -1,7 +1,7 @@
 package com.example.ModelView.services.create;
 
-import com.example.ModelView.entities.locale.ModelTag;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
+import com.example.ModelView.model.entities.locale.PrintModelTagData;
+import com.example.ModelView.persistance.repositories.locale.ModelRepositoryTags;
 import com.example.ModelView.services.create.locale.CollectionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +13,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import static com.example.ModelView.utillity.CreateUtils.getSizeFileToDouble;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,23 +21,24 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 class EntitiesAttributeServiceTest {
+
     EntitiesAttributeService entitiesAttributeService;
     @Mock
     CollectionsService collectionsService;
     @Mock
-    ModelRepositoryTagsJPA modelRepositoryTagsJPA;
+    ModelRepositoryTags modelRepositoryTags;
     @Mock
-    HashSet<ModelTag> modelsTagsSavedSet = new HashSet<>();
+    HashSet<PrintModelTagData> modelsTagsSavedSet = new HashSet<>();
     @Mock
-    CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
+    CopyOnWriteArraySet<PrintModelTagData> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
 
     @BeforeEach
     void initService(){
-        entitiesAttributeService = new EntitiesAttributeService(collectionsService, modelRepositoryTagsJPA);
+        entitiesAttributeService = new EntitiesAttributeService(collectionsService, modelRepositoryTags);
     }
 
     @Test
-    void detectCreateObjTag() {
+    void detectCreateObjTag_Should() {
         entitiesAttributeService.setModelsTagsSavedSet(modelsTagsSavedSet);
         entitiesAttributeService.setModelsTagsToSaveSet(modelsTagsToSaveSet);
         String[] tests = new String[]{
@@ -55,10 +57,10 @@ class EntitiesAttributeServiceTest {
     }
 
     @Test
-    void getSizeFileToDouble(){
+    void getSizeFileToDouble_Should(){
         File testFile = mock(File.class);
         when(testFile.length()).thenReturn(8388608L).thenReturn(15728640L);
-        assertEquals(8.0, entitiesAttributeService.getSizeFileToDouble(testFile));
-        assertEquals(15.0, entitiesAttributeService.getSizeFileToDouble(testFile));
+        assertEquals(8.0, getSizeFileToDouble(testFile));
+        assertEquals(15.0, getSizeFileToDouble(testFile));
     }
 }

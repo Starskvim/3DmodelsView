@@ -1,8 +1,8 @@
 package com.example.ModelView.services.create;
 
-import com.example.ModelView.entities.locale.ModelTag;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryTagsJPA;
+import com.example.ModelView.model.entities.locale.PrintModelTagData;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.persistance.repositories.locale.ModelRepositoryTags;
 import com.example.ModelView.services.create.locale.CollectionsService;
 import lombok.*;
 import net.sf.sevenzipjbinding.IInArchive;
@@ -13,10 +13,8 @@ import net.sf.sevenzipjbinding.impl.RandomAccessFileInStream;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchive;
 import net.sf.sevenzipjbinding.simple.ISimpleInArchiveItem;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.*;
@@ -33,14 +31,14 @@ import java.util.stream.Collectors;
 public class EntitiesAttributeService {
 
     private final CollectionsService collectionsService;
-    private final ModelRepositoryTagsJPA modelRepositoryTagsJPA;
+    private final ModelRepositoryTags modelRepositoryTags;
 
     //TODO need obj
     private static volatile Boolean isSevenZipInitialized = false;
-    private CopyOnWriteArraySet<ModelTag> modelsTagsToSaveSet;
-    private HashSet<ModelTag> modelsTagsSavedSet;
+    private CopyOnWriteArraySet<PrintModelTagData> modelsTagsToSaveSet;
+    private HashSet<PrintModelTagData> modelsTagsSavedSet;
 
-    private ConcurrentMap<String, ModelTag> assignTagMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, PrintModelTagData> assignTagMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     private void postConstruct() {
@@ -117,28 +115,10 @@ public class EntitiesAttributeService {
         return 0;
     }
 
-    public Double getSizeFileToDouble(File file) {
-        double inputSize = file.length() / 1024.0 / 1024.0;
-        double scale = Math.pow(10, 3);
-        return Math.round(inputSize * scale) / scale;
-    }
-
-    public String detectPrintModelCategory(File file) {
-        if (file.getPath().contains("[Figure]")) {
-            return "[Figure]";
-        } else if (file.getPath().contains("[Pack]")) {
-            return "[Pack]";
-        } else if (file.getPath().contains("[Other]")) {
-            return "[OtherFDM]";
-        } else {
-            return "Other";
-        }
-    }
-
     public void prepareDetectTags(){
-        modelsTagsSavedSet.addAll(modelRepositoryTagsJPA.findAll());
+        modelsTagsSavedSet.addAll(modelRepositoryTags.findAll());
         assignTagMap = modelsTagsSavedSet.stream()
-                .collect(Collectors.toConcurrentMap(ModelTag::getTag, Function.identity()));
+                .collect(Collectors.toConcurrentMap(PrintModelTagData::getTag, Function.identity()));
     }
 
     public void detectCreateObjTag (String path) {
@@ -159,39 +139,28 @@ public class EntitiesAttributeService {
                         status--;
                     }
                 }
-                ModelTag modelTag = new ModelTag(stringBuilder.toString());
-                if(!modelsTagsSavedSet.contains(modelTag) && !modelsTagsToSaveSet.contains(modelTag)){
-                    modelsTagsToSaveSet.add(modelTag);
-                    assignTagMap.put(modelTag.getTag(), modelTag);
+                PrintModelTagData printModelTagData = new PrintModelTagData(stringBuilder.toString());
+                if(!modelsTagsSavedSet.contains(printModelTagData) && !modelsTagsToSaveSet.contains(printModelTagData)){
+                    modelsTagsToSaveSet.add(printModelTagData);
+                    assignTagMap.put(printModelTagData.getTag(), printModelTagData);
                 }
             }
         }
     }
 
-    public void assignTags (PrintModel printModel){
+    public void assignTags (PrintModelData printModelData){
         for (String key : assignTagMap.keySet()) {
-            if(printModel.getModelDerictory().contains(key)){ // TODO <- non optimal
-                ModelTag modelTag = assignTagMap.get(key);
+            if(printModelData.getModelDirectory().contains(key)){ // TODO <- non optimal
+                PrintModelTagData printModelTagData = assignTagMap.get(key);
 
-                List<PrintModel> printModels = modelTag.getPrintModels();
-                printModels.add(printModel);
+                List<PrintModelData> printModelsData = printModelTagData.getPrintModelData();
+                printModelsData.add(printModelData);
 
-                List<ModelTag> modelTagsObj = printModel.getModelTagsObj();
-                modelTagsObj.add(modelTag);
+                List<PrintModelTagData> modelTagsObjData = printModelData.getModelTagsObjData();
+                modelTagsObjData.add(printModelTagData);
 
             }
         }
 
-    }
-
-    public static String trimStringNameModel (String modelName){
-        String modelNameOld = StringUtils.trimLeadingCharacter(modelName, '+');
-        return StringUtils.trimTrailingWhitespace(modelNameOld);
-    }
-
-    public static Integer detectMyRateForModel(String nameFolderModel) {
-        int myRate = StringUtils.countOccurrencesOf(nameFolderModel, "+");
-        myRate = myRate == 1 ? 0 : Math.max(myRate - 1, 0);
-        return myRate;
     }
 }

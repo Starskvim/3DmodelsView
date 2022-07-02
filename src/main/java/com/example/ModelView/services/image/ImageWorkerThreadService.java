@@ -1,8 +1,8 @@
 package com.example.ModelView.services.image;
 
-import com.example.ModelView.dto.MapperAbstract;
-import com.example.ModelView.dto.PrintModelPreviewDto;
-import com.example.ModelView.entities.locale.PrintModel;
+import com.example.ModelView.mapping.OldPrintModelMapper;
+import com.example.ModelView.model.rest.PrintModelPreview;
+import com.example.ModelView.model.entities.locale.PrintModelData;
 import lombok.*;
 import java.util.concurrent.Callable;
 
@@ -10,20 +10,20 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @Setter
 @Getter
-public class ImageWorkerThreadService implements Callable<PrintModelPreviewDto> {
-    private PrintModel printModel;
+public class ImageWorkerThreadService implements Callable<PrintModelPreview> {
+    private PrintModelData printModelData;
 
-    private MapperAbstract mapperAbstract;
+    private OldPrintModelMapper oldPrintModelMapper;
 
-    private PrintModelPreviewDto printModelPreviewDTO;
+    private PrintModelPreview printModelPreview;
 
-    public ImageWorkerThreadService(PrintModel printModel, MapperAbstract mapperAbstract) {
-        this.printModel = printModel;
-        this.mapperAbstract = mapperAbstract;
+    public ImageWorkerThreadService(PrintModelData printModelData, OldPrintModelMapper oldPrintModelMapper) {
+        this.printModelData = printModelData;
+        this.oldPrintModelMapper = oldPrintModelMapper;
     }
 
     @Override
-    public PrintModelPreviewDto call(){
-        return mapperAbstract.toPrintModelPreviewDTO(printModel);
+    public PrintModelPreview call(){
+        return oldPrintModelMapper.toPrintModelPreviewDTO(printModelData);
     }
 }

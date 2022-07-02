@@ -1,7 +1,7 @@
 package com.example.ModelView.services.image;
 
-import com.example.ModelView.entities.locale.ModelOTH;
-import com.example.ModelView.entities.locale.PrintModel;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelData;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +24,10 @@ import java.util.Iterator;
 public class ImageService {
 
 
-    public String getPreviewBaseSFimg (PrintModel printModel, Boolean comression) {
+    public String getPreviewBase64Img(PrintModelData printModelData, Boolean comression) {
         try {
             if (comression){
-                byte[] bytes = compression(getOnePicturePreview(printModel), 0.2f);
+                byte[] bytes = compression(getOnePicturePreview(printModelData), 0.2f);
                 return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
             }
         } catch (Exception a) {
@@ -36,23 +36,23 @@ public class ImageService {
         return null;
     }
 
-    public String getBaseSFimgWeb (ModelOTH modelOTH, Boolean comression, float quality) {
+    public String getBase64ImgWeb(PrintModelOthData printModelOthData, Boolean comression, float quality) {
         try {
             if (comression){
-                byte[] bytes = compression(getPicture(modelOTH), quality);
+                byte[] bytes = compression(getPicture(printModelOthData), quality);
                 return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
             } else {
-                return getFullBaseSFimg(modelOTH);
+                return getFullBase64Img(printModelOthData);
             }
         } catch (Exception a) {
             return null;
         }
     }
 
-    public String getFullBaseSFimg (ModelOTH modelOTH) {
+    public String getFullBase64Img(PrintModelOthData printModelOthData) {
 
-        try (FileInputStream fileInputStreamReader = new FileInputStream(getPicture(modelOTH))) {
-            File file =  new File(getPicture(modelOTH));
+        try (FileInputStream fileInputStreamReader = new FileInputStream(getPicture(printModelOthData))) {
+            File file =  new File(getPicture(printModelOthData));
             byte[] bytes = new byte[(int)file.length()];
             fileInputStreamReader.read(bytes);
             return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
@@ -63,11 +63,11 @@ public class ImageService {
         return null;
     }
 
-    private String getPicture(ModelOTH modelOTH) {
+    private String getPicture(PrintModelOthData printModelOthData) {
         String adress;
-        String format = modelOTH.getModelOTHFormat();
+        String format = printModelOthData.getOthFormat();
         if (format.contains("jpg") || format.contains("png") || format.contains("jpeg")) {
-            adress = modelOTH.getModelOTHAdress();
+            adress = printModelOthData.getOthAddress();
         } else {
             adress = "";
         }
@@ -75,11 +75,11 @@ public class ImageService {
     }
 
 
-    private String getOnePicturePreview(PrintModel printModel) {
+    private String getOnePicturePreview(PrintModelData printModelData) {
         String adress = null;
-        for (ModelOTH modelOTH : printModel.getModelOTHSet()) {
-            if (modelOTH.getModelOTHFormat().contains("jpg") || modelOTH.getModelOTHFormat().contains("png") || modelOTH.getModelOTHFormat().contains("jpeg")) {
-                adress = modelOTH.getModelOTHAdress();
+        for (PrintModelOthData printModelOthData : printModelData.getPrintModelOthDataSet()) {
+            if (printModelOthData.getOthFormat().contains("jpg") || printModelOthData.getOthFormat().contains("png") || printModelOthData.getOthFormat().contains("jpeg")) {
+                adress = printModelOthData.getOthAddress();
             } else {
                 adress = "";
             }

@@ -1,22 +1,16 @@
 package com.example.ModelView.services;
 
-import com.example.ModelView.dto.web.PrintModelWebDTO;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.services.lokal.SerializeService;
+import com.example.ModelView.model.rest.PrintModelWeb;
+import com.example.ModelView.persistance.FolderScanRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 @Service
 @RequiredArgsConstructor
@@ -59,7 +53,7 @@ public class WebSyncService {
 
         inputSerFiles.stream()
                 .filter(this::checkContain)
-                .limit(5)
+                .limit(500)
                 .forEach(this::prepareAndPostDto);
 
 
@@ -73,9 +67,9 @@ public class WebSyncService {
         printModelService.postSyncModelOnWeb(getDtoToPost(file));
     }
 
-    private PrintModelWebDTO getDtoToPost(File file) {
+    private PrintModelWeb getDtoToPost(File file) {
         try {
-            return objectMapper.readValue(file, PrintModelWebDTO.class);
+            return objectMapper.readValue(file, PrintModelWeb.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

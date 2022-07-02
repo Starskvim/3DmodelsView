@@ -1,10 +1,10 @@
 package com.example.ModelView.services.security;
 
-import com.example.ModelView.dto.security.UserRegistrationDto;
-import com.example.ModelView.entities.security.ERole;
-import com.example.ModelView.entities.security.Role;
-import com.example.ModelView.entities.security.Watcher;
-import com.example.ModelView.repositories.jpa.WatchersRepository;
+import com.example.ModelView.model.rest.security.UserRegistrationDto;
+import com.example.ModelView.model.entities.security.ERole;
+import com.example.ModelView.model.entities.security.Role;
+import com.example.ModelView.model.entities.security.Watcher;
+import com.example.ModelView.persistance.repositories.WatchersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

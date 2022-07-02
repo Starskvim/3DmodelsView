@@ -1,13 +1,12 @@
 package com.example.ModelView.services.create.locale;
 
-import com.example.ModelView.entities.locale.ModelOTH;
-import com.example.ModelView.entities.locale.ModelZIP;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.FolderScanRepository;
-import com.example.ModelView.repositories.jpa.locale.ModelRepositoryJPA;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelZipData;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.persistance.FolderScanRepository;
+import com.example.ModelView.persistance.repositories.locale.ModelRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.create.EntitiesAttributeService;
-import com.example.ModelView.services.create.locale.CollectionsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
@@ -15,20 +14,21 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
+import static com.example.ModelView.utillity.CreateUtils.*;
+import static org.apache.commons.io.FilenameUtils.getExtension;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class CreateObjService {
 
-    private final ModelRepositoryJPA modelRepositoryJPA;
+    private final ModelRepository modelRepository;
     private final FolderScanRepository folderScanRepository;
     private final EntitiesAttributeService entitiesAttributeService;
     private final CollectionsService collectionsService;
@@ -39,19 +39,17 @@ public class CreateObjService {
     private volatile AtomicInteger countDone = new AtomicInteger(0);
 
 
-    CopyOnWriteArraySet<PrintModel> printModelsToSaveSet;
-    CopyOnWriteArraySet<ModelOTH> modelOTHToSaveSet;
-    CopyOnWriteArraySet<ModelZIP> modelZIPToSaveSet;
-    CopyOnWriteArrayList<String> zipFormatList;
+    CopyOnWriteArraySet<PrintModelData> printModelsToSaveSetData;
+    CopyOnWriteArraySet<PrintModelOthData> printModelOthDataToSaveSet;
+    CopyOnWriteArraySet<PrintModelZipData> printModelZipDataToSaveSet;
     CopyOnWriteArraySet<String> printModelsToSaveNameStringSet;
 
 
     @PostConstruct
     private void postConstruct() {
-        printModelsToSaveSet = collectionsService.getPrintModelsToSaveList();
-        modelOTHToSaveSet = collectionsService.getModelOTHList();
-        modelZIPToSaveSet = collectionsService.getModelZIPList();
-        zipFormatList = collectionsService.getZipFormatList();
+        printModelsToSaveSetData = collectionsService.getPrintModelsToSaveListData();
+        printModelOthDataToSaveSet = collectionsService.getPrintModelOthDataList();
+        printModelZipDataToSaveSet = collectionsService.getPrintModelZipDataList();
         printModelsToSaveNameStringSet = collectionsService.getPrintModelsToSaveNameStringSet();
     }
 
@@ -62,24 +60,20 @@ public class CreateObjService {
         collectionsService.saveAllListToJpaRepository();
 
         log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
     }
 
-    public Set<PrintModel> startCreateOBJService(Collection<File> filesList) {
+    public Set<PrintModelData> startCreateOBJService(Collection<File> filesList) {
         createOBJService(filesList);
 
         log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
 
-        return printModelsToSaveSet;
+        return printModelsToSaveSetData;
     }
 
     public void createOBJService(Collection<File> filesList) {
 
-
-//        zipFormatList.add("zip");
-//        zipFormatList.add("7z");
-//        zipFormatList.add("rar");
 //        printModelsToSaveNameStringSet.addAll(modelRepositoryJPA.getAllNameModel()); TODO ???
 
         filesListSize = filesList.size();
@@ -87,14 +81,14 @@ public class CreateObjService {
 
         entitiesAttributeService.prepareDetectTags();
         filesList.parallelStream().forEach(file -> detectTypeCreate(file));
-        printModelsToSaveSet.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDerictory()));
-        printModelsToSaveSet.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model));
+        printModelsToSaveSetData.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDirectory()));
+        printModelsToSaveSetData.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model));
 
 
         collectionsService.saveAllListToJpaRepository();
 
         log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSet.size());
+        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
 
     }
 
@@ -117,7 +111,7 @@ public class CreateObjService {
 
 
     private void checkAndCreateOBJ(File file) {
-        if (zipFormatList.contains(FilenameUtils.getExtension(file.getName()))) {
+        if (ZIP_FORMATS.contains(getExtension(file.getName()))) {
             createModelZIP(file);
         } else {
             createModelOTH(file);
@@ -125,49 +119,49 @@ public class CreateObjService {
     }
 
     private void createPrintModelOBJ(File file) {
-        String category = entitiesAttributeService.detectPrintModelCategory(file);
-        PrintModel printModel = new PrintModel(file.getParentFile().getName(), file.getParent(), category);
-        printModel.setMyRate(entitiesAttributeService.detectMyRateForModel(file.getParentFile().getName()));
+        String category = detectPrintModelCategory(file);
+        PrintModelData printModelData = new PrintModelData(file.getParentFile().getName(), file.getParent(), category);
+        printModelData.setMyRate(detectMyRateForModel(file.getParentFile().getName()));
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
-        printModelsToSaveSet.add(printModel);
+        printModelsToSaveSetData.add(printModelData);
     }
 
     private void createModelOTH(File file) {
-        Double size = entitiesAttributeService.getSizeFileToDouble(file);
-        String format = FilenameUtils.getExtension(file.getName());
-        ModelOTH modelOTH = new ModelOTH(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
-        modelOTHToSaveSet.add(modelOTH);
-        getModelListOTHRepositoryService(file, modelOTH);
+        Double size = getSizeFileToDouble(file);
+        String format = getExtension(file.getName());
+        PrintModelOthData printModelOthData = new PrintModelOthData(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
+        printModelOthDataToSaveSet.add(printModelOthData);
+        getModelListOTHRepositoryService(file, printModelOthData);
     }
 
     private void createModelZIP(File file) {
-        Double size = entitiesAttributeService.getSizeFileToDouble(file);
-        String format = FilenameUtils.getExtension(file.getName());
+        Double size = getSizeFileToDouble(file);
+        String format = getExtension(file.getName());
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
-        ModelZIP modelZIP = new ModelZIP(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
-        modelZIPToSaveSet.add(modelZIP);
-        getModelListZIPService(file, modelZIP);
+        PrintModelZipData printModelZipData = new PrintModelZipData(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
+        printModelZipDataToSaveSet.add(printModelZipData);
+        getModelListZIPService(file, printModelZipData);
     }
 
 
-    private void getModelListZIPService(File file, ModelZIP modelZip) {
-        for (PrintModel printModel : printModelsToSaveSet) {
-            if (printModel.getModelName().equals(file.getParentFile().getName())) {
+    private void getModelListZIPService(File file, PrintModelZipData printModelZipData) {
+        for (PrintModelData printModelData : printModelsToSaveSetData) {
+            if (printModelData.getModelName().equals(file.getParentFile().getName())) {
 
-                Set<ModelZIP> modelZIPSet = printModel.getModelZIPSet();
-                modelZIPSet.add(modelZip);
+                Set<PrintModelZipData> printModelZipDataSet = printModelData.getPrintModelZipDataSet();
+                printModelZipDataSet.add(printModelZipData);
 
                 break;
             }
         }
     }
 
-    private void getModelListOTHRepositoryService(File file, ModelOTH modelOTH) {
-        for (PrintModel printModel : printModelsToSaveSet) {
-            if (printModel.getModelName().equals(file.getParentFile().getName())) {
+    private void getModelListOTHRepositoryService(File file, PrintModelOthData printModelOthData) {
+        for (PrintModelData printModelData : printModelsToSaveSetData) {
+            if (printModelData.getModelName().equals(file.getParentFile().getName())) {
 
-                Set<ModelOTH> modelOTHSet = printModel.getModelOTHSet();
-                modelOTHSet.add(modelOTH);
+                Set<PrintModelOthData> printModelOthDataSet = printModelData.getPrintModelOthDataSet();
+                printModelOthDataSet.add(printModelOthData);
 
                 break;
             }

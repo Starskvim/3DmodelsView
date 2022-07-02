@@ -1,11 +1,11 @@
 package com.example.ModelView.services.create.locale;
 
 
-import com.example.ModelView.dto.MapperAbstract;
-import com.example.ModelView.dto.ModelOTHDto;
-import com.example.ModelView.dto.PrintModelPreviewDto;
-import com.example.ModelView.entities.locale.ModelOTH;
-import com.example.ModelView.entities.locale.PrintModel;
+import com.example.ModelView.mapping.OldPrintModelMapper;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.model.rest.PrintModelOth;
+import com.example.ModelView.model.rest.PrintModelPreview;
 import com.example.ModelView.services.image.ImageWorkerThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,22 +23,22 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CreateDtoService {
-    private final MapperAbstract mapperAbstract;
+    private final OldPrintModelMapper oldPrintModelMapper;
 
     private final ExecutorService executorService = Executors.newFixedThreadPool(8);
 
-    private List<Future<PrintModelPreviewDto>> futureList = new ArrayList<>();
-    private List<PrintModelPreviewDto> resultList = new ArrayList<>(40);
+    private List<Future<PrintModelPreview>> futureList = new ArrayList<>();
+    private List<PrintModelPreview> resultList = new ArrayList<>(40);
 
-    public Collection<ModelOTHDto> prepareOTHListDTOService (Collection<ModelOTH> printModelOTHList){
-        Collection<ModelOTHDto> resultListOTHDTO = new ArrayList<>(10);
-        for (ModelOTH modelOTH : printModelOTHList) {
-            resultListOTHDTO.add(mapperAbstract.toModelOTHDTO(modelOTH));
+    public Collection<PrintModelOth> prepareOTHListDTOService (Collection<PrintModelOthData> printPrintModelOthDataList){
+        Collection<PrintModelOth> resultListOTHDTO = new ArrayList<>(10);
+        for (PrintModelOthData printModelOthData : printPrintModelOthDataList) {
+            resultListOTHDTO.add(oldPrintModelMapper.toModelOTHDTO(printModelOthData));
         }
         return resultListOTHDTO;
     }
 
-    public List<PrintModelPreviewDto> createDTOListThreads(Page<PrintModel> modelsPages) {
+    public List<PrintModelPreview> createDTOListThreads(Page<PrintModelData> modelsPages) {
 
         if (!futureList.isEmpty()) {
             futureList.clear();
@@ -46,14 +46,14 @@ public class CreateDtoService {
         if (!resultList.isEmpty()) {
             resultList.clear();
         }
-        for (PrintModel printModel : modelsPages.getContent()) {
-            Future<PrintModelPreviewDto> future = executorService.submit(new ImageWorkerThreadService(printModel, mapperAbstract));
+        for (PrintModelData printModelData : modelsPages.getContent()) {
+            Future<PrintModelPreview> future = executorService.submit(new ImageWorkerThreadService(printModelData, oldPrintModelMapper));
             futureList.add(future);
         }
 
-        for (Future<PrintModelPreviewDto> future : futureList) {
+        for (Future<PrintModelPreview> future : futureList) {
             try {
-                PrintModelPreviewDto result = future.get();
+                PrintModelPreview result = future.get();
                 resultList.add(result);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -62,7 +62,7 @@ public class CreateDtoService {
         return this.resultList;
     }
 
-    public List<PrintModelPreviewDto> createDTOlistStream(Page<PrintModel> modelsPages) {
+    public List<PrintModelPreview> createDTOlistStream(Page<PrintModelData> modelsPages) {
 
         if (!futureList.isEmpty()) {
             futureList.clear();
@@ -71,10 +71,10 @@ public class CreateDtoService {
             resultList.clear();
         }
 
-        List<PrintModelPreviewDto> resultListStream = modelsPages
+        List<PrintModelPreview> resultListStream = modelsPages
                 .getContent()
                 .parallelStream()
-                .map(mapperAbstract::toPrintModelPreviewDTO)
+                .map(oldPrintModelMapper::toPrintModelPreviewDTO)
                 .collect(Collectors.toList());
 
         return resultListStream;

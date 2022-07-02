@@ -1,11 +1,11 @@
 package com.example.ModelView.services.lokal;
 
-import com.example.ModelView.dto.MapperDto;
-import com.example.ModelView.dto.web.PrintModelWebDTO;
-import com.example.ModelView.entities.locale.ModelOTH;
-import com.example.ModelView.entities.locale.ModelZIP;
-import com.example.ModelView.entities.locale.PrintModel;
-import com.example.ModelView.repositories.FolderScanRepository;
+import com.example.ModelView.mapping.MapperDto;
+import com.example.ModelView.model.entities.locale.PrintModelOthData;
+import com.example.ModelView.model.entities.locale.PrintModelZipData;
+import com.example.ModelView.model.rest.PrintModelWeb;
+import com.example.ModelView.model.entities.locale.PrintModelData;
+import com.example.ModelView.persistance.FolderScanRepository;
 import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.PrintModelService;
 import com.example.ModelView.services.create.locale.CollectionsService;
@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -46,15 +45,15 @@ public class SerializeService {
     private String adressSer;
 
     public void serializeOneModelToWebDtoService(Long id) {
-        PrintModel printModel = printModelService.getById(id);
+        PrintModelData printModelData = printModelService.getById(id);
         try {
-            serializeDtoAndSave(mapperDTO.toPrintModelWebDTO(printModel));
+            serializeDtoAndSave(mapperDTO.toPrintModelWebDTO(printModelData));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void serializeObj(Collection<PrintModel> outputList) {
+    public void serializeObj(Collection<PrintModelData> outputList) {
 
         total = outputList.size();
         JsProgressBarService.setTotalCount(total);
@@ -62,12 +61,12 @@ public class SerializeService {
         outputList.stream().parallel().forEach(printModel -> streamSerialize(printModel));
     }
 
-    private void streamSerialize(PrintModel printModel) { // TODO need test
-        PrintModelWebDTO printModelWebDTO = mapperDTO.toPrintModelWebDTO(printModel);
-        String modelName = printModelWebDTO.getModelName();
+    private void streamSerialize(PrintModelData printModelData) { // TODO need test
+        PrintModelWeb printModelWeb = mapperDTO.toPrintModelWebDTO(printModelData);
+        String modelName = printModelWeb.getModelName();
         String modelString = null;
         try {
-            modelString = objectMapper.writeValueAsString(printModelWebDTO);
+            modelString = objectMapper.writeValueAsString(printModelWeb);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -81,22 +80,22 @@ public class SerializeService {
         count.incrementAndGet();
 
         JsProgressBarService.setCurrentCount(count);
-        JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModel.getModelName());
-        System.out.println(count + "/" + total + " serializeObj " + printModel.getModelName());
+        JsProgressBarService.setCurrentTask(count + "/" + total + " - ser - " + printModelData.getModelName());
+        System.out.println(count + "/" + total + " serializeObj " + printModelData.getModelName());
     }
 
-    public void serializeDtoAndSave(PrintModelWebDTO printModelWebDTO) throws IOException {
-        String modelName = printModelWebDTO.getModelName();
-        String modelString = objectMapper.writeValueAsString(printModelWebDTO);
+    public void serializeDtoAndSave(PrintModelWeb printModelWeb) throws IOException {
+        String modelName = printModelWeb.getModelName();
+        String modelString = objectMapper.writeValueAsString(printModelWeb);
         FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".json"), modelString);
         System.out.println(" serializeObj " + modelName);
 
     }
 
-    public String serializeDto (PrintModelWebDTO printModelWebDTO)  {
+    public String serializeDto (PrintModelWeb printModelWeb)  {
         String result = null;
         try {
-            result = objectMapper.writeValueAsString(printModelWebDTO);
+            result = objectMapper.writeValueAsString(printModelWeb);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -107,9 +106,9 @@ public class SerializeService {
     @Transactional
     public void deserializeObj() throws IOException, ClassNotFoundException {
 
-        CopyOnWriteArraySet<PrintModel> printModelsToSaveList = collectionsService.getPrintModelsToSaveList();
-        CopyOnWriteArraySet<ModelOTH> modelOTHList = collectionsService.getModelOTHList();
-        CopyOnWriteArraySet<ModelZIP> modelZIPList = collectionsService.getModelZIPList();
+        CopyOnWriteArraySet<PrintModelData> printModelsToSaveListData = collectionsService.getPrintModelsToSaveListData();
+        CopyOnWriteArraySet<PrintModelOthData> printModelOthDataList = collectionsService.getPrintModelOthDataList();
+        CopyOnWriteArraySet<PrintModelZipData> printModelZipDataList = collectionsService.getPrintModelZipDataList();
 
         Collection<File> inputSer = folderScanRepository.startScanRepository(false);
 
@@ -121,30 +120,30 @@ public class SerializeService {
 
             FileInputStream fileInputStream = new FileInputStream(file.getAbsolutePath());
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            PrintModel printModel = (PrintModel) objectInputStream.readObject();
+            PrintModelData printModelData = (PrintModelData) objectInputStream.readObject();
             fileInputStream.close();
             objectInputStream.close();
 
-            printModel.setId(0L);
+            printModelData.setId(0L);
 
-            for (ModelZIP modelZIP : printModel.getModelZIPSet()) {
-                modelZIP.setId(0L);
+            for (PrintModelZipData printModelZipData : printModelData.getPrintModelZipDataSet()) {
+                printModelZipData.setId(0L);
             }
-            for (ModelOTH modelOTH : printModel.getModelOTHSet()) {
-                modelOTH.setId(0L);
+            for (PrintModelOthData printModelOthData : printModelData.getPrintModelOthDataSet()) {
+                printModelOthData.setId(0L);
             }
 
-            printModelsToSaveList.add(printModel);
+            printModelsToSaveListData.add(printModelData);
 
             count.incrementAndGet();
             JsProgressBarService.setCurrentCount(count);
-            JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModel.getModelName());
-            System.out.println(count + "/" + total + " deserializeObj " + printModel.getModelName());
+            JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelData.getModelName());
+            System.out.println(count + "/" + total + " deserializeObj " + printModelData.getModelName());
         }
 
-        System.out.println(printModelsToSaveList.size() + " printModelsToSaveList");
-        System.out.println(modelOTHList.size() + " modelOTHList");
-        System.out.println(modelZIPList.size() + " modelZIPList");
+        System.out.println(printModelsToSaveListData.size() + " printModelsToSaveList");
+        System.out.println(printModelOthDataList.size() + " modelOTHList");
+        System.out.println(printModelZipDataList.size() + " modelZIPList");
 
         collectionsService.saveAllListToJpaRepository();
 
@@ -154,13 +153,13 @@ public class SerializeService {
 
         ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
         ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-        PrintModelWebDTO printModelWebDTO = (PrintModelWebDTO) objectInputStream.readObject();
+        PrintModelWeb printModelWeb = (PrintModelWeb) objectInputStream.readObject();
         objectInputStream.close();
 
-        JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelWebDTO.getModelName());
-        System.out.println(count + "/" + total + " deserializeObj " + printModelWebDTO.getModelName());
+        JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelWeb.getModelName());
+        System.out.println(count + "/" + total + " deserializeObj " + printModelWeb.getModelName());
 
-        System.out.println(printModelWebDTO.getModelOTHList().size() + " size list");
+        System.out.println(printModelWeb.getModelOTHList().size() + " size list");
 
     } // TODO not working
 
@@ -183,7 +182,7 @@ public class SerializeService {
 
     public void deserializePrintModelWebDTO(byte[] bytes) throws IOException{
 
-        PrintModelWebDTO printModelWebDTO = objectMapper.readValue(bytes, PrintModelWebDTO.class);
+        PrintModelWeb printModelWeb = objectMapper.readValue(bytes, PrintModelWeb.class);
 
 
     }
