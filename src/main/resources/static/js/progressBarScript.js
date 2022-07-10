@@ -20,7 +20,7 @@
     }
 
     getResponse = async () => {
-        let response = await fetch("http://localhost:8189/3Dmodel/update-progress-bar");
+        let response = await fetch("http://localhost:8189/3Dmodels/update-progress-bar");
 
         if (response.ok) {
             let obj = await response.json()
