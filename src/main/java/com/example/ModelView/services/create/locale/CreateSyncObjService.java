@@ -68,7 +68,7 @@ public class CreateSyncObjService {
     }
 
     @Transactional
-    public void startSyncOBJRepository() throws IOException {
+    public void startSyncOBJRepository(){
 
         Collection<File> filesList = folderScanRepository.startScanRepository(true);
 

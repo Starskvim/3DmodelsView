@@ -16,9 +16,11 @@ import com.example.ModelView.rest.request.PrintModelRequest;
 import com.example.ModelView.rest.request.PrintModelsPageRequest;
 import com.example.ModelView.services.create.locale.CreateDtoService;
 import com.example.ModelView.services.create.locale.CreateSyncObjService;
+import com.example.ModelView.services.create.locale.PrintModelLocalService;
 import com.example.ModelView.services.lokal.FolderSyncService;
 import com.example.ModelView.services.lokal.SyncSerializeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,35 +33,29 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class PrintModelService {
-    private final FolderScanRepository folderScanRepository;
-    private final FolderSyncService folderSyncService;
-    private final SyncSerializeService syncSerializeService;
-    private final CreateSyncObjService createSyncObjService;
+
+    private final PrintModelLocalService localService;
     private final PrintModelDataService dataService;
-
-
     private final CreateDtoService createDTOService;
-
     private final WebRestService webRestService;
-
     private final MapperDto mapperDto;
     private final OldPrintModelMapper oldPrintModelMapper;
-
 
     public PrintModelsPageRequest getPage(Specification<PrintModelData> searchSpec, Pageable pageable) {
 
         long start1 = System.currentTimeMillis();
         Page<PrintModelData> modelsPage = dataService.findAllWithSpecs(searchSpec, pageable);
         long fin1 = System.currentTimeMillis();
-        System.out.println("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
+        log.info("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
 
         long start2 = System.currentTimeMillis();
         List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPage);
         long fin2 = System.currentTimeMillis();
-        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+        log.info("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
         PageImpl<PrintModelPreview> page = new PageImpl<>(resultList, pageable, modelsPage.getTotalElements());
         return new PrintModelsPageRequest(modelsPage.getTotalPages(), page); // TODO ????
@@ -74,15 +70,15 @@ public class PrintModelService {
         return new PrintModelRequest(printModel, resultListOTH, printPrintModelZipDataList);
     }
 
-    public List<String> getAllTagsNameWithPage(Pageable pageable){
+    public List<String> getAllTagsNameWithPage(Pageable pageable) {
         long start3 = System.currentTimeMillis();
         List<String> modelTagList = dataService.getAllNameTags();
         long fin3 = System.currentTimeMillis();
-        System.out.println("Create page modelTagList " + pageable.getPageNumber() + " Time " + (fin3 - start3));
+        log.info("Create page modelTagList " + pageable.getPageNumber() + " Time " + (fin3 - start3));
         return modelTagList;
     }
 
-    public List<String> getAllTagsName(){
+    public List<String> getAllTagsName() {
         return dataService.getAllNameTags();
     }
 
@@ -92,7 +88,7 @@ public class PrintModelService {
         long start2 = System.currentTimeMillis();
         List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPages);
         long fin2 = System.currentTimeMillis();
-        System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+        log.info("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
         return new PageImpl<>(resultList, pageable, resultList.size());
     }
@@ -102,7 +98,7 @@ public class PrintModelService {
     }
 
     public Collection<PrintModelData> getSyncSerModelListService() {
-        return syncSerializeService.getModelForSer();
+        return localService.getModelForSer();
     }
 
     public Page<PrintModelZipData> getAllZipsListByPageService(Pageable pageable) {
@@ -110,7 +106,7 @@ public class PrintModelService {
     }
 
     public void startFolderScanService() throws IOException {
-        folderScanRepository.startScanRepository(true);
+        localService.startScanRepository(true);
     }
 
     public PrintModelData getById(Long id) {
@@ -123,8 +119,8 @@ public class PrintModelService {
         dataService.deleteById(id);
     }
 
-    public void openFolderOrFile(String adress) throws IOException {
-        Runtime.getRuntime().exec("explorer.exe /select," + adress);
+    public void openFolderOrFile(String address) throws IOException {
+        localService.openFolderOrFile(address);
     }
 
     public PrintModel createDto(PrintModelData printModelData) {
@@ -133,29 +129,25 @@ public class PrintModelService {
 
     public void postModelOnWeb(Long id) {
         PrintModelData printModelData = getById(id);
-        System.out.println("post get - " + printModelData.getModelName());
+        log.info("post get - " + printModelData.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelData printModelData) {
-        System.out.println("postSync get - " + printModelData.getModelName());
+        log.info("postSync get - " + printModelData.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelWeb printModel) {
-        System.out.println("postSync get - " + printModel.getModelName());
+        log.info("postSync get - " + printModel.getModelName());
         webRestService.createPostModel(printModel);
     }
 
     public void startSyncFolderService() {
-        folderSyncService.startSyncFolderService();
+        localService.startSyncFolderService();
     }
 
     public void startSyncObjService() {
-        try {
-            createSyncObjService.startSyncOBJRepository();
-        } catch (IOException a) {
-            System.out.println("IOException");
-        }
+        localService.startSyncOBJRepository();
     }
 }
