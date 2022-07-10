@@ -20,7 +20,7 @@
     }
 
     getResponse = async () => {
-        let response = await fetch("http://localhost:8189/3Dmodel/updateProgressBar");
+        let response = await fetch("http://localhost:8189/3Dmodel/update-progress-bar");
 
         if (response.ok) {
             let obj = await response.json()
@@ -31,7 +31,7 @@
     }
 
     getResponseStats = async () => {
-        let response = await fetch("http://localhost:8189/3Dmodel/stats");
+        let response = await fetch("http://localhost:8189/3Dmodels/stats");
         if (response.ok) {
             let obj = await response.json()
             return obj

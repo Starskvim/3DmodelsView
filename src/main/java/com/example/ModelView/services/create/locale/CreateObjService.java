@@ -9,7 +9,6 @@ import com.example.ModelView.services.JsProgressBarService;
 import com.example.ModelView.services.create.EntitiesAttributeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +18,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.example.ModelView.utillity.Constant.Create.NSFW_TRIGGERS;
 import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
 import static com.example.ModelView.utillity.CreateUtils.*;
 import static org.apache.commons.io.FilenameUtils.getExtension;
@@ -99,13 +99,13 @@ public class CreateObjService {
         } else {
             createPrintModelOBJ(file);
             checkAndCreateOBJ(file);
-            System.err.println("Model - create - " + file.getParentFile().getName());
+            log.error("Model - create - " + file.getParentFile().getName());
         }
         countDone.incrementAndGet();
 
         JsProgressBarService.setCurrentCount(countDone);
         JsProgressBarService.setCurrentTask(countDone + "/" + filesListSize + " - create - " + file.getName());
-        System.out.println(countDone + "/" + filesListSize + " - create - " + file.getName());
+        log.info(countDone + "/" + filesListSize + " - create - " + file.getName());
 
     }
 
@@ -120,8 +120,11 @@ public class CreateObjService {
 
     private void createPrintModelOBJ(File file) {
         String category = detectPrintModelCategory(file);
-        PrintModelData printModelData = new PrintModelData(file.getParentFile().getName(), file.getParent(), category);
+        PrintModelData printModelData = new PrintModelData(file.getParentFile().getName(),
+                                                           file.getParent(),
+                                                           category);
         printModelData.setMyRate(detectMyRateForModel(file.getParentFile().getName()));
+        printModelData.setNsfw(detectTrigger(file.getAbsolutePath(), NSFW_TRIGGERS));
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
         printModelsToSaveSetData.add(printModelData);
     }
@@ -129,7 +132,11 @@ public class CreateObjService {
     private void createModelOTH(File file) {
         Double size = getSizeFileToDouble(file);
         String format = getExtension(file.getName());
-        PrintModelOthData printModelOthData = new PrintModelOthData(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size);
+        PrintModelOthData printModelOthData = new PrintModelOthData(file.getName(),
+                                                                    file.getParentFile().getName(),
+                                                                    file.getAbsolutePath(),
+                                                                    format,
+                                                                    size);
         printModelOthDataToSaveSet.add(printModelOthData);
         getModelListOTHRepositoryService(file, printModelOthData);
     }
@@ -138,7 +145,12 @@ public class CreateObjService {
         Double size = getSizeFileToDouble(file);
         String format = getExtension(file.getName());
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
-        PrintModelZipData printModelZipData = new PrintModelZipData(file.getName(), file.getParentFile().getName(), file.getAbsolutePath(), format, size, ratioZIP);
+        PrintModelZipData printModelZipData = new PrintModelZipData(file.getName(),
+                                                                    file.getParentFile().getName(),
+                                                                    file.getAbsolutePath(),
+                                                                    format,
+                                                                    size,
+                                                                    ratioZIP);
         printModelZipDataToSaveSet.add(printModelZipData);
         getModelListZIPService(file, printModelZipData);
     }

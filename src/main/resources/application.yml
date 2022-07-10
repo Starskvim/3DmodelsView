@@ -15,11 +15,11 @@ spring:
           lob:
             non_contextual_creation: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 server:
   servlet:
-    context-path: /3Dmodel
+    context-path: /3Dmodels
   tomcat:
     relaxed-query-chars: '|,{,},[,]'
   port: 8189

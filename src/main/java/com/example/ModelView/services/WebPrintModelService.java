@@ -4,10 +4,7 @@ import com.example.ModelView.mapping.PrintModelMapper;
 import com.example.ModelView.mapping.PrintModelOthMapper;
 import com.example.ModelView.model.entities.web.PrintModelOthWebData;
 import com.example.ModelView.model.entities.web.PrintModelWebData;
-import com.example.ModelView.model.rest.PrintModel;
-import com.example.ModelView.model.rest.PrintModelOth;
-import com.example.ModelView.model.rest.PrintModelPreview;
-import com.example.ModelView.model.rest.PrintModelWeb;
+import com.example.ModelView.model.rest.*;
 import com.example.ModelView.persistance.WebPrintModelDataService;
 import com.example.ModelView.rest.exceptions.ModelNotFoundException;
 import com.example.ModelView.rest.request.PrintModelRequest;
@@ -49,14 +46,14 @@ public class WebPrintModelService {
 
     }
 
-    public PrintModelRequest<PrintModel> getOneModelForPage(Long id) {
+    public PrintModelRequest<PrintModel, PrintModelOth, PrintModelZip> getOneModelForPage(Long id) {
         PrintModelWebData printModelData = getById(id);
 
         PrintModel printModel = printModelMapper.dataToApi(printModelData);
         List<PrintModelOthWebData> printPrintModelOthDataList = printModelData.getModelOthList();
         Collection<PrintModelOth> resultListOTH = printOthMapper.dataToApi(printPrintModelOthDataList);
 
-        return new PrintModelRequest(printModel, null, resultListOTH);
+        return new PrintModelRequest(printModel, resultListOTH, null);
     }
 
     @Transactional(readOnly = true)

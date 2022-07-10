@@ -36,7 +36,7 @@
                 </a>
             </th>
             <th>
-                <form th:action="@{/models/zipPage}"
+                <form th:action="@{/models/zips}"
                       method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead myNavBarDiv">
                         <button type="submit" class="btn btn-primary myNavBarBut">Zip Page
@@ -47,7 +47,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/tagsPage}"
+                <form th:action="@{/models/tags}"
                       method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead myNavBarDiv">
                         <button type="submit" class="btn btn-primary myNavBarBut">Tags Page
@@ -96,14 +96,14 @@
                     <div class="carousel-inner">
                         <div class="carousel-item active">
 
-                            <a th:href="@{'/models/modelsByTag?tag=[Titan-Forge%20Miniatures]'}" target=»_blank»
+                            <a th:href="@{'/models/tag?tag=[Titan-Forge%20Miniatures]'}" target=»_blank»
                                text="[Titan-Forge Miniatures]"></a>
 
                         </div>
 
                         <div th:each="tagName : ${modelTagList}" class="carousel-item">
 
-                            <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
+                            <a th:href="@{'/models/tag?tag=' + ${tagName}}" target=»_blank»
                                th:text="${tagName.toString()}"></a>
 
                         </div>
@@ -182,7 +182,7 @@
             <td th:text="${model.modelCategory}"></td>
             <td th:text="${model.modelName}"></td>
             <td class="Link">
-                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотр"></a>
+                <a th:href="@{'/models/model-obj/' + ${model.id}}" target=»_blank» th:text="Просмотр"></a>
             </td>
         </tr>
         </tbody>

@@ -11,12 +11,14 @@ import com.example.ModelView.persistance.repositories.locale.ModelRepositoryZip;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 @Setter
@@ -37,7 +39,7 @@ public class CollectionsService {
     // TODO multi ?
     private HashSet<String> printModelsSavedNameStringSet = new HashSet<>(10000);
     private HashSet<String> printModelsSavedFilesNameStringSet = new HashSet<>(30000);
-    private HashSet<String> printModelsSavedFilesAdressStringSet = new HashSet<>(30000);
+    private HashSet<String> printModelsSavedFilesAddressStringSet = new HashSet<>(30000);
 
     private HashSet<PrintModelTagData> modelsTagsSavedSet = new HashSet<>(400);
     private CopyOnWriteArraySet<PrintModelTagData> modelsTagsToSaveSet = new CopyOnWriteArraySet<>();
@@ -58,7 +60,7 @@ public class CollectionsService {
             modelRepositoryTags.saveAll(modelsTagsToSaveSet);
         }
         long fin4 = System.currentTimeMillis();
-        System.out.println("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
+        log.info("modelRepositoryTagsJPA.saveAll time - " + (fin4 - start4));
 
 
 //        long start1 = System.currentTimeMillis();
@@ -83,7 +85,8 @@ public class CollectionsService {
 //        System.out.println("modelRepositoryOTHJPA.saveAll time - " + (fin3 - start3));
 
         long fin = System.currentTimeMillis();
-        System.out.println("ALL SAVE saveAllListToJpaRepository time - " + (fin - start));
+        log.info("All save saveAllListToJpaRepository time - " + (fin4 - start4));
+
 
     }
 

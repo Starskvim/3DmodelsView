@@ -26,7 +26,7 @@ class ModelRestControllerTest {
 
     @Test
     void getStats() throws Exception {
-        MvcResult result = mockMvc.perform(get("http://localhost:8189/3Dmodel/stats"))
+        MvcResult result = mockMvc.perform(get("http://localhost:8189/3Dmodels/stats"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json("{'message':'ok'}"))

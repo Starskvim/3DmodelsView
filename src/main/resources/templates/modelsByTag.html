@@ -33,7 +33,7 @@
                 </a>
             </th>
             <th>
-                <form th:action="@{/models/zipPage}"
+                <form th:action="@{/models/zips}"
                       method="get" target=»_blank» class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group myButtonHead">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -69,7 +69,7 @@
 </div>
 
 <div class="container">
-    <form th:action="@{/models/modelsByTag}"
+    <form th:action="@{/models/tag}"
           method="get" class="form-horizontal">
         <table class="table table-hover">
             <tr>
@@ -108,7 +108,7 @@
             <td th:text="${model.modelCategory}"></td>
             <td th:text="${model.modelName}"></td>
             <td class="Link">
-                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотр"></a>
+                <a th:href="@{'/models/model-obj/' + ${model.id}}" target=»_blank» th:text="Просмотр"></a>
             </td>
         </tr>
         </tbody>

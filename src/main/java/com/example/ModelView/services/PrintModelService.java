@@ -13,6 +13,7 @@ import com.example.ModelView.mapping.MapperDto;
 import com.example.ModelView.model.rest.PrintModel;
 import com.example.ModelView.model.rest.PrintModelWeb;
 import com.example.ModelView.rest.request.PrintModelRequest;
+import com.example.ModelView.rest.request.PrintModelsPageRequest;
 import com.example.ModelView.services.create.locale.CreateDtoService;
 import com.example.ModelView.services.create.locale.CreateSyncObjService;
 import com.example.ModelView.services.lokal.FolderSyncService;
@@ -48,7 +49,7 @@ public class PrintModelService {
     private final OldPrintModelMapper oldPrintModelMapper;
 
 
-    public Page<PrintModelPreview> getPage(Specification<PrintModelData> searchSpec, Pageable pageable) {
+    public PrintModelsPageRequest getPage(Specification<PrintModelData> searchSpec, Pageable pageable) {
 
         long start1 = System.currentTimeMillis();
         Page<PrintModelData> modelsPage = dataService.findAllWithSpecs(searchSpec, pageable);
@@ -60,7 +61,8 @@ public class PrintModelService {
         long fin2 = System.currentTimeMillis();
         System.out.println("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
 
-        return new PageImpl<>(resultList, pageable, resultList.size());
+        PageImpl<PrintModelPreview> page = new PageImpl<>(resultList, pageable, modelsPage.getTotalElements());
+        return new PrintModelsPageRequest(modelsPage.getTotalPages(), page); // TODO ????
     }
 
     public PrintModelRequest getOneModelForPage(Long id) {
@@ -69,7 +71,7 @@ public class PrintModelService {
         Collection<PrintModelOthData> printPrintModelOthDataList = printModelData.getPrintModelOthDataSet();
         Collection<PrintModelZipData> printPrintModelZipDataList = printModelData.getPrintModelZipDataSet();
         Collection<PrintModelOth> resultListOTH = createDTOService.prepareOTHListDTOService(printPrintModelOthDataList);
-        return new PrintModelRequest(printModel, printPrintModelZipDataList, resultListOTH);
+        return new PrintModelRequest(printModel, resultListOTH, printPrintModelZipDataList);
     }
 
     public List<String> getAllTagsNameWithPage(Pageable pageable){

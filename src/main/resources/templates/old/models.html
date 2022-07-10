@@ -43,7 +43,7 @@
                 </form>
             </th>
             <th>
-                <form th:action="@{/models/zipPage}"
+                <form th:action="@{/models/zips}"
                       method="get" class="form-horizontal">
                     <div style="margin-bottom: 14px; width: 25%" class="input-group">
                         <span class="input-group-addon"><i class="glyphicon glyphicon-watcher"></i></span>
@@ -148,7 +148,7 @@
             <td th:text="${model.modelCategory}"/>
             <td th:text="${model.modelName}"/>
             <td class="Link">
-                <a th:href="@{'/models/modelOBJ/' + ${model.id}}" target=»_blank» th:text="Просмотреть"/>
+                <a th:href="@{'/models/model-obj/' + ${model.id}}" target=»_blank» th:text="Просмотреть"/>
             </td>
 
         </tr>

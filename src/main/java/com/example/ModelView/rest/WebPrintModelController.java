@@ -1,7 +1,5 @@
 package com.example.ModelView.rest;
 
-import com.example.ModelView.model.entities.locale.PrintModelData;
-import com.example.ModelView.model.entities.locale.PrintModelZipData;
 import com.example.ModelView.model.entities.web.PrintModelWebData;
 import com.example.ModelView.model.rest.PrintModelPreview;
 import com.example.ModelView.rest.request.PrintModelRequest;
@@ -54,11 +52,10 @@ public class WebPrintModelController {
         return "models";
     }
 
-    @GetMapping("/modelsByTag")
+    @GetMapping("/tag")
     public String showTagPage(Model model, Pageable pageable, @RequestParam(value = "tag") String tag) {
 
         Page<PrintModelPreview> result = printModelService.getTagPage(tag, pageable);
-
 
         model.addAttribute("tag", tag);
         model.addAttribute("models", result);
@@ -68,7 +65,7 @@ public class WebPrintModelController {
         return "modelsByTag";
     }
 
-    @GetMapping("/tagsPage")
+    @GetMapping("/tags")
     public String showTagsListController(Model model) {
         List<String> modelTagList = printModelService.getAllTagsName();
 
@@ -76,7 +73,7 @@ public class WebPrintModelController {
         return "tagsPage";
     }
 
-    @GetMapping("/modelOBJ/{id}")
+    @GetMapping("/model-obj/{id}")
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
 
         PrintModelRequest result = printModelService.getOneModelForPage(id);
@@ -87,14 +84,15 @@ public class WebPrintModelController {
         return "modelPage";
     }
 
-    @PostMapping("/modelOBJ/{id}/delete")
+    // TODO delete
+    @PostMapping("/model-obj/{id}/delete")
     public String deleteModel(@PathVariable(value = "id") Long id) {
         printModelService.deleteModelById(id);
         System.out.println("delete model with id - " + id);
         return "redirect:/models";
     }
 
-    @GetMapping("/modelOBJ/{id}/postOnWeb")
+    @GetMapping("/model-obj/{id}/postOnWeb")
     public String postModelOnWeb(@PathVariable(value = "id") Long id) {
         System.out.println("post - " + id);
         printModelService.postModelOnWeb(id);

@@ -46,14 +46,14 @@
 <div class="container">
     <table class="table table-hover">
 
-        <form th:action="@{/models/modelsByTag}" method="get">
+        <form th:action="@{/models/tag}" method="get">
 
             <tr th:each="tagName : ${modelTagList}">
                 <th>
 
                     <div>
 
-                        <a th:href="@{'/models/modelsByTag?tag=' + ${tagName}}" target=»_blank»
+                        <a th:href="@{'/models/tag?tag=' + ${tagName}}" target=»_blank»
                            th:text="${tagName}"></a>
 
                     </div>

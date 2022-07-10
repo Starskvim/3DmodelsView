@@ -37,7 +37,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/start")
-    public String startSkanController() {
+    public String startScanController() {
         try {
             printModelService.startFolderScanService();
         } catch (IOException a) {
@@ -46,7 +46,7 @@ public class AdminController {
         return "redirect:/models";
     }
 
-    @GetMapping("/admin/startCreate")
+    @GetMapping("/admin/start-create")
     public String startCreateController() {
         long start = System.currentTimeMillis();
         createObjService.startCreateOBJService();
@@ -55,8 +55,8 @@ public class AdminController {
         return "redirect:/models";
     }
 
-    @GetMapping("/admin/syncFolder")
-    public String startSyncFolderController() {
+    @GetMapping("/admin/sync/folders")
+    public String startSyncFoldersController() {
         long start = System.currentTimeMillis();
         printModelService.startSyncFolderService();
         long fin = System.currentTimeMillis();
@@ -73,7 +73,7 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/admin/syncWeb")
+    @GetMapping("/admin/sync/web")
     public String startSyncWebController(){
         long start = System.currentTimeMillis();
         webSyncService.startSyncWeb();
@@ -119,11 +119,5 @@ public class AdminController {
         serializeService.serializeOneModelToWebDtoService(id);
         System.out.println("end ser");
         return "redirect:/models/modelOBJ/" + id;
-    }
-
-    @RequestMapping(value = "/admin/upload", method = RequestMethod.POST)
-    public String handleFileUpload(@RequestParam("file") MultipartFile file) {
-        serializeService.handleFileUploadService(file);
-        return "redirect:/admin";
     }
 }

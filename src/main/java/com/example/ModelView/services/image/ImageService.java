@@ -20,6 +20,10 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
+import static com.example.ModelView.utillity.Constant.Create.IMAGE_FORMATS_TRIGGERS;
+import static com.example.ModelView.utillity.CreateUtils.detectTrigger;
+import static java.util.Objects.nonNull;
+
 @Service
 public class ImageService {
 
@@ -36,9 +40,9 @@ public class ImageService {
         return null;
     }
 
-    public String getBase64ImgWeb(PrintModelOthData printModelOthData, Boolean comression, float quality) {
+    public String getBase64ImgWeb(PrintModelOthData printModelOthData, Boolean compression, float quality) {
         try {
-            if (comression){
+            if (compression){
                 byte[] bytes = compression(getPicture(printModelOthData), quality);
                 return new String(Base64.encodeBase64(bytes), StandardCharsets.UTF_8);
             } else {
@@ -64,21 +68,21 @@ public class ImageService {
     }
 
     private String getPicture(PrintModelOthData printModelOthData) {
-        String adress;
+        String address;
         String format = printModelOthData.getOthFormat();
-        if (format.contains("jpg") || format.contains("png") || format.contains("jpeg")) {
-            adress = printModelOthData.getOthAddress();
+        if (detectTrigger(format, IMAGE_FORMATS_TRIGGERS)) {
+            address = printModelOthData.getOthAddress();
         } else {
-            adress = "";
+            address = "";
         }
-        return adress;
+        return address;
     }
 
 
     private String getOnePicturePreview(PrintModelData printModelData) {
         String adress = null;
         for (PrintModelOthData printModelOthData : printModelData.getPrintModelOthDataSet()) {
-            if (printModelOthData.getOthFormat().contains("jpg") || printModelOthData.getOthFormat().contains("png") || printModelOthData.getOthFormat().contains("jpeg")) {
+            if (detectTrigger(printModelOthData.getOthFormat(), IMAGE_FORMATS_TRIGGERS)) {
                 adress = printModelOthData.getOthAddress();
             } else {
                 adress = "";
@@ -88,17 +92,18 @@ public class ImageService {
     }
 
 
-    private byte[] compression (String adress, float quality) throws IOException {
-
-        File input = new File(adress);
-        BufferedImage image = ImageIO.read(input);
-        return createResultBytes(image, quality);
-
+    private byte[] compression (String address, float quality) throws IOException {
+        if(nonNull(address)) {
+            File input = new File(address);
+            BufferedImage image = ImageIO.read(input);
+            return createResultBytes(image, quality);
+        }
+        return null;
     }
 
 
 
-    private byte[] createResultBytes(BufferedImage losslessimage, float quality) {
+    private byte[] createResultBytes(BufferedImage losslessImage, float quality) {
 
         Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName("JPG");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -112,9 +117,9 @@ public class ImageService {
             writer.setOutput(mcios);
 
             // workaround for alpha-channel problems with lossy images: Seems to be non-functional for some pictures, anyway.
-            BufferedImage img2=new BufferedImage(losslessimage.getWidth(),losslessimage.getHeight(),BufferedImage.TYPE_INT_RGB);
+            BufferedImage img2=new BufferedImage(losslessImage.getWidth(), losslessImage.getHeight(),BufferedImage.TYPE_INT_RGB);
             Graphics g=img2.getGraphics();
-            g.drawImage(new ImageIcon(losslessimage).getImage(),0,0,null);
+            g.drawImage(new ImageIcon(losslessImage).getImage(),0,0,null);
             g.dispose();
             IIOImage iioimg = new IIOImage(img2, null, null);
             try {

@@ -3,6 +3,7 @@ package com.example.ModelView.rest;
 import com.example.ModelView.model.entities.locale.PrintModelData;
 import com.example.ModelView.model.entities.locale.PrintModelZipData;
 import com.example.ModelView.rest.request.PrintModelRequest;
+import com.example.ModelView.rest.request.PrintModelsPageRequest;
 import com.example.ModelView.rest.request.SearchRequestParams;
 import com.example.ModelView.rest.specifications.SpecificationBuilder;
 import com.example.ModelView.model.rest.PrintModelPreview;
@@ -34,7 +35,7 @@ public class PrintModelController {
     private final SpecificationBuilder specBuilder;
 
     @GetMapping
-    public String modelsController(Model model, Pageable pageable,
+    public String getModels(Model model, Pageable pageable,
                                    @RequestParam(value = "wordName", required = false) String wordName,
                                    @RequestParam(value = "wordCategory", required = false) String wordCategory
 
@@ -45,7 +46,8 @@ public class PrintModelController {
                 .build();
 
         Specification<PrintModelData> searchSpec = specBuilder.createSpec(searchParams);
-        Page<PrintModelPreview> result = printModelService.getPage(searchSpec, pageable);
+        PrintModelsPageRequest resultReq = printModelService.getPage(searchSpec, pageable);
+        Page result = resultReq.getResult();
         List<String> modelTagList = printModelService.getAllTagsNameWithPage(pageable);
 
         model.addAttribute("modelTagList", modelTagList);
@@ -55,15 +57,13 @@ public class PrintModelController {
         model.addAttribute("wordName", wordName);
         model.addAttribute("wordCategory", wordCategory);
         model.addAttribute("currentPage", pageable.getPageNumber());
-        model.addAttribute("pageNumbers", preparePageIntService(pageable.getPageNumber(), result.getTotalPages()));
+        model.addAttribute("pageNumbers", preparePageIntService(pageable.getPageNumber(), resultReq.getTotalPages()));
         return "models";
     }
 
-    @GetMapping("/modelsByTag")
+    @GetMapping("/tag")
     public String showTagPage(Model model, Pageable pageable, @RequestParam(value = "tag") String tag) {
-
         Page<PrintModelPreview> result = printModelService.getTagPage(tag, pageable);
-
 
         model.addAttribute("tag", tag);
         model.addAttribute("models", result);
@@ -73,7 +73,7 @@ public class PrintModelController {
         return "modelsByTag";
     }
 
-    @GetMapping("/zipPage")
+    @GetMapping("/zips")
     public String showZipList(Model model, Pageable pageable) {
         List<PrintModelZipData> zipsPages = printModelService.getAllZipsListByPageService(pageable).getContent();
 
@@ -81,7 +81,7 @@ public class PrintModelController {
         return "zipPage";
     }
 
-    @GetMapping("/tagsPage")
+    @GetMapping("/tags")
     public String showTagsListController(Model model) {
         List<String> modelTagList = printModelService.getAllTagsName();
 
@@ -89,29 +89,28 @@ public class PrintModelController {
         return "tagsPage";
     }
 
-    @GetMapping("/modelOBJ/{id}")
+    @GetMapping("/model-obj/{id}")
     public String showOneModelPage(Model model, @PathVariable(value = "id") Long id) {
-
         PrintModelRequest result = printModelService.getOneModelForPage(id);
 
-        model.addAttribute("printModelOTHList", result.getPrintOths());
-        model.addAttribute("printModelZIPList", result.getPrintZips());
+        model.addAttribute("printModelOthList", result.getPrintOths());
+        model.addAttribute("printModelZipList", result.getPrintZips());
         model.addAttribute("printModel", result.getPrintModel());
         return "modelPage";
     }
 
-    @PostMapping("/modelOBJ/{id}/delete")
+    // TODO delete
+    @PostMapping("/model-obj/{id}/delete")
     public String deleteModel(@PathVariable(value = "id") Long id) {
         printModelService.deleteModelById(id);
         System.out.println("delete model with id - " + id);
         return "redirect:/models";
     }
 
-    @GetMapping("/modelOBJ/{id}/postOnWeb")
+    @GetMapping("/model-obj/{id}/post-on-web")
     public String postModelOnWeb(@PathVariable(value = "id") Long id) {
         System.out.println("post - " + id);
         printModelService.postModelOnWeb(id);
-
         return "redirect:/models/modelOBJ/" + id;
     }
 
