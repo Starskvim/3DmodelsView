@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Setter
 @Getter
 public class JsProgressBarService {
+
     private static volatile AtomicInteger currentCount = new AtomicInteger(0);
 
     private static volatile Integer totalCount = 0;

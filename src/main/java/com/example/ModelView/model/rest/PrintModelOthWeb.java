@@ -12,6 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrintModelOthWeb {
+
     private String nameModelOTH;
     private String modelName;
     private String fileClass;

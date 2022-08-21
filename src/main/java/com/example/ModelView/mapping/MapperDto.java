@@ -17,8 +17,9 @@ import java.util.*;
 public class MapperDto {
 
     private final ImageService imageService;
+    private final PrintModelZipMapper zipMapper;
 
-    public PrintModelWeb toPrintModelWebDTO (PrintModelData printModelData){
+    public PrintModelWeb toPrintModelWebDto(PrintModelData printModelData){
 
         PrintModelWeb newPrintModelWeb = new PrintModelWeb();
         newPrintModelWeb.setModelName(printModelData.getModelName());
@@ -33,11 +34,9 @@ public class MapperDto {
             tagsNamesList.add(printModelTagData.getTag());
         }
 
-        System.out.println("toPrintModelWebDTO size out tags list - " + tagsNamesList.size());
-
-        ArrayList<PrintModelOthWeb> resiltList = new ArrayList<>();
+        ArrayList<PrintModelOthWeb> resultList = new ArrayList<>();
         for(PrintModelOthData printModelOthData : printModelOthDataSet){
-            resiltList.add(toModelOTHWebDTO(printModelOthData));
+            resultList.add(toModelOthWebDto(printModelOthData));
         }
         Double totalSize = 0d;
         for (PrintModelZipData printModelZipData : printModelData.getPrintModelZipDataSet()){
@@ -46,12 +45,13 @@ public class MapperDto {
 
         newPrintModelWeb.setModelTagsNames(tagsNamesList);
         newPrintModelWeb.setModelSize(totalSize);
-        newPrintModelWeb.setModelOTHList(resiltList);
+        newPrintModelWeb.setModelOthList(resultList);
+        newPrintModelWeb.setModelZips(zipMapper.dataToWeb(printModelData.getPrintModelZipDataSet()));
 
         return newPrintModelWeb;
     }
 
-    public PrintModelOthWeb toModelOTHWebDTO (PrintModelOthData printModelOthData){
+    private PrintModelOthWeb toModelOthWebDto(PrintModelOthData printModelOthData){
 
         PrintModelOthWeb newPrintModelOthWeb = new PrintModelOthWeb();
         newPrintModelOthWeb.setNameModelOTH(printModelOthData.getNameModelOth());

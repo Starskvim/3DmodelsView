@@ -10,12 +10,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table
+@Table(name = "print_model_zip_data")
 @NoArgsConstructor
 @Setter
 @Getter
 public class PrintModelZipData implements Serializable {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,8 +33,6 @@ public class PrintModelZipData implements Serializable {
     private Double zipSize;
     @Column(name = "archive_ratio")
     private Integer archiveRatio;
-
-
 
     public PrintModelZipData(String nameModelZip, String modelName, String zipAddress, String zipFormat, Double zipSize, int archiveRatio){
         this.nameModelZip = nameModelZip;

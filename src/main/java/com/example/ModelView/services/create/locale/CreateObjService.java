@@ -63,7 +63,7 @@ public class CreateObjService {
         log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
     }
 
-    public Set<PrintModelData> startCreateOBJService(Collection<File> filesList) {
+    public Set<PrintModelData> startCreateObj(Collection<File> filesList) {
         createOBJService(filesList);
 
         log.info("Входные файлы filesList size - {}", filesList.size());

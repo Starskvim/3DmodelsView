@@ -7,6 +7,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,10 +17,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-@Repository
-@RequiredArgsConstructor
+@Log4j2
 @Getter
 @Setter
+@Service
+@RequiredArgsConstructor
 public class FolderScanRepository {
 
     @Value("${scan.adress1}")
@@ -65,8 +67,9 @@ public class FolderScanRepository {
         }
 
         long fin = System.currentTimeMillis();
-        System.out.println("ScanRepository SIZE " + files.size());
-        System.out.println("ScanRepository TIME " + (fin - start));
+
+        log.info("ScanRepository SIZE {}", files.size());
+        log.info("ScanRepository TIME  {}", (fin - start));
         return files;
     }
 

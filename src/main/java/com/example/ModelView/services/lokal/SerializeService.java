@@ -47,7 +47,7 @@ public class SerializeService {
     public void serializeOneModelToWebDtoService(Long id) {
         PrintModelData printModelData = printModelService.getById(id);
         try {
-            serializeDtoAndSave(mapperDTO.toPrintModelWebDTO(printModelData));
+            serializeDtoAndSave(mapperDTO.toPrintModelWebDto(printModelData));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class SerializeService {
     }
 
     private void streamSerialize(PrintModelData printModelData) { // TODO need test
-        PrintModelWeb printModelWeb = mapperDTO.toPrintModelWebDTO(printModelData);
+        PrintModelWeb printModelWeb = mapperDTO.toPrintModelWebDto(printModelData);
         String modelName = printModelWeb.getModelName();
         String modelString = null;
         try {
@@ -159,7 +159,7 @@ public class SerializeService {
         JsProgressBarService.setCurrentTask(count + "/" + total + " - deser - " + printModelWeb.getModelName());
         System.out.println(count + "/" + total + " deserializeObj " + printModelWeb.getModelName());
 
-        System.out.println(printModelWeb.getModelOTHList().size() + " size list");
+        System.out.println(printModelWeb.getModelOthList().size() + " size list");
 
     } // TODO not working
 

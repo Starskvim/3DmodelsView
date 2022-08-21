@@ -33,8 +33,7 @@ public class SyncSerializeService {
         System.out.println("inputSerModelName - " + inputSerModelName.size());
 
 
-
-        return createObjService.startCreateOBJService(inputFileToSave);
+        return createObjService.startCreateObj(inputFileToSave);
     }
 
     private Set<String> getModelName(Collection<File> input) {

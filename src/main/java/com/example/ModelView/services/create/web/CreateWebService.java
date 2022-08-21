@@ -115,7 +115,7 @@ public class CreateWebService {
 
     private void addOthObj(PrintModelWeb printModelWebDTO, PrintModelWebData printModelWebData) {
 
-        Collection<PrintModelOthWeb> inputOthList = printModelWebDTO.getModelOTHList();
+        Collection<PrintModelOthWeb> inputOthList = printModelWebDTO.getModelOthList();
 
         for (PrintModelOthWeb othWebDTO : inputOthList) {
             PrintModelOthWebData newOth = new PrintModelOthWebData();

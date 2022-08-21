@@ -5,13 +5,14 @@ import com.example.ModelView.services.WebSyncService;
 import com.example.ModelView.services.create.locale.CreateObjService;
 import com.example.ModelView.services.lokal.SerializeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class AdminController {
@@ -51,7 +52,7 @@ public class AdminController {
         long start = System.currentTimeMillis();
         createObjService.startCreateOBJService();
         long fin = System.currentTimeMillis();
-        System.out.println("startCreateController time create - " + (fin - start));
+        log.info("startCreateController time create - {}", (fin - start));
         return "redirect:/models";
     }
 
@@ -60,7 +61,7 @@ public class AdminController {
         long start = System.currentTimeMillis();
         printModelService.startSyncFolderService();
         long fin = System.currentTimeMillis();
-        System.out.println("startSyncFolderController time sync - " + (fin - start));
+        log.info("startSyncFolderController time sync - {}", (fin - start));
         return "admin";
     }
 
@@ -69,7 +70,7 @@ public class AdminController {
         long start = System.currentTimeMillis();
         printModelService.startSyncObjService();
         long fin = System.currentTimeMillis();
-        System.out.println("startSyncController time create - " + (fin - start));
+        log.info("startSyncController time create - {}", (fin - start));
         return "admin";
     }
 
@@ -78,25 +79,25 @@ public class AdminController {
         long start = System.currentTimeMillis();
         webSyncService.startSyncWeb();
         long fin = System.currentTimeMillis();
-        System.out.println("startSyncWeb() time ser - " + (fin - start));
+        log.info("startSyncWeb() time ser - {}", (fin - start));
         return "admin";
     }
 
     @GetMapping("/admin/serialization")
     public String startSerializationController() {
         long start = System.currentTimeMillis();
-        serializeService.serializeObj(printModelService.getAllModelListService());
+        serializeService.serializeObj(printModelService.getAllModelList());
         long fin = System.currentTimeMillis();
-        System.out.println("startSerializationController time ser - " + (fin - start));
+        log.info("startSerializationController time ser - {}", (fin - start));
         return "admin";
     }
 
     @GetMapping("/admin/serialization/sync")
     public String startSerializationSyncController() {
         long start = System.currentTimeMillis();
-        serializeService.serializeObj(printModelService.getSyncSerModelListService());
+        serializeService.serializeObj(printModelService.getSyncSerModelList());
         long fin = System.currentTimeMillis();
-        System.out.println("startSerializationSyncController time create + ser - " + (fin - start));
+        log.info("startSerializationSyncController time create + ser - {}", (fin - start));
         return "admin";
     }
 
@@ -109,14 +110,15 @@ public class AdminController {
             e.printStackTrace();
         }
         long fin = System.currentTimeMillis();
-        System.out.println("startSerializationController time ser - " + (fin - start));
+        log.info("startSerializationController time ser - {}", (fin - start));
         return "admin";
     }
 
     @GetMapping("/admin/serialization/{id}")
     public String serializeModel(Model model, @PathVariable(value = "id") Long id) {
-        System.out.println("start ser");
+        log.info("start ser");
         serializeService.serializeOneModelToWebDtoService(id);
+        log.info("end ser");
         System.out.println("end ser");
         return "redirect:/models/modelOBJ/" + id;
     }

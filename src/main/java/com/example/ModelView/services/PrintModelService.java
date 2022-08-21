@@ -6,7 +6,6 @@ import com.example.ModelView.model.entities.locale.PrintModelOthData;
 import com.example.ModelView.model.entities.locale.PrintModelZipData;
 import com.example.ModelView.model.rest.PrintModelOth;
 import com.example.ModelView.model.rest.PrintModelPreview;
-import com.example.ModelView.persistance.FolderScanRepository;
 import com.example.ModelView.persistance.PrintModelDataService;
 import com.example.ModelView.rest.exceptions.ModelNotFoundException;
 import com.example.ModelView.mapping.MapperDto;
@@ -15,10 +14,7 @@ import com.example.ModelView.model.rest.PrintModelWeb;
 import com.example.ModelView.rest.request.PrintModelRequest;
 import com.example.ModelView.rest.request.PrintModelsPageRequest;
 import com.example.ModelView.services.create.locale.CreateDtoService;
-import com.example.ModelView.services.create.locale.CreateSyncObjService;
 import com.example.ModelView.services.create.locale.PrintModelLocalService;
-import com.example.ModelView.services.lokal.FolderSyncService;
-import com.example.ModelView.services.lokal.SyncSerializeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -93,11 +89,11 @@ public class PrintModelService {
         return new PageImpl<>(resultList, pageable, resultList.size());
     }
 
-    public List<PrintModelData> getAllModelListService() {
+    public List<PrintModelData> getAllModelList() {
         return dataService.findAll();
     }
 
-    public Collection<PrintModelData> getSyncSerModelListService() {
+    public Collection<PrintModelData> getSyncSerModelList() {
         return localService.getModelForSer();
     }
 
@@ -130,12 +126,12 @@ public class PrintModelService {
     public void postModelOnWeb(Long id) {
         PrintModelData printModelData = getById(id);
         log.info("post get - " + printModelData.getModelName());
-        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
+        webRestService.createPostModel(mapperDto.toPrintModelWebDto(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelData printModelData) {
         log.info("postSync get - " + printModelData.getModelName());
-        webRestService.createPostModel(mapperDto.toPrintModelWebDTO(printModelData));
+        webRestService.createPostModel(mapperDto.toPrintModelWebDto(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelWeb printModel) {

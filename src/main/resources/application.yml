@@ -24,7 +24,7 @@ server:
     relaxed-query-chars: '|,{,},[,]'
   port: 8189
 scan:
-  adressSer: G:\testJava
+  adressSer: G:\[Model]\save
   adress1: D:\[Patreon]\[Figure]
   adress2: D:\[Patreon]\[Other]
   adress3: D:\[Patreon]\[Pack]

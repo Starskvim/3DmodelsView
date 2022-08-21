@@ -12,22 +12,24 @@ import java.util.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PrintModelWeb {
+
     private String modelName;
     private String modelPath;
     private Double modelSize;
     private String modelCategory;
     private Collection<String> modelTagsNames;
-    private Collection<PrintModelOthWeb> modelOTHList = new ArrayList<>();
+    private Collection<PrintModelOthWeb> modelOthList = new ArrayList<>();
+    private Collection<PrintModelZipWeb> modelZips = new ArrayList<>();
 
     @Override
     public String toString() {
-        return "PrintModelWebDTO{" +
+        return "PrintModelWebDto{" +
                 "modelName='" + modelName + '\'' +
                 ", modelPath='" + modelPath + '\'' +
                 ", modelSize=" + modelSize +
                 ", modelCategory='" + modelCategory + '\'' +
                 ", modelTagsNames=" + modelTagsNames +
-                ", modelOTHList=" + modelOTHList +
+                ", modelOthList=" + modelOthList +
                 '}';
     }
 }
