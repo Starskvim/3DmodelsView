@@ -3,6 +3,7 @@ package com.example.ModelView.model.entities.web;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -24,8 +25,9 @@ public class PrintModelOthWebData {
     @Column(name = "oth_size")
     private Double othSize;
     @Lob
+    @Type(type = "org.hibernate.type.ImageType")
     @Column(name = "oth_preview")
-    private String previewOth;
+    private String othPreview;
 
     @Override
     public boolean equals(Object o) {

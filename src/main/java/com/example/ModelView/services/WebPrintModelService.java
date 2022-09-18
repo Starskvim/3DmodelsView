@@ -29,7 +29,6 @@ public class WebPrintModelService {
     private final PrintModelMapper printModelMapper;
     private final PrintModelOthMapper printOthMapper;
 
-    @Transactional(readOnly = true)
     public Page<PrintModelPreview> getPage(Specification<PrintModelWebData> searchSpec, Pageable pageable) {
 
         long start1 = System.currentTimeMillis();

@@ -22,8 +22,8 @@ import static com.example.ModelView.utillity.CreateUtils.detectMyRateForModel;
 @Slf4j
 public class CreateWebService {
 
-    private final ModelRepositoryWeb modelRepositoryJPA;
-    private final ModelRepositoryTagsWeb modelRepositoryTagsJPA;
+    private final ModelRepositoryWeb modelRepository;
+    private final ModelRepositoryTagsWeb modelRepositoryTags;
     private final EntitiesAttributeService attributeService;
 
     private static Set<PrintModelWebData> printModelWebDataToSave;
@@ -69,7 +69,6 @@ public class CreateWebService {
 
             if (assignTagMap.containsKey(tag)) {
                 PrintModelTagWebData currentTag = assignTagMap.get(tag);
-
                 currentTag.getPrintModels().add(printModelWebData);
 
 //                    Collection<PrintModelWeb> models = currentTag.getPrintModels();
@@ -96,7 +95,7 @@ public class CreateWebService {
         assignTagMap = new HashMap<>();
 
         System.out.println("prepareDetectTags new ArrayList()");
-        Collection<PrintModelTagWebData> printModelTagWebDataSavedList = new ArrayList<>(modelRepositoryTagsJPA.findAll());
+        Collection<PrintModelTagWebData> printModelTagWebDataSavedList = new ArrayList<>(modelRepositoryTags.findAll());
 
         if(printModelTagWebDataSavedList.size() != 0) {
             for (PrintModelTagWebData tag : printModelTagWebDataSavedList) {
@@ -121,7 +120,7 @@ public class CreateWebService {
             PrintModelOthWebData newOth = new PrintModelOthWebData();
             newOth.setOthName(othWebDTO.getNameModelOTH());
             newOth.setOthSize(othWebDTO.getSizeOTH());
-            newOth.setPreviewOth(othWebDTO.getPreviewOth());
+            newOth.setOthPreview(othWebDTO.getPreviewOth());
             newOth.setOthFormat(othWebDTO.getModelOTHFormat());
             printModelWebData.getModelOthList().add(newOth);
         }
@@ -132,7 +131,7 @@ public class CreateWebService {
     }
 
     public void saveNewModel() {
-        modelRepositoryTagsJPA.saveAll(printModelTagWebDataToSaveList);
+        modelRepositoryTags.saveAll(printModelTagWebDataToSaveList);
         printModelTagWebDataToSaveList.clear();
 //        modelRepositoryJPA.saveAll(printModelWebToSaveList);
     }

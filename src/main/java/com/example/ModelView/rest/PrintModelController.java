@@ -38,7 +38,6 @@ public class PrintModelController {
     public String getModels(Model model, Pageable pageable,
                                    @RequestParam(value = "wordName", required = false) String wordName,
                                    @RequestParam(value = "wordCategory", required = false) String wordCategory
-
     ) {
         SearchRequestParams searchParams = SearchRequestParams.builder()
                 .wordName(wordName)

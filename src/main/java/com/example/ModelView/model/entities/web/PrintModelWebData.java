@@ -47,7 +47,7 @@ public class PrintModelWebData {
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private List<PrintModelTagWebData> modelTags = new ArrayList<>();
 
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinColumn
     private PrintModelOthWebData previewModel;
 

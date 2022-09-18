@@ -26,7 +26,7 @@ public abstract class PrintModelMapper {
 
     @AfterMapping
     public void setPreview(PrintModelWebData source, @MappingTarget PrintModelPreview target){
-        target.setCompressPreview(source.getPreviewModel().getPreviewOth());
+        target.setCompressPreview(source.getPreviewModel().getOthPreview());
     }
 
 }
