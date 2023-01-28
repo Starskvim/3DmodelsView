@@ -6,22 +6,22 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class DBStatsResponseMapper implements RowMapper<DBStatsResponse> {
+public class DBStatsResponseMapper implements RowMapper<DataBaseStatsView> {
 
     static final double scale = Math.pow(10, 2);
 
     @Override
-    public DBStatsResponse mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public DataBaseStatsView mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        DBStatsResponse dbStatsResponse = new DBStatsResponse();
+        DataBaseStatsView dataBaseStatsView = new DataBaseStatsView();
 
-        dbStatsResponse.setTotalModels(rs.getInt("totalModels"));
-        dbStatsResponse.setTotalOTH(rs.getInt("totalOTH"));
-        dbStatsResponse.setTotalZIP(rs.getInt("totalZIP"));
-        dbStatsResponse.setTotalSize(Math.round(rs.getDouble("totalSize") * scale) / scale);
-        dbStatsResponse.setRatioAvg((int) Math.round(rs.getDouble("ratioAvg")));
-        dbStatsResponse.setRatioMed(rs.getInt("ratioMed"));
+        dataBaseStatsView.setTotalModels(rs.getInt("totalModels"));
+        dataBaseStatsView.setTotalOTH(rs.getInt("totalOTH"));
+        dataBaseStatsView.setTotalZIP(rs.getInt("totalZIP"));
+        dataBaseStatsView.setTotalSize(Math.round(rs.getDouble("totalSize") * scale) / scale);
+        dataBaseStatsView.setRatioAvg((int) Math.round(rs.getDouble("ratioAvg")));
+        dataBaseStatsView.setRatioMed(rs.getInt("ratioMed"));
 
-        return dbStatsResponse;
+        return dataBaseStatsView;
     }
 }

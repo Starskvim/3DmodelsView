@@ -19,10 +19,10 @@ import java.util.HashSet;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @Log4j2
-@Service
-@RequiredArgsConstructor
 @Setter
 @Getter
+@Service
+@RequiredArgsConstructor
 public class CollectionsService {
 
     private final ModelRepository modelRepository;
@@ -86,8 +86,6 @@ public class CollectionsService {
 
         long fin = System.currentTimeMillis();
         log.info("All save saveAllListToJpaRepository time - " + (fin4 - start4));
-
-
     }
 
     public boolean checkPrintModelsFilesSavedNameStringSet(String name){

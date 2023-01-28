@@ -5,6 +5,7 @@ import com.example.ModelView.rest.exceptions.WebSyncPostException;
 import com.example.ModelView.model.rest.PrintModelWeb;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,10 +16,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Collections;
 import java.util.List;
 
+import static com.example.ModelView.utillity.Constant.Log.CREATE_POST;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Setter
 public class WebRestService {
 
     @Value("${webApp.urlPostWeb}")
@@ -27,20 +29,17 @@ public class WebRestService {
     @Value("${webApp.urlGetWeb}")
     private String urlGetWebApp;
 
-    @Autowired
     private RestTemplate restTemplate;
 
     public void createPostModel (PrintModelWeb printModelWeb){
-
-        System.out.println("create post - " + printModelWeb.getModelName());
-        System.out.println("url " + urlPostWebApp);
-
+        log.info(CREATE_POST, printModelWeb.getModelName(), urlPostWebApp);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<PrintModelWeb> entity = new HttpEntity<>(printModelWeb, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp, entity, String.class);
-
+        ResponseEntity<String> response = restTemplate.postForEntity(urlPostWebApp,
+                entity,
+                String.class);
         if (response.getStatusCode() != HttpStatus.OK){
             throw new WebSyncPostException(printModelWeb.getModelName());
         }
@@ -50,7 +49,6 @@ public class WebRestService {
         return this.exchangeAsList(urlGetWebApp, new ParameterizedTypeReference<List<String>>() {});
     }
 
-
     public <T> List<T> exchangeAsList(String uri, ParameterizedTypeReference<List<T>> responseType) {
         ResponseEntity<List<T>> response = restTemplate.exchange(uri, HttpMethod.GET, null, responseType);
         if(response.getStatusCode() == HttpStatus.OK){
@@ -59,7 +57,4 @@ public class WebRestService {
             throw new WebSyncGetException();
         }
     }
-
-
-
 }

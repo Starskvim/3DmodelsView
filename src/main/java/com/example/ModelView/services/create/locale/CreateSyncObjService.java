@@ -28,6 +28,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.ModelView.utillity.Constant.Create.NSFW_TRIGGERS;
 import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
+import static com.example.ModelView.utillity.Constant.Log.INPUT_FILES;
+import static com.example.ModelView.utillity.Constant.Log.RESULT_MODELS;
 import static com.example.ModelView.utillity.CreateUtils.*;
 
 
@@ -115,9 +117,8 @@ public class CreateSyncObjService {
 
         collectionsService.saveAllListToJpaRepository();
 
-        log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
-
+        log.info(INPUT_FILES, filesList.size());
+        log.info(RESULT_MODELS, printModelsToSaveSetData.size());
     }
 
     public void checkAndCreateObj(File file) {

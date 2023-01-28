@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 @ComponentScan ("com.example.ModelView")
 public class AppConfig {
+
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();

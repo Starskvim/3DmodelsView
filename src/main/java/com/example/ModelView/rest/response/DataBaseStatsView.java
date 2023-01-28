@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DBStatsResponse {
+public class DataBaseStatsView {
 
     private Integer totalModels;
 
@@ -18,6 +18,4 @@ public class DBStatsResponse {
     private Integer ratioAvg;
 
     private Integer ratioMed;
-
-
 }

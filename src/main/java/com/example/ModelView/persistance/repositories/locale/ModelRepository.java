@@ -40,8 +40,4 @@ public interface ModelRepository extends JpaRepository <PrintModelData, Long>, J
     List<String> getAllNameModel();
 
     PrintModelData getByModelName(String nameModel);
-
-
-
-
 }

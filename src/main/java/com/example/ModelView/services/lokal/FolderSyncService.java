@@ -1,6 +1,7 @@
 package com.example.ModelView.services.lokal;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.stream.Collectors;
 
+import static com.example.ModelView.utillity.Constant.Log.SCAN_TIME;
+import static com.example.ModelView.utillity.Constant.Service.EMPTY_STRING;
+
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class FolderSyncService {
@@ -29,7 +34,6 @@ public class FolderSyncService {
         String folder1 = "F:\\test\\folder1";
         String folder2 = "F:\\test\\folder2";
         syncStartMethodB(folder1, folder2);
-
     }
 
     private static void syncStartMethodA(String folder1, String folder2) {
@@ -92,7 +96,6 @@ public class FolderSyncService {
         }
 
         for (File file : folder2list) {
-
             if (!currentFileABSpath.contains(file.getAbsolutePath().replace(folder2, folder1))) {
 
                 File fileFolder = new File(file.getParent());
@@ -106,11 +109,8 @@ public class FolderSyncService {
                 } else {
                     System.out.println(file.getParent() + " - папка не пуста");
                 }
-
             }
         }
-
-
     }
 
     private static void syncStartMethodC(String folder1, String folder2) {
@@ -121,8 +121,6 @@ public class FolderSyncService {
     }
 
     private static void syncRenamingFiles(HashSet<File> folder1listToMD5, HashSet<File> folder2listToMD5) {
-
-
         HashMap<String, File> folder1FilesMap = new HashMap<>();
         for (File file : folder1listToMD5) {
             folder1FilesMap.put(getMD5file(file.getAbsolutePath()), file);
@@ -152,7 +150,7 @@ public class FolderSyncService {
     }
 
     private static String getMD5file(String path) {
-        String md5 = "";
+        String md5 = EMPTY_STRING;
         try {
             try (InputStream is = Files.newInputStream(Paths.get(path))) {
                 md5 = org.apache.commons.codec.digest.DigestUtils.md5Hex(is);
@@ -185,7 +183,7 @@ public class FolderSyncService {
         }
 
         long fin = System.currentTimeMillis();
-        System.out.println("scan time " + (fin - start));
+        log.info(SCAN_TIME, (fin - start));
 
         return files;
     }

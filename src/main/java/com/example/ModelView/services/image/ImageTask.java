@@ -10,14 +10,14 @@ import java.util.concurrent.Callable;
 @RequiredArgsConstructor
 @Setter
 @Getter
-public class ImageWorkerThreadService implements Callable<PrintModelPreview> {
+public class ImageTask implements Callable<PrintModelPreview> {
     private PrintModelData printModelData;
 
     private OldPrintModelMapper oldPrintModelMapper;
 
     private PrintModelPreview printModelPreview;
 
-    public ImageWorkerThreadService(PrintModelData printModelData, OldPrintModelMapper oldPrintModelMapper) {
+    public ImageTask(PrintModelData printModelData, OldPrintModelMapper oldPrintModelMapper) {
         this.printModelData = printModelData;
         this.oldPrintModelMapper = oldPrintModelMapper;
     }

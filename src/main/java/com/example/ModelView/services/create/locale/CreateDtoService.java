@@ -6,7 +6,7 @@ import com.example.ModelView.model.entities.locale.PrintModelOthData;
 import com.example.ModelView.model.entities.locale.PrintModelData;
 import com.example.ModelView.model.rest.PrintModelOth;
 import com.example.ModelView.model.rest.PrintModelPreview;
-import com.example.ModelView.services.image.ImageWorkerThreadService;
+import com.example.ModelView.services.image.ImageTask;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class CreateDtoService {
             resultList.clear();
         }
         for (PrintModelData printModelData : modelsPages.getContent()) {
-            Future<PrintModelPreview> future = executorService.submit(new ImageWorkerThreadService(printModelData, oldPrintModelMapper));
+            Future<PrintModelPreview> future = executorService.submit(new ImageTask(printModelData, oldPrintModelMapper));
             futureList.add(future);
         }
 

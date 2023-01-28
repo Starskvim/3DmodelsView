@@ -27,7 +27,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+
+import static com.example.ModelView.utillity.Constant.Log.*;
 
 @Log4j2
 @Service
@@ -46,12 +49,12 @@ public class PrintModelService {
         long start1 = System.currentTimeMillis();
         Page<PrintModelData> modelsPage = dataService.findAllWithSpecs(searchSpec, pageable);
         long fin1 = System.currentTimeMillis();
-        log.info("Create selects PrintModel " + pageable.getPageNumber() + " Time " + (fin1 - start1));
+        log.info(CREATE_SELECT,  pageable.getPageNumber(), (fin1 - start1));
 
         long start2 = System.currentTimeMillis();
         List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPage);
         long fin2 = System.currentTimeMillis();
-        log.info("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+        log.info(CREATE_PAGE, pageable.getPageNumber(), (fin2 - start2));
 
         PageImpl<PrintModelPreview> page = new PageImpl<>(resultList, pageable, modelsPage.getTotalElements());
         return new PrintModelsPageRequest(modelsPage.getTotalPages(), page); // TODO ????
@@ -70,7 +73,7 @@ public class PrintModelService {
         long start3 = System.currentTimeMillis();
         List<String> modelTagList = dataService.getAllNameTags();
         long fin3 = System.currentTimeMillis();
-        log.info("Create page modelTagList " + pageable.getPageNumber() + " Time " + (fin3 - start3));
+        log.info(CREATE_PAGE_TAG, pageable.getPageNumber(), (fin3 - start3));
         return modelTagList;
     }
 
@@ -84,7 +87,7 @@ public class PrintModelService {
         long start2 = System.currentTimeMillis();
         List<PrintModelPreview> resultList = createDTOService.createDTOListThreads(modelsPages);
         long fin2 = System.currentTimeMillis();
-        log.info("Create page " + pageable.getPageNumber() + " Time " + (fin2 - start2));
+        log.info(CREATE_PAGE, pageable.getPageNumber(), (fin2 - start2));
 
         return new PageImpl<>(resultList, pageable, resultList.size());
     }
@@ -125,17 +128,20 @@ public class PrintModelService {
 
     public void postModelOnWeb(Long id) {
         PrintModelData printModelData = getById(id);
-        log.info("post get - " + printModelData.getModelName());
+        log.info(POST_GET, printModelData.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDto(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelData printModelData) {
-        log.info("postSync get - " + printModelData.getModelName());
+        log.info(POST_SYNC_GET, printModelData.getModelName());
         webRestService.createPostModel(mapperDto.toPrintModelWebDto(printModelData));
     }
 
     public void postSyncModelOnWeb(PrintModelWeb printModel) {
-        log.info("postSync get - " + printModel.getModelName());
+        log.info(POST_SYNC_GET, printModel.getModelName());
+        if (Objects.isNull(printModel)) {
+            return;
+        }
         webRestService.createPostModel(printModel);
     }
 

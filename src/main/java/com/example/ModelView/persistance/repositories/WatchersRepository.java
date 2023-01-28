@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface WatchersRepository extends JpaRepository<Watcher, Long> {
+
     Watcher findByEmail(String email);
 }

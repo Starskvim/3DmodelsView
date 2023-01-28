@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.example.ModelView.utillity.Constant.Log.START_PROGRESS_BAR;
+
 @Service
 @RequiredArgsConstructor
 @Setter
@@ -19,7 +21,7 @@ public class JsProgressBarService {
 
     private static volatile Integer totalCount = 0;
 
-    private static volatile AtomicReference<String> currentTask = new AtomicReference<>("Start Progress Bar");
+    private static volatile AtomicReference<String> currentTask = new AtomicReference<>(START_PROGRESS_BAR);
 
     public static void setCurrentCount(AtomicInteger count){
         double count2 = count.get();

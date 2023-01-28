@@ -26,8 +26,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Getter
-@Setter
 public class EntitiesAttributeService {
 
     private final CollectionsService collectionsService;

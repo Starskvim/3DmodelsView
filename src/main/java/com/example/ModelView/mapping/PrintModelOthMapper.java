@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper
 public abstract class PrintModelOthMapper {
 
     public abstract PrintModelOth dataToApi (PrintModelOthWebData source);

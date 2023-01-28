@@ -4,7 +4,7 @@ import com.example.ModelView.model.entities.web.PrintModelWebData;
 import com.example.ModelView.model.rest.PrintModelPreview;
 import com.example.ModelView.rest.request.PrintModelRequest;
 import com.example.ModelView.rest.request.SearchRequestParams;
-import com.example.ModelView.rest.specifications.SpecificationBuilder;
+import com.example.ModelView.persistance.specifications.SpecificationBuilder;
 import com.example.ModelView.services.WebPrintModelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

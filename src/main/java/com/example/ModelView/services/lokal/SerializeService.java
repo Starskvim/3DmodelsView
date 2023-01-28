@@ -10,9 +10,8 @@ import com.example.ModelView.services.create.locale.CollectionsService;
 import com.example.ModelView.services.create.web.CreateWebService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,9 @@ import java.io.*;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Setter
-@Getter
 public class SerializeService {
 
     private final CreateWebService createWebService;
@@ -40,8 +38,8 @@ public class SerializeService {
     private static Integer total = 0;
     private static volatile AtomicInteger count = new AtomicInteger(0);
 
-    @Value("${scan.adressSer}")
-    private String adressSer;
+    @Value("${scan.addressSer}")
+    private String addressSer;
 
     public void serializeOneModelToWebDtoService(Long id) {
         PrintModelData printModelData = printModelService.getById(id);
@@ -70,7 +68,7 @@ public class SerializeService {
             e.printStackTrace();
         }
         try {
-            FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".json"), modelString);
+            FileUtils.writeStringToFile(new File(addressSer + "/" + modelName + ".json"), modelString);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -86,7 +84,7 @@ public class SerializeService {
     public void serializeDtoAndSave(PrintModelWeb printModelWeb) throws IOException {
         String modelName = printModelWeb.getModelName();
         String modelString = objectMapper.writeValueAsString(printModelWeb);
-        FileUtils.writeStringToFile(new File(adressSer + "/" + modelName + ".json"), modelString);
+        FileUtils.writeStringToFile(new File(addressSer + "/" + modelName + ".json"), modelString);
         System.out.println(" serializeObj " + modelName);
 
     }

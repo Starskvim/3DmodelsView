@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.ModelView.utillity.Constant.Create.NSFW_TRIGGERS;
 import static com.example.ModelView.utillity.Constant.Create.ZIP_FORMATS;
+import static com.example.ModelView.utillity.Constant.Log.*;
 import static com.example.ModelView.utillity.CreateUtils.*;
 import static org.apache.commons.io.FilenameUtils.getExtension;
 
@@ -56,19 +57,15 @@ public class CreateObjService {
     public void startCreateOBJService() {
         Collection<File> filesList = folderScanRepository.startScanRepository(true);
         createOBJService(filesList);
-
         collectionsService.saveAllListToJpaRepository();
-
-        log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
+        log.info(INPUT_FILES, filesList.size());
+        log.info(RESULT_MODELS, printModelsToSaveSetData.size());
     }
 
     public Set<PrintModelData> startCreateObj(Collection<File> filesList) {
         createOBJService(filesList);
-
-        log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
-
+        log.info(INPUT_FILES, filesList.size());
+        log.info(RESULT_MODELS, printModelsToSaveSetData.size());
         return printModelsToSaveSetData;
     }
 
@@ -80,15 +77,18 @@ public class CreateObjService {
         JsProgressBarService.setTotalCount(filesListSize);
 
         entitiesAttributeService.prepareDetectTags();
-        filesList.parallelStream().forEach(file -> detectTypeCreate(file));
-        printModelsToSaveSetData.parallelStream().forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDirectory()));
-        printModelsToSaveSetData.parallelStream().forEach(model -> entitiesAttributeService.assignTags(model));
+        filesList.parallelStream()
+                .forEach(this::detectTypeCreate);
+        printModelsToSaveSetData.parallelStream()
+                .forEach(model -> entitiesAttributeService.detectCreateObjTag(model.getModelDirectory()));
+        printModelsToSaveSetData.parallelStream()
+                .forEach(entitiesAttributeService::assignTags);
 
 
         collectionsService.saveAllListToJpaRepository();
 
-        log.info("Входные файлы filesList size - {}", filesList.size());
-        log.info("Итоговые модели printModelsList size - {}", printModelsToSaveSetData.size());
+        log.info(INPUT_FILES, filesList.size());
+        log.info(RESULT_MODELS, printModelsToSaveSetData.size());
 
     }
 
@@ -99,7 +99,7 @@ public class CreateObjService {
         } else {
             createPrintModelOBJ(file);
             checkAndCreateOBJ(file);
-            log.error("Model - create - " + file.getParentFile().getName());
+            log.error(MODEL_CREATE, file.getParentFile().getName());
         }
         countDone.incrementAndGet();
 
@@ -121,8 +121,8 @@ public class CreateObjService {
     private void createPrintModelOBJ(File file) {
         String category = detectPrintModelCategory(file);
         PrintModelData printModelData = new PrintModelData(file.getParentFile().getName(),
-                                                           file.getParent(),
-                                                           category);
+                file.getParent(),
+                category);
         printModelData.setMyRate(detectMyRateForModel(file.getParentFile().getName()));
         printModelData.setNsfw(detectTrigger(file.getAbsolutePath(), NSFW_TRIGGERS));
         printModelsToSaveNameStringSet.add(file.getParentFile().getName());
@@ -133,10 +133,10 @@ public class CreateObjService {
         Double size = getSizeFileToDouble(file);
         String format = getExtension(file.getName());
         PrintModelOthData printModelOthData = new PrintModelOthData(file.getName(),
-                                                                    file.getParentFile().getName(),
-                                                                    file.getAbsolutePath(),
-                                                                    format,
-                                                                    size);
+                file.getParentFile().getName(),
+                file.getAbsolutePath(),
+                format,
+                size);
         printModelOthDataToSaveSet.add(printModelOthData);
         getModelListOTHRepositoryService(file, printModelOthData);
     }
@@ -146,11 +146,11 @@ public class CreateObjService {
         String format = getExtension(file.getName());
         int ratioZIP = entitiesAttributeService.getCreateArchiveCompressionRatio(file.getAbsolutePath());
         PrintModelZipData printModelZipData = new PrintModelZipData(file.getName(),
-                                                                    file.getParentFile().getName(),
-                                                                    file.getAbsolutePath(),
-                                                                    format,
-                                                                    size,
-                                                                    ratioZIP);
+                file.getParentFile().getName(),
+                file.getAbsolutePath(),
+                format,
+                size,
+                ratioZIP);
         printModelZipDataToSaveSet.add(printModelZipData);
         getModelListZIPService(file, printModelZipData);
     }
@@ -159,10 +159,8 @@ public class CreateObjService {
     private void getModelListZIPService(File file, PrintModelZipData printModelZipData) {
         for (PrintModelData printModelData : printModelsToSaveSetData) {
             if (printModelData.getModelName().equals(file.getParentFile().getName())) {
-
                 Set<PrintModelZipData> printModelZipDataSet = printModelData.getPrintModelZipDataSet();
                 printModelZipDataSet.add(printModelZipData);
-
                 break;
             }
         }
@@ -171,14 +169,10 @@ public class CreateObjService {
     private void getModelListOTHRepositoryService(File file, PrintModelOthData printModelOthData) {
         for (PrintModelData printModelData : printModelsToSaveSetData) {
             if (printModelData.getModelName().equals(file.getParentFile().getName())) {
-
                 Set<PrintModelOthData> printModelOthDataSet = printModelData.getPrintModelOthDataSet();
                 printModelOthDataSet.add(printModelOthData);
-
                 break;
             }
         }
     }
-
-
 }

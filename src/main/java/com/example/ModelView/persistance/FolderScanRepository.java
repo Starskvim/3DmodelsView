@@ -24,16 +24,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FolderScanRepository {
 
-    @Value("${scan.adress1}")
+    @Value("${scan.address1}")
     private String adress1;
 
-    @Value("${scan.adress2}")
+    @Value("${scan.address2}")
     private String adress2;
 
-    @Value("${scan.adress3}")
+    @Value("${scan.address3}")
     private String adress3;
 
-    @Value("${scan.adressSer}")
+    @Value("${scan.addressSer}")
     private String adressSer;
 
 

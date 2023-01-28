@@ -11,7 +11,7 @@ import org.mapstruct.MappingTarget;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring" , uses = {PrintModelOthMapper.class, PrintModelTagMapper.class, PrintModelZipMapper.class})
+@Mapper(uses = {PrintModelOthMapper.class, PrintModelTagMapper.class, PrintModelZipMapper.class})
 public abstract class PrintModelMapper {
 
     public abstract PrintModelPreview dataToApiPreview (PrintModelWebData source);
